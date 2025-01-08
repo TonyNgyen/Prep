@@ -26,25 +26,33 @@ function NavBar() {
   } else {
     return (
       <div className="w-full py-5 lg:px-20 px-5 flex justify-between items-center fixed bottom-0 left-0 bg-mainGreen h-20">
-        <button className="w-[60px] h-[60px] flex flex-col items-center justify-center text-white gap-1">
-          <IoHome className="w-full h-full" />
-          <p className="font-semibold text-sm">Home</p>
-        </button>
-        <button className="w-[60px] h-[60px] flex flex-col items-center justify-center text-white gap-1">
-          <LuHistory className="w-full h-full" />
-          <p className="font-semibold text-sm">History</p>
-        </button>
+        <a href="/">
+          <button className="w-[60px] h-[60px] flex flex-col items-center justify-center text-white gap-1">
+            <IoHome className="w-full h-full" />
+            <p className="font-semibold text-sm">Home</p>
+          </button>
+        </a>
+        <a href="/history">
+          <button className="w-[60px] h-[60px] flex flex-col items-center justify-center text-white gap-1">
+            <LuHistory className="w-full h-full" />
+            <p className="font-semibold text-sm">History</p>
+          </button>
+        </a>
         <button className="w-[75px] h-[75px] flex flex-col items-center justify-center text-white rounded-full">
           <IoIosAddCircle className="w-full h-full" />
         </button>
-        <button className="w-[60px] h-[60px] flex flex-col items-center justify-center text-white gap-1">
-          <MdAccountCircle className="w-full h-full" />
-          <p className="font-semibold text-sm">Account</p>
-        </button>
-        <button className="w-[60px] h-[60px] flex flex-col items-center justify-center text-white gap-1">
-          <FaGear className="w-full h-full" />
-          <p className="font-semibold text-sm">Settings</p>
-        </button>
+        <a href="account">
+          <button className="w-[60px] h-[60px] flex flex-col items-center justify-center text-white gap-1">
+            <MdAccountCircle className="w-full h-full" />
+            <p className="font-semibold text-sm">Account</p>
+          </button>
+        </a>
+        <a href="settings">
+          <button className="w-[60px] h-[60px] flex flex-col items-center justify-center text-white gap-1">
+            <FaGear className="w-full h-full" />
+            <p className="font-semibold text-sm">Settings</p>
+          </button>
+        </a>
       </div>
     );
   }
