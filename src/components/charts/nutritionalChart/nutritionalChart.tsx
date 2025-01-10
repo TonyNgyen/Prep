@@ -1,19 +1,24 @@
-import React, { PureComponent } from "react";
-import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from "recharts";
-import { CircularProgressbar } from "react-circular-progressbar";
+import React from "react";
+import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
-function NutritionalChart() {
-  const data02 = [
-    { name: "Group A", value: 2400 },
-    { name: "Group B", value: 4567 },
-    { name: "Group C", value: 1398 },
-    { name: "Group D", value: 9800 },
-    { name: "Group E", value: 3908 },
-    { name: "Group F", value: 4800 },
-  ];
-  const percentage = 66;
-  return <CircularProgressbar value={percentage} text={`${percentage}%`} />;
+interface NutritionalChartProps {
+  current: number;
+  goal: number;
 }
+
+const NutritionalChart: React.FC<NutritionalChartProps> = ({ current, goal }) => {
+  const percentage = (current / goal) * 100; // Calculate percentage correctly
+  return (
+    <CircularProgressbar
+      value={percentage}
+      text={current.toString()} // Rounded percentage for better display
+      styles={buildStyles({
+        textColor: "#0B6E4F",
+        pathColor: "#0B6E4F",
+      })}
+    />
+  );
+};
 
 export default NutritionalChart;
