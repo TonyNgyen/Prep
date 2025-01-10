@@ -2,6 +2,7 @@
 import NavBar from "@/components/navbar/navbar";
 import { MdAccountCircle } from "react-icons/md";
 import { useState } from "react";
+import NutritionalChart from "@/components/charts/nutritionalChart/nutritionalChart";
 
 export default function Home() {
   const [user, setUser] = useState(true);
@@ -22,8 +23,12 @@ export default function Home() {
           <div className="bg-mainGreen p-4 text-white rounded-lg shadow-md">
             Log Meal
           </div>
-          <div className="bg-white p-4 text-black rounded-lg shadow-md">
-            Nutritional Values
+          <div className="bg-white p-4 text-black rounded-lg shadow-md h-60">
+            <div className="grid grid-cols-3 gap-4">
+              <NutritionalChart />
+              <NutritionalChart />
+              <NutritionalChart />
+            </div>
           </div>
           <div className="bg-white p-4 text-black rounded-lg shadow-md">
             Weight History
