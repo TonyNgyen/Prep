@@ -47,10 +47,10 @@ function NavBar() {
             <p className="font-semibold text-sm">Edit</p>
           </button>
         </a>
-        <a href="/stock">
+        <a href="/inventory">
           <button className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1">
             <MdInventory className="w-full h-full" />
-            <p className="font-semibold text-sm">Stock</p>
+            <p className="font-semibold text-sm">Inventory</p>
           </button>
         </a>
       </div>

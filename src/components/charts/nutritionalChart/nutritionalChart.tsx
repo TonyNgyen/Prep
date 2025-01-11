@@ -7,7 +7,10 @@ interface NutritionalChartProps {
   goal: number;
 }
 
-const NutritionalChart: React.FC<NutritionalChartProps> = ({ current, goal }) => {
+const NutritionalChart: React.FC<NutritionalChartProps> = ({
+  current,
+  goal,
+}) => {
   const percentage = (current / goal) * 100; // Calculate percentage correctly
   return (
     <CircularProgressbar
@@ -16,6 +19,7 @@ const NutritionalChart: React.FC<NutritionalChartProps> = ({ current, goal }) =>
       styles={buildStyles({
         textColor: "#0B6E4F",
         pathColor: "#0B6E4F",
+        // pathColor: `rgba(11, 110, 79, ${percentage / 100})`,
       })}
     />
   );

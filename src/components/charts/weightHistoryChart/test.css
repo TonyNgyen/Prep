@@ -1,0 +1,4 @@
+.recharts-wrapper .recharts-cartesian-grid-horizontal line:nth-last-child(2),
+.recharts-wrapper .recharts-cartesian-grid-horizontal line:last-child {
+  stroke-opacity: 0;
+}
