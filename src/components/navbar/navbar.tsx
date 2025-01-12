@@ -6,9 +6,11 @@ import { AiOutlineHistory } from "react-icons/ai";
 import { IoIosAddCircle } from "react-icons/io";
 import { MdInventory } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
+import AddPopup from "../addPopup/addPop";
 
 function NavBar() {
   const [user, setUser] = useState(true);
+  const [addPopup, setAddPopup] = useState(false);
   if (!user) {
     return (
       <div className="w-full py-5 lg:px-20 px-5 flex justify-between items-center">
@@ -38,9 +40,13 @@ function NavBar() {
             <p className="font-semibold text-sm">History</p>
           </button>
         </a>
-        <button className="w-[70px] h-[70px] flex flex-col items-center justify-center text-white rounded-full">
-          <IoIosAddCircle className="w-full h-full" />
-        </button>
+        <div>
+          {addPopup && <AddPopup />}
+          <button className="w-[70px] h-[70px] flex flex-col items-center justify-center text-white rounded-full" onClick={() => setAddPopup(!addPopup)}>
+            <IoIosAddCircle className="w-full h-full" />
+          </button>
+        </div>
+
         <a href="/edit">
           <button className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1 ">
             <MdEdit className="w-full h-full" />
