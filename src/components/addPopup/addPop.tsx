@@ -9,7 +9,7 @@ function AddPopup() {
       <a href="/recipes/add" className="flex items-center">
         <button className=" font-semibold text-lg">Add Recipes</button>
       </a>
-      <a href="/inventory/add" className="flex items-center">
+      <a href="/ingredients/add" className="flex items-center">
         <button className=" font-semibold text-lg">Add Ingredients</button>
       </a>
       <a href="/inventory/add" className="flex items-center">
