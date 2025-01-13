@@ -27,7 +27,7 @@ function NavBar() {
     );
   } else {
     return (
-      <div className="w-full py-5 lg:px-20 px-5 flex justify-between items-center fixed bottom-0 left-0 bg-mainGreen h-20">
+      <div className="w-full py-5 lg:px-20 px-5 flex justify-between items-center fixed bottom-0 left-0 bg-mainGreen h-20 z-50">
         <a href="/">
           <button className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1">
             <IoHome className="w-full h-full" />
@@ -40,9 +40,17 @@ function NavBar() {
             <p className="font-semibold text-sm">History</p>
           </button>
         </a>
-        <div>
-          {addPopup && <AddPopup />}
-          <button className="w-[70px] h-[70px] flex flex-col items-center justify-center text-white rounded-full" onClick={() => setAddPopup(!addPopup)}>
+        <div className="relative">
+          {/* AddPopup container */}
+          <div className={`absolute left-1/2 -translate-x-1/2 -top-[7.75rem]`}>
+            {addPopup && <AddPopup />}
+          </div>
+
+          {/* Button */}
+          <button
+            className="w-[70px] h-[70px] flex flex-col items-center justify-center text-white rounded-full"
+            onClick={() => setAddPopup(!addPopup)}
+          >
             <IoIosAddCircle className="w-full h-full" />
           </button>
         </div>
