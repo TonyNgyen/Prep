@@ -62,7 +62,7 @@ function AddIngredientsPage() {
           <label className="block font-semibold">Servings Per Container</label>
           <input
             type="number"
-            value={calories === 0 ? "" : calories}
+            value={servingsPerContainer === 0 ? "" : servingsPerContainer}
             onChange={(e) =>
               setServingsPerContainer(
                 e.target.value === "" ? 0 : Number(e.target.value)
