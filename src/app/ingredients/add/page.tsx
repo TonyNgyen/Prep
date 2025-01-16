@@ -11,6 +11,7 @@ function AddIngredientsPage() {
   const [protein, setProtein] = useState(0);
   const [carbs, setCarbs] = useState(0);
   const [fat, setFat] = useState(0);
+  const [price, setPrice] = useState(0);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,6 +65,21 @@ function AddIngredientsPage() {
             value={calories === 0 ? "" : calories}
             onChange={(e) =>
               setServingsPerContainer(
+                e.target.value === "" ? 0 : Number(e.target.value)
+              )
+            }
+            placeholder="50"
+            className="border rounded w-full p-2"
+            required
+          />
+        </div>
+        <div>
+          <label className="block font-semibold">Price Per Container</label>
+          <input
+            type="number"
+            value={price === 0 ? "" : price}
+            onChange={(e) =>
+              setPrice(
                 e.target.value === "" ? 0 : Number(e.target.value)
               )
             }
