@@ -4,6 +4,7 @@ import { MdAccountCircle } from "react-icons/md";
 import { useEffect, useState } from "react";
 import NutritionalChart from "@/components/charts/nutritionalChart/nutritionalChart";
 import WeightHistoryChart from "@/components/charts/weightHistoryChart/weightHistoryChart";
+import { FaPlusSquare } from "react-icons/fa";
 
 interface Nutrition {
   current: number;
@@ -66,8 +67,9 @@ export default function Home() {
           </a>
         </div>
         <div className="flex flex-col gap-2">
-          <div className="bg-mainGreen p-4 text-white rounded-lg shadow-md">
-            Log Meal
+          <div className="bg-mainGreen p-4 text-white rounded-lg shadow-md flex items-center justify-between">
+            <h1 className="text-2xl font-bold">Log Meal</h1>
+            <FaPlusSquare className="text-4xl" />
           </div>
           <div className="bg-white p-4 text-black rounded-lg shadow-md flex flex-col gap-4">
             <h1 className="text-2xl font-bold">Daily Nutrition Log</h1>
