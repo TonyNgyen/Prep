@@ -58,6 +58,11 @@ function IngredientsPage() {
       ) : (
         <div className="p-6">
           <h1 className="text-2xl font-bold mb-4">Ingredients</h1>
+          <div className="flex gap-4">
+            <button className="bg-mainGreen text-white p-2 rounded-md font-semibold">Add Ingredient</button>
+            <button>Filter</button>
+            <button>Sort</button>
+          </div>
           {Object.keys(ingredientsList).map((ingredientId) => {
             const ingredient = ingredientsList[ingredientId];
             return (
