@@ -1,6 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
-function AddIngredientForm() {
+type formProp = {
+  setShowAddForm: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+function AddIngredientForm({ setShowAddForm }: formProp) {
   const [name, setName] = useState("");
   const [servingSize, setServingSize] = useState(0);
   const [servingUnit, setServeringUnit] = useState("");
@@ -30,7 +34,11 @@ function AddIngredientForm() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Add Ingredient</h1>
+      <div className="flex justify-between">
+        <h1 className="text-3xl font-bold mb-4">Add Ingredient</h1>
+        <button onClick={() => setShowAddForm(false)}>X</button>
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-3">
         <div>
           <label className="block font-semibold">Ingredient Name</label>
@@ -77,9 +85,7 @@ function AddIngredientForm() {
             type="number"
             value={price === 0 ? "" : price}
             onChange={(e) =>
-              setPrice(
-                e.target.value === "" ? 0 : Number(e.target.value)
-              )
+              setPrice(e.target.value === "" ? 0 : Number(e.target.value))
             }
             placeholder="50"
             className="border rounded w-full p-2"
@@ -149,4 +155,4 @@ function AddIngredientForm() {
   );
 }
 
-export default AddIngredientForm
+export default AddIngredientForm;
