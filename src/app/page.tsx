@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import NutritionalChart from "@/components/charts/nutritionalChart/nutritionalChart";
 import WeightHistoryChart from "@/components/charts/weightHistoryChart/weightHistoryChart";
 import { FaPlusSquare } from "react-icons/fa";
+import { onAuthStateChanged, User } from "firebase/auth";
+import { auth } from "./firebase";
 
 interface Nutrition {
   current: number;
@@ -26,12 +28,31 @@ interface WeightHistoryData {
 }
 
 export default function Home() {
-  const [user, setUser] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
   const [nutritionalData, setNutritionalData] =
     useState<NutritionalData | null>(null);
   const [weightHistoryData, setWeightHistoryData] =
     useState<WeightHistoryData | null>(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser); // Set the user if logged in
+      } else {
+        setUser(null); // Set null if logged out
+      }
+      setLoading(false); // Authentication state is determined
+    });
+
+    // Cleanup the listener on component unmount
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
     setNutritionalData({
       calories: { current: 2100, goal: 2000 },
       protein: { current: 40, goal: 100 },
@@ -52,9 +73,10 @@ export default function Home() {
       ],
       weightGoal: 139,
     });
-  }, []);
+  }, [user]);
+
   if (!user) {
-    return <div>Not Logged In</div>;
+    return <div>Not logged in</div>;
   } else {
     return (
       <div className="px-4">

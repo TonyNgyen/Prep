@@ -63,12 +63,11 @@ function IngredientInfo({ ingredient }: IngredientInfoProps) {
           </div>
 
           {Object.keys(ingredient.nutrition).map((nutritionMacro) => (
-            <div className="flex items-center justify-between text-2xl">
+            <div className="flex items-center justify-between text-2xl" key={nutritionMacro}>
               <h1>
                 {nutritionMacro.charAt(0).toUpperCase() +
                   nutritionMacro.slice(1)}
               </h1>
-              {/* <p>{ingredient.nutrition[nutritionMacro as keyof Nutrition]}</p> */}
               <p>
                 {typeof ingredient.nutrition[
                   nutritionMacro as keyof Nutrition

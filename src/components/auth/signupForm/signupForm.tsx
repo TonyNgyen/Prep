@@ -1,58 +1,74 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "@/app/firebase";
+import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 function SignupForm() {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [signUpEmail, setSignUpEmail] = useState("");
+  const [signUpPassword, setSignUpPassword] = useState("");
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const userCredential = await signInWithEmailAndPassword(
+      const userCredential = await createUserWithEmailAndPassword(
         auth,
-        email,
-        password
+        signUpEmail,
+        signUpPassword
       );
-      console.log("User logged in:", userCredential.user);
+      console.log("User created:", userCredential.user);
+      const user = userCredential.user;
+      const userRef = doc(db, "users", user.uid);
+      await setDoc(userRef, { createdAt: serverTimestamp() }, { merge: true });
+      const settingsRef = doc(collection(userRef, "settings"));
+      await setDoc(settingsRef, {});
     } catch (error) {
-      console.error("Error logging in:", error);
+      console.error("Error signing up:", error);
     }
   };
 
   return (
-    <form onSubmit={handleLogin} className="flex flex-col gap-6">
-      <div>
+    <form
+      onSubmit={handleSignUp}
+      className="flex flex-col gap-6 w-11/12 absolute top-[40%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-zinc-300 bg-[#f1ded5] p-9 rounded-lg border-2 border-[#d3beb5]"
+    >
+      <h1 className="text-center text-4xl font-semibold">Sign Up</h1>
+      <div className="flex flex-col gap-1">
         <h2 className="text-2xl font-bold">Email</h2>
         <input
           type="email"
           placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={signUpEmail}
+          onChange={(e) => setSignUpEmail(e.target.value)}
           required
-          className="border-b-[3px] border-b-black bg-transparent text-xl w-full"
+          className="border-[2px] p-3 rounded-md border-black bg-transparent text-xl w-full"
         />
       </div>
-      <div>
+      <div className="flex flex-col gap-1">
         <h2 className="text-2xl font-bold">Password</h2>
         <input
           type="password"
           placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={signUpPassword}
+          onChange={(e) => setSignUpPassword(e.target.value)}
           required
-          className="border-b-[3px] border-b-black bg-transparent text-xl w-full"
+          className="border-[2px] p-3 rounded-md border-black bg-transparent text-xl w-full"
         />
       </div>
       <button
         type="submit"
-        className="bg-[#E5D3FF] border-[#CCA8FF] border-[4px] rounded-lg py-1 font-bold text-xl"
+        className="bg-mainGreen text-white rounded-lg py-3 font-bold text-xl"
       >
-        Log in
+        Sign Up
       </button>
+      <h3 className="text-center text-lg font-medium">
+        Have an Account?{" "}
+        <a href="/login" className="text-mainGreen font-bold">
+          Log in!
+        </a>
+      </h3>
     </form>
   );
 }
