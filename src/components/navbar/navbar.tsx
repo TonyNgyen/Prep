@@ -7,10 +7,12 @@ import { IoIosAddCircle } from "react-icons/io";
 import { MdInventory } from "react-icons/md";
 import { FiMoreHorizontal } from "react-icons/fi";
 import AddPopup from "../addPopup/addPop";
+import { useAuth } from "../authProvider";
 
-function NavBar({ loggedIn }: { loggedIn: boolean }) {
+function NavBar() {
+  const { user, loading } = useAuth();
   const [addPopup, setAddPopup] = useState(false);
-  if (!loggedIn) {
+  if (!user) {
     return (
       <div className="w-full py-5 lg:px-20 px-5 flex justify-between items-center">
         <a href="/" className="text-mainGreen text-6xl font-bold">
