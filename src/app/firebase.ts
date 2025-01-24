@@ -17,23 +17,23 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-let analytics: Analytics | undefined;
 let db: Firestore;
 let auth: Auth;
 let app: FirebaseApp;
 
-if (firebaseConfig?.projectId) {
-  // Initialize Firebase
-  app = initializeApp(firebaseConfig);
+app = initializeApp(firebaseConfig);
+db = getFirestore(app);
+auth = getAuth(app);
 
-  // Initialize Analytics only if in the browser environment
-  if (app.name && typeof window !== "undefined") {
-    analytics = getAnalytics(app);
-  }
+// if (firebaseConfig?.projectId) {
+//   // Initialize Firebase
+//   app = initializeApp(firebaseConfig);
 
-  // Access Firebase services using shorthand notation
-  db = getFirestore(app);
-  auth = getAuth(app);
-}
+//   // Initialize Analytics only if in the browser environment
 
-export { app, analytics, db, auth };
+//   // Access Firebase services using shorthand notation
+//   db = getFirestore(app);
+//   auth = getAuth(app);
+// }
+
+export { app, db, auth };

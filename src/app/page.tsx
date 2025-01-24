@@ -1,5 +1,4 @@
 "use client";
-import NavBar from "@/components/navbar/navbar";
 import { MdAccountCircle } from "react-icons/md";
 import { useEffect, useState } from "react";
 import NutritionalChart from "@/components/charts/nutritionalChart/nutritionalChart";
@@ -7,6 +6,7 @@ import WeightHistoryChart from "@/components/charts/weightHistoryChart/weightHis
 import { FaPlusSquare } from "react-icons/fa";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "./firebase";
+import Link from "next/link";
 
 interface Nutrition {
   current: number;
@@ -82,11 +82,11 @@ export default function Home() {
       <div className="px-4">
         <div className="pt-10 flex justify-between items-center mb-4">
           <h1 className="text-4xl font-bold">Hello User</h1>
-          <a href="/account" className="flex items-center">
+          <Link href="/account" className="flex items-center">
             <button className="">
               <MdAccountCircle className="h-[45px] w-[45px]" />
             </button>
-          </a>
+          </Link>
         </div>
         <div className="flex flex-col gap-2">
           <div className="bg-mainGreen p-4 text-white rounded-lg shadow-md flex items-center justify-between">

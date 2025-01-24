@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "@/app/firebase";
 import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
+import Link from "next/link";
 
 function SignupForm() {
   const [username, setUsername] = useState("");
@@ -65,9 +66,9 @@ function SignupForm() {
       </button>
       <h3 className="text-center text-lg font-medium">
         Have an Account?{" "}
-        <a href="/login" className="text-mainGreen font-bold">
+        <Link href="/login" className="text-mainGreen font-bold">
           Log in!
-        </a>
+        </Link>
       </h3>
     </form>
   );

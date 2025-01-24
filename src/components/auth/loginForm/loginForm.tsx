@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "@/app/firebase";
+import Link from "next/link";
 
 function LoginForm() {
   const [username, setUsername] = useState("");
@@ -59,9 +60,9 @@ function LoginForm() {
       </button>
       <h3 className="text-center text-lg font-medium">
         Don't have an account?{" "}
-        <a href="/signup" className="text-mainGreen font-bold">
+        <Link href="/signup" className="text-mainGreen font-bold">
           Sign up!
-        </a>
+        </Link>
       </h3>
     </form>
   );

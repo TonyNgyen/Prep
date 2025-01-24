@@ -7,23 +7,24 @@ import { IoIosAddCircle } from "react-icons/io";
 import { MdInventory } from "react-icons/md";
 import { FiMoreHorizontal } from "react-icons/fi";
 import AddPopup from "../addPopup/addPop";
-import { useAuth } from "../authProvider";
+import { useAuth } from "@/context/AuthContext";
+import Link from "next/link";
 
 function NavBar() {
-  const { user, loading } = useAuth();
+  const { currentUser } = useAuth();
   const [addPopup, setAddPopup] = useState(false);
-  if (!user) {
+  if (!currentUser) {
     return (
       <div className="w-full py-5 lg:px-20 px-5 flex justify-between items-center">
-        <a href="/" className="text-mainGreen text-6xl font-bold">
+        <Link href="/" className="text-mainGreen text-6xl font-bold">
           Prep
-        </a>
+        </Link>
         <div className="flex gap-2 items-center justify-center">
           <button className="border-mainGreen border-[3px] bg-mainGreen text-white lg:px-6 px-4 py-2 rounded-full text-lg font-semibold">
-            <a href="/login">Login</a>
+            <Link href="/login">Login</Link>
           </button>
           <button className="border-mainGreen border-[3px] text-mainGreen lg:px-6 px-4 py-2 rounded-full text-lg font-semibold">
-            <a href="signup">Sign Up</a>
+            <Link href="signup">Sign Up</Link>
           </button>
         </div>
       </div>
@@ -31,18 +32,18 @@ function NavBar() {
   } else {
     return (
       <div className="w-full py-5 lg:px-20 px-2 flex justify-between items-center fixed bottom-0 left-0 bg-mainGreen h-20 z-50">
-        <a href="/">
+        <Link href="/">
           <button className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1">
             <IoHome className="w-full h-full" />
             <p className="font-semibold text-sm">Home</p>
           </button>
-        </a>
-        <a href="/history">
+        </Link>
+        <Link href="/history">
           <button className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1 ">
             <AiOutlineHistory className="w-full h-full" />
             <p className="font-semibold text-sm">History</p>
           </button>
-        </a>
+        </Link>
         <div className="relative">
           <div className={`absolute left-1/2 -translate-x-1/2 -top-[7.75rem]`}>
             {addPopup && <AddPopup />}
@@ -56,18 +57,18 @@ function NavBar() {
           </button>
         </div>
 
-        <a href="/inventory">
+        <Link href="/inventory">
           <button className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1">
             <MdInventory className="w-full h-full" />
             <p className="font-semibold text-sm">Inventory</p>
           </button>
-        </a>
-        <a href="/more">
+        </Link>
+        <Link href="/more">
           <button className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1 ">
             <FiMoreHorizontal className="w-full h-full" />
             <p className="font-semibold text-sm">More</p>
           </button>
-        </a>
+        </Link>
       </div>
     );
   }
