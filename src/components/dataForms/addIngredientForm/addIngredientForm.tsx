@@ -1,3 +1,6 @@
+import { db } from "@/app/firebase";
+import Dropdown from "@/components/dropdown/dropdown";
+import { addDoc, collection } from "firebase/firestore";
 import React, { useState } from "react";
 import { IoIosClose } from "react-icons/io";
 
@@ -16,21 +19,57 @@ function AddIngredientForm({ setShowAddForm }: formProp) {
   const [fat, setFat] = useState(0);
   const [price, setPrice] = useState(0);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [dropping, setDropping] = useState(false);
+
+  const handleDropdownChange = (selectedValue: string) => {
+    console.log(selectedValue);
+    setServeringUnit(selectedValue);
+  };
+
+  const options = [
+    { value: "g", label: "Grams (g)" },
+    { value: "oz", label: "Ounces (oz)" },
+    { value: "c", label: "Cups (c)" },
+  ];
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({
+
+    const ingredientData = {
       name,
+      servingSize,
+      servingUnit,
+      servingsPerContainer,
       calories,
       protein,
       carbs,
       fat,
-    });
+      price,
+    };
 
-    setName("");
-    setCalories(0);
-    setProtein(0);
-    setCarbs(0);
-    setFat(0);
+    try {
+      const docRef = await addDoc(
+        collection(db, "ingredients"),
+        ingredientData
+      );
+      console.log("Document written with ID: ", docRef.id);
+
+      // Reset the form
+      setName("");
+      setServingSize(0);
+      setServeringUnit("");
+      setServingsPerContainer(0);
+      setCalories(0);
+      setProtein(0);
+      setCarbs(0);
+      setFat(0);
+      setPrice(0);
+
+      alert("Ingredient added successfully!");
+    } catch (error) {
+      console.error("Error adding document: ", error);
+      alert("Failed to add ingredient.");
+    }
   };
 
   return (
@@ -50,22 +89,37 @@ function AddIngredientForm({ setShowAddForm }: formProp) {
             placeholder="Lettuce"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="border rounded w-full p-2"
+            className="border rounded-md w-full p-2 border-gray-300"
             required
           />
         </div>
-        <div>
-          <label className="block font-semibold">Serving Size</label>
-          <input
-            type="number"
-            value={servingSize === 0 ? "" : servingSize}
-            onChange={(e) =>
-              setServingSize(e.target.value === "" ? 0 : Number(e.target.value))
-            }
-            placeholder="50"
-            className="border rounded w-full p-2"
-            required
-          />
+        <div className="flex h-full">
+          <div className="w-1/2">
+            <label className="block font-semibold">Serving Size</label>
+            <input
+              type="number"
+              value={servingSize === 0 ? "" : servingSize}
+              onChange={(e) =>
+                setServingSize(
+                  e.target.value === "" ? 0 : Number(e.target.value)
+                )
+              }
+              placeholder="50"
+              className="border border-r-0 rounded-l-md w-full p-2 border-gray-300"
+              required
+            />
+          </div>
+          <div className="w-1/2 flex flex-col">
+            <label className="block font-semibold">Serving Unit</label>
+            <Dropdown
+              options={options}
+              defaultValue={options[0].label}
+              onChange={handleDropdownChange}
+              className={`${dropping ? " rounded-tr-md " : " rounded-r-md "}`}
+              drop={dropping}
+              onDropChange={setDropping}
+            />
+          </div>
         </div>
         <div>
           <label className="block font-semibold">Servings Per Container</label>
@@ -78,8 +132,7 @@ function AddIngredientForm({ setShowAddForm }: formProp) {
               )
             }
             placeholder="50"
-            className="border rounded w-full p-2"
-            required
+            className="border rounded-md w-full p-2 border-gray-300"
           />
         </div>
         <div>
@@ -91,8 +144,7 @@ function AddIngredientForm({ setShowAddForm }: formProp) {
               setPrice(e.target.value === "" ? 0 : Number(e.target.value))
             }
             placeholder="50"
-            className="border rounded w-full p-2"
-            required
+            className="border rounded-md w-full p-2 border-gray-300"
           />
         </div>
         <div>
@@ -104,7 +156,7 @@ function AddIngredientForm({ setShowAddForm }: formProp) {
               setCalories(e.target.value === "" ? 0 : Number(e.target.value))
             }
             placeholder="50"
-            className="border rounded w-full p-2"
+            className="border rounded-md w-full p-2 border-gray-300"
             required
           />
         </div>
@@ -117,8 +169,7 @@ function AddIngredientForm({ setShowAddForm }: formProp) {
               setProtein(e.target.value === "" ? 0 : Number(e.target.value))
             }
             placeholder="50"
-            className="border rounded w-full p-2"
-            required
+            className="border rounded-md w-full p-2 border-gray-300"
           />
         </div>
         <div>
@@ -130,8 +181,7 @@ function AddIngredientForm({ setShowAddForm }: formProp) {
               setCarbs(e.target.value === "" ? 0 : Number(e.target.value))
             }
             placeholder="50"
-            className="border rounded w-full p-2"
-            required
+            className="border rounded-md w-full p-2 border-gray-300"
           />
         </div>
         <div>
@@ -143,13 +193,12 @@ function AddIngredientForm({ setShowAddForm }: formProp) {
               setFat(e.target.value === "" ? 0 : Number(e.target.value))
             }
             placeholder="50"
-            className="border rounded w-full p-2"
-            required
+            className="border rounded-md w-full p-2 border-gray-300"
           />
         </div>
         <button
           type="submit"
-          className="bg-mainGreen text-white font-semibold rounded px-4 py-2"
+          className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
         >
           Add Ingredient
         </button>
