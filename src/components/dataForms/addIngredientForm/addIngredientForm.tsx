@@ -1,4 +1,4 @@
-import { db } from "@/app/firebase";
+import { auth, db } from "@/app/firebase";
 import Dropdown from "@/components/dropdown/dropdown";
 import { addDoc, collection } from "firebase/firestore";
 import React, { useState } from "react";
@@ -6,9 +6,10 @@ import { IoIosClose } from "react-icons/io";
 
 type formProp = {
   setShowAddForm: React.Dispatch<React.SetStateAction<boolean>>;
+  isForm: boolean;
 };
 
-function AddIngredientForm({ setShowAddForm }: formProp) {
+function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
   const [name, setName] = useState("");
   const [servingSize, setServingSize] = useState(0);
   const [servingUnit, setServeringUnit] = useState("");
@@ -35,26 +36,61 @@ function AddIngredientForm({ setShowAddForm }: formProp) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const ingredientData = {
-      name,
-      servingSize,
-      servingUnit,
-      servingsPerContainer,
-      calories,
-      protein,
-      carbs,
-      fat,
-      price,
-    };
+    const user = auth.currentUser;
+
+    if (!user) {
+      console.error("User is not authenticated");
+      return;
+    }
 
     try {
+      // Reference to the user's ingredients subcollection
+      const ingredientsRef = collection(db, "users", user.uid, "ingredients");
+
+      const newIngredient = {
+        name,
+        nutrition: {
+          calories,
+          protein,
+          carbs,
+          fats: fat,
+          sodium: { amount: 0, unit: "mg" }, // Replace 0 with actual sodium value if available
+        },
+        servingSize,
+        servingUnit,
+        servingsPerContainer,
+        pricePerContainer: price,
+        howManyTimesUsed: 0, // Default to 0 for a new ingredient
+        createdAt: new Date().toISOString(), // Optional: Add a timestamp
+      };
+
+      // Add the ingredient document
+      await addDoc(ingredientsRef, newIngredient);
+
+      const newIngredient2 = {
+        name,
+        nutrition: {
+          calories,
+          protein,
+          carbs,
+          fats: fat,
+          sodium: { amount: 0, unit: "mg" }, // Replace 0 with actual sodium value if available
+        },
+        servingSize,
+        servingUnit,
+        servingsPerContainer,
+        pricePerContainer: price,
+        createdAt: new Date().toISOString(), // Optional: Add a timestamp
+      };
+
       const docRef = await addDoc(
         collection(db, "ingredients"),
-        ingredientData
+        newIngredient2
       );
-      console.log("Document written with ID: ", docRef.id);
 
-      // Reset the form
+      alert("Ingredient added successfully!");
+
+      // Clear form fields
       setName("");
       setServingSize(0);
       setServeringUnit("");
@@ -64,11 +100,8 @@ function AddIngredientForm({ setShowAddForm }: formProp) {
       setCarbs(0);
       setFat(0);
       setPrice(0);
-
-      alert("Ingredient added successfully!");
     } catch (error) {
-      console.error("Error adding document: ", error);
-      alert("Failed to add ingredient.");
+      console.error("Error adding ingredient: ", error);
     }
   };
 
@@ -76,9 +109,11 @@ function AddIngredientForm({ setShowAddForm }: formProp) {
     <div className="p-6">
       <div className="flex justify-between mb-3 items-center">
         <h1 className="text-3xl font-bold">Add Ingredient</h1>
-        <button onClick={() => setShowAddForm(false)} className="flex">
-          <IoIosClose className="text-5xl flex" />
-        </button>
+        {isForm && (
+          <button onClick={() => setShowAddForm(false)} className="flex">
+            <IoIosClose className="text-5xl flex" />
+          </button>
+        )}
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-3">

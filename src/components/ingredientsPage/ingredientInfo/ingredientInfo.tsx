@@ -11,11 +11,11 @@ type Ingredient = {
   id: string;
   name: string;
   nutrition: Nutrition;
-  servingSize: number;
-  servingUnit: string;
-  servingsPerContainer: number;
-  pricePerContainer: number;
-  historicalServingsUsage: number;
+  servingSize?: number;
+  servingUnit?: string;
+  servingsPerContainer?: number;
+  pricePerContainer?: number;
+  howManyTimesUsed?: number;
 };
 
 type IngredientInfoProps = {
@@ -63,7 +63,10 @@ function IngredientInfo({ ingredient }: IngredientInfoProps) {
           </div>
 
           {Object.keys(ingredient.nutrition).map((nutritionMacro) => (
-            <div className="flex items-center justify-between text-2xl" key={nutritionMacro}>
+            <div
+              className="flex items-center justify-between text-2xl"
+              key={nutritionMacro}
+            >
               <h1>
                 {nutritionMacro.charAt(0).toUpperCase() +
                   nutritionMacro.slice(1)}

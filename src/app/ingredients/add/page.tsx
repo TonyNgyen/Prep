@@ -4,9 +4,7 @@ import AddIngredientForm from "@/components/dataForms/addIngredientForm/addIngre
 import React from "react";
 
 function AddIngredientsPage() {
-  return (
-    <AddIngredientForm />
-  );
+  return <AddIngredientForm isForm={false} />;
 }
 
 export default AddIngredientsPage;
