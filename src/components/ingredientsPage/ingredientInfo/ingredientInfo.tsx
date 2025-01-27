@@ -16,6 +16,7 @@ type Ingredient = {
   servingsPerContainer?: number;
   pricePerContainer?: number;
   howManyTimesUsed?: number;
+  createdAt: Date;
 };
 
 type IngredientInfoProps = {

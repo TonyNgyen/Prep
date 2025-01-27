@@ -19,6 +19,7 @@ type Ingredient = {
   servingsPerContainer?: number;
   pricePerContainer?: number;
   howManyTimesUsed?: number;
+  createdAt: Date;
 };
 
 type IngredientsList = {
@@ -51,6 +52,8 @@ function IngredientsPage() {
           setLoading(false);
           return;
         }
+
+        console.log(data);
 
         const formattedData: IngredientsList = data.reduce(
           (acc, ingredient) => {
@@ -89,10 +92,14 @@ function IngredientsPage() {
           {/* <button>Filter</button>
           <button>Sort</button> */}
         </div>
-        {Object.keys(ingredientsList).map((ingredientId) => {
-          const ingredient = ingredientsList[ingredientId];
-          return <IngredientInfo key={ingredient.id} ingredient={ingredient} />;
-        })}
+        <div className="space-y-3">
+          {Object.keys(ingredientsList).map((ingredientId) => {
+            const ingredient = ingredientsList[ingredientId];
+            return (
+              <IngredientInfo key={ingredient.id} ingredient={ingredient} />
+            );
+          })}
+        </div>
       </div>
     );
   }

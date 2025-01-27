@@ -1,10 +1,11 @@
 "use client";
 
 import AddIngredientForm from "@/components/dataForms/addIngredientForm/addIngredientForm";
-import IngredientInfo from "@/components/ingredientsPage/ingredientInfo/ingredientInfo";
 import React, { useEffect, useState } from "react";
-import { getIngredients } from "@/lib/data";
+import { getIngredients, getRecipes } from "@/lib/data";
 import { useAuth } from "@/context/AuthContext";
+import RecipeInfo from "@/components/recipeInfo/recipeInfo";
+import AddRecipeForm from "@/components/dataForms/addRecipeForm/addRecipeForm";
 
 type Nutrition = {
   [key: string]: number | { amount: number; unit: string };
@@ -19,20 +20,35 @@ type Ingredient = {
   servingsPerContainer?: number;
   pricePerContainer?: number;
   howManyTimesUsed?: number;
+  createdAt: Date;
 };
 
 type IngredientsList = {
   [key: string]: Ingredient;
 };
 
+type Recipe = {
+  id: string;
+  name: string;
+  nutrition: Nutrition;
+  ingredientsList: IngredientsList
+  howManyServings: number;
+  pricePerServing?: number;
+  howManyTimesUsed?: number;
+};
+
+type RecipeList = {
+  [key: string]: Recipe;
+}
+
 function RecipesPage() {
-  const [ingredientsList, setIngredientList] = useState<IngredientsList>({});
+  const [recipeList, setRecipeList] = useState<RecipeList>({});
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
   const { currentUser } = useAuth();
 
   useEffect(() => {
-    const fetchIngredients = async () => {
+    const fetchRecipes = async () => {
       if (!currentUser) {
         return;
       }
@@ -44,23 +60,23 @@ function RecipesPage() {
           return;
         }
 
-        const data = await getIngredients(currentUser.uid);
+        const data = await getRecipes(currentUser.uid);
 
         if (!data) {
-          setIngredientList({});
+          setRecipeList({});
           setLoading(false);
           return;
         }
 
-        const formattedData: IngredientsList = data.reduce(
-          (acc, ingredient) => {
-            acc[ingredient.id] = ingredient;
+        const formattedData: RecipeList = data.reduce(
+          (acc, recipe) => {
+            acc[recipe.id] = recipe;
             return acc;
           },
-          {} as IngredientsList
+          {} as RecipeList
         );
 
-        setIngredientList(formattedData);
+        setRecipeList(formattedData);
       } catch (error) {
         console.error("Failed to load ingredients:", error);
       } finally {
@@ -68,13 +84,13 @@ function RecipesPage() {
       }
     };
 
-    fetchIngredients();
+    fetchRecipes();
   }, [currentUser]);
 
   if (loading) {
     return <h1>Loading</h1>;
   } else if (showAddForm) {
-    return <AddIngredientForm setShowAddForm={setShowAddForm} isForm={true} />;
+    return <AddRecipeForm setShowAddForm={setShowAddForm} isForm={true} />;
   } else {
     return (
       <div className="p-6">
@@ -86,12 +102,12 @@ function RecipesPage() {
           >
             Add Recipe
           </button>
-          {/* <button>Filter</button>
-          <button>Sort</button> */}
+          <button>Filter</button>
+          <button>Sort</button>
         </div>
-        {Object.keys(ingredientsList).map((ingredientId) => {
-          const ingredient = ingredientsList[ingredientId];
-          return <RecipeInfo key={ingredient.id} recipe={ingredient} />;
+        {Object.keys(recipeList).map((recipeID) => {
+          const recipe = recipeList[recipeID];
+          return <RecipeInfo key={recipe.id} recipe={recipe} />;
         })}
       </div>
     );

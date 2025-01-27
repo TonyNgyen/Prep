@@ -22,14 +22,15 @@ type Ingredient = {
   servingsPerContainer?: number;
   pricePerContainer?: number;
   howManyTimesUsed?: number;
+  createdAt: Date;
 };
 
 type Recipe = {
   id: string;
   name: string;
   nutrition: Nutrition;
+  ingredientsList: IngredientsList
   howManyServings: number;
-  servingSize?: number;
   pricePerServing?: number;
   howManyTimesUsed?: number;
 };
@@ -42,26 +43,12 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
   const [name, setName] = useState("");
   const [ingredientsList, setIngredientList] = useState<IngredientsList>({});
   const [servingSize, setServingSize] = useState(0);
-  const [servingsPerContainer, setServingsPerContainer] = useState(0);
   const [calories, setCalories] = useState(0);
   const [protein, setProtein] = useState(0);
   const [carbs, setCarbs] = useState(0);
   const [fat, setFat] = useState(0);
   const [sodium, setSodium] = useState(0);
   const [price, setPrice] = useState(0);
-
-  const [dropping, setDropping] = useState(false);
-
-  const handleDropdownChange = (selectedValue: string) => {
-    console.log(selectedValue);
-    setServeringUnit(selectedValue);
-  };
-
-  const options = [
-    { value: "g", label: "Grams (g)" },
-    { value: "oz", label: "Ounces (oz)" },
-    { value: "c", label: "Cups (c)" },
-  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -87,8 +74,6 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
           sodium: { amount: sodium, unit: "mg" }, // Replace 0 with actual sodium value if available
         },
         servingSize,
-        servingUnit,
-        servingsPerContainer,
         pricePerContainer: price,
         howManyTimesUsed: 0, // Default to 0 for a new ingredient
         createdAt: new Date().toISOString(), // Optional: Add a timestamp
@@ -107,8 +92,6 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
           sodium: { amount: sodium, unit: "mg" }, // Replace 0 with actual sodium value if available
         },
         servingSize,
-        servingUnit,
-        servingsPerContainer,
         pricePerContainer: price,
         createdAt: new Date().toISOString(), // Optional: Add a timestamp
       };
@@ -123,8 +106,6 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
       // Clear form fields
       setName("");
       setServingSize(0);
-      setServeringUnit("");
-      setServingsPerContainer(0);
       setCalories(0);
       setProtein(0);
       setCarbs(0);
@@ -139,7 +120,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
   return (
     <div className="p-6">
       <div className="flex justify-between mb-3 items-center">
-        <h1 className="text-3xl font-bold">Add Ingredient</h1>
+        <h1 className="text-3xl font-bold">Add Recipe</h1>
         {isForm && (
           <button onClick={() => setShowAddForm(false)} className="flex2">
             <IoIosClose className="text-5xl flex" />
@@ -149,7 +130,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
 
       <form onSubmit={handleSubmit} className="space-y-3">
         <div>
-          <label className="block font-semibold">Ingredient Name</label>
+          <label className="block font-semibold">Recipe Name</label>
           <input
             type="text"
             placeholder="Lettuce"
@@ -160,8 +141,8 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
           />
         </div>
         <div className="flex h-full">
-          <div className="w-1/2">
-            <label className="block font-semibold">Serving Size</label>
+          <div className="w-full">
+            <label className="block font-semibold">Servings</label>
             <input
               type="number"
               value={servingSize === 0 ? "" : servingSize}
@@ -170,20 +151,9 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
                   e.target.value === "" ? 0 : Number(e.target.value)
                 )
               }
-              placeholder="50"
+              placeholder="10"
               className="border border-r-0 rounded-l-md w-full p-2 border-gray-300"
               required
-            />
-          </div>
-          <div className="w-1/2 flex flex-col">
-            <label className="block font-semibold">Serving Unit</label>
-            <Dropdown
-              options={options}
-              defaultValue={options[0].label}
-              onChange={handleDropdownChange}
-              className={`${dropping ? " rounded-tr-md " : " rounded-r-md "}`}
-              drop={dropping}
-              onDropChange={setDropping}
             />
           </div>
         </div>

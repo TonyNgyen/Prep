@@ -15,18 +15,21 @@ type Ingredient = {
   servingsPerContainer?: number;
   pricePerContainer?: number;
   howManyTimesUsed?: number;
+  createdAt: Date;
 };
 
 type Recipe = {
   id: string;
   name: string;
   nutrition: Nutrition;
+  ingredientsList: IngredientsList
   howManyServings: number;
-  servingSize?: number;
-  servingUnit?: string;
-  servingsPerContainer?: number;
-  pricePerContainer?: number;
+  pricePerServing?: number;
   howManyTimesUsed?: number;
+};
+
+type IngredientsList = {
+  [key: string]: Ingredient;
 };
 
 const getIngredients = async (userID: string): Promise<Ingredient[]> => {
@@ -51,7 +54,7 @@ const getIngredients = async (userID: string): Promise<Ingredient[]> => {
   }
 };
 
-const getRecipes = async (userID: string): Promise<Ingredient[]> => {
+const getRecipes = async (userID: string): Promise<Recipe[]> => {
   try {
     // Reference the 'ingredients' subcollection for a specific user
     const recipesRef = collection(db, `users/${userID}/recipes`);

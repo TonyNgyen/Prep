@@ -241,9 +241,9 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
           <label className="block font-semibold flex-1">Sodium (mg)</label>
           <input
             type="number"
-            value={fat === 0 ? "" : fat}
+            value={sodium === 0 ? "" : sodium}
             onChange={(e) =>
-              setFat(e.target.value === "" ? 0 : Number(e.target.value))
+              setSodium(e.target.value === "" ? 0 : Number(e.target.value))
             }
             placeholder="50"
             className="border rounded-md w-1/3 p-2 border-gray-300"
