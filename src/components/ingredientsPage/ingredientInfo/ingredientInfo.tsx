@@ -24,6 +24,8 @@ type IngredientInfoProps = {
 
 function IngredientInfo({ ingredient }: IngredientInfoProps) {
   const [dropdown, setDropdown] = useState(false);
+  const desiredOrder = ["calories", "protein", "carbs", "fats", "sodium"];
+
   return (
     <div className="shadow-md">
       <div
@@ -57,39 +59,43 @@ function IngredientInfo({ ingredient }: IngredientInfoProps) {
               <h1>Serving Size</h1>
               <p>
                 {ingredient.servingSize}
-                {ingredient.servingUnit}
+                {ingredient.servingUnit ? ingredient.servingUnit : "g"}
               </p>
             </div>
           </div>
 
-          {Object.keys(ingredient.nutrition).map((nutritionMacro) => (
-            <div
-              className="flex items-center justify-between text-2xl"
-              key={nutritionMacro}
-            >
-              <h1>
-                {nutritionMacro.charAt(0).toUpperCase() +
-                  nutritionMacro.slice(1)}
-              </h1>
-              <p>
-                {typeof ingredient.nutrition[
-                  nutritionMacro as keyof Nutrition
-                ] == "number"
-                  ? ingredient.nutrition[nutritionMacro as keyof Nutrition] +
-                    "g"
-                  : (
-                      ingredient.nutrition[
+          {Object.keys(ingredient.nutrition)
+            .sort((a, b) => desiredOrder.indexOf(a) - desiredOrder.indexOf(b))
+            .map((nutritionMacro) => (
+              <div
+                className="flex items-center justify-between text-2xl"
+                key={nutritionMacro}
+              >
+                <h1>
+                  {nutritionMacro.charAt(0).toUpperCase() +
+                    nutritionMacro.slice(1)}
+                </h1>
+                <p>
+                  {nutritionMacro == "calories"
+                    ? ingredient.nutrition["calories"] + ""
+                    : typeof ingredient.nutrition[
                         nutritionMacro as keyof Nutrition
-                      ] as { amount: number; unit: string }
-                    ).amount +
-                    (
-                      ingredient.nutrition[
-                        nutritionMacro as keyof Nutrition
-                      ] as { amount: number; unit: string }
-                    ).unit}
-              </p>
-            </div>
-          ))}
+                      ] == "number"
+                    ? ingredient.nutrition[nutritionMacro as keyof Nutrition] +
+                      "g"
+                    : (
+                        ingredient.nutrition[
+                          nutritionMacro as keyof Nutrition
+                        ] as { amount: number; unit: string }
+                      ).amount +
+                      (
+                        ingredient.nutrition[
+                          nutritionMacro as keyof Nutrition
+                        ] as { amount: number; unit: string }
+                      ).unit}
+                </p>
+              </div>
+            ))}
         </div>
       )}
     </div>

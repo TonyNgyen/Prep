@@ -2,17 +2,14 @@
 
 import AddIngredientForm from "@/components/dataForms/addIngredientForm/addIngredientForm";
 import IngredientInfo from "@/components/ingredientsPage/ingredientInfo/ingredientInfo";
-import { collection, getDocs } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { auth, db } from "../firebase";
 import { getIngredients } from "@/lib/data";
+import { useAuth } from "@/context/AuthContext";
 
-// Define a type for the nutrition information
 type Nutrition = {
   [key: string]: number | { amount: number; unit: string };
 };
 
-// Define a type for the ingredient
 type Ingredient = {
   id: string;
   name: string;
@@ -24,7 +21,6 @@ type Ingredient = {
   howManyTimesUsed?: number;
 };
 
-// Define a type for the ingredients list
 type IngredientsList = {
   [key: string]: Ingredient;
 };
@@ -33,17 +29,29 @@ function IngredientsPage() {
   const [ingredientsList, setIngredientList] = useState<IngredientsList>({});
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     const fetchIngredients = async () => {
+      if (!currentUser) {
+        return;
+      }
       try {
-        const data = await getIngredients();
-
-        if (data == undefined) {
+        setLoading(true);
+        if (!currentUser) {
+          console.warn("No user is logged in");
+          setLoading(false);
           return;
         }
 
-        // Convert array to object keyed by ingredient ID
+        const data = await getIngredients(currentUser.uid);
+
+        if (!data) {
+          setIngredientList({});
+          setLoading(false);
+          return;
+        }
+
         const formattedData: IngredientsList = data.reduce(
           (acc, ingredient) => {
             acc[ingredient.id] = ingredient;
@@ -61,7 +69,7 @@ function IngredientsPage() {
     };
 
     fetchIngredients();
-  }, []);
+  }, [currentUser]);
 
   if (loading) {
     return <h1>Loading</h1>;
@@ -78,8 +86,8 @@ function IngredientsPage() {
           >
             Add Ingredient
           </button>
-          <button>Filter</button>
-          <button>Sort</button>
+          {/* <button>Filter</button>
+          <button>Sort</button> */}
         </div>
         {Object.keys(ingredientsList).map((ingredientId) => {
           const ingredient = ingredientsList[ingredientId];

@@ -9,7 +9,7 @@ type formProp = {
   isForm: boolean;
 };
 
-function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
+function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
   const [name, setName] = useState("");
   const [servingSize, setServingSize] = useState(0);
   const [servingUnit, setServeringUnit] = useState("");
@@ -260,4 +260,4 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
   );
 }
 
-export default AddIngredientForm;
+export default AddRecipeForm;
