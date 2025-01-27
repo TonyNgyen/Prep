@@ -9,10 +9,39 @@ type formProp = {
   isForm: boolean;
 };
 
+type Nutrition = {
+  [key: string]: number | { amount: number; unit: string };
+};
+
+type Ingredient = {
+  id: string;
+  name: string;
+  nutrition: Nutrition;
+  servingSize?: number;
+  servingUnit?: string;
+  servingsPerContainer?: number;
+  pricePerContainer?: number;
+  howManyTimesUsed?: number;
+};
+
+type Recipe = {
+  id: string;
+  name: string;
+  nutrition: Nutrition;
+  howManyServings: number;
+  servingSize?: number;
+  pricePerServing?: number;
+  howManyTimesUsed?: number;
+};
+
+type IngredientsList = {
+  [key: string]: Ingredient;
+};
+
 function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
   const [name, setName] = useState("");
+  const [ingredientsList, setIngredientList] = useState<IngredientsList>({});
   const [servingSize, setServingSize] = useState(0);
-  const [servingUnit, setServeringUnit] = useState("");
   const [servingsPerContainer, setServingsPerContainer] = useState(0);
   const [calories, setCalories] = useState(0);
   const [protein, setProtein] = useState(0);
@@ -158,102 +187,11 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
             />
           </div>
         </div>
-        <div className="flex w-full">
-          <label className="block font-semibold flex-1">
-            Servings Per Container
-          </label>
-          <input
-            type="number"
-            value={servingsPerContainer === 0 ? "" : servingsPerContainer}
-            onChange={(e) =>
-              setServingsPerContainer(
-                e.target.value === "" ? 0 : Number(e.target.value)
-              )
-            }
-            placeholder="50"
-            className="border rounded-md w-1/3 p-2 border-gray-300"
-          />
-        </div>
-        <div className="flex w-full">
-          <label className="block font-semibold flex-1">
-            Price Per Container
-          </label>
-          <input
-            type="number"
-            value={price === 0 ? "" : price}
-            onChange={(e) =>
-              setPrice(e.target.value === "" ? 0 : Number(e.target.value))
-            }
-            placeholder="50"
-            className="border rounded-md w-1/3 p-2 border-gray-300"
-          />
-        </div>
-        <div className="flex w-full">
-          <label className="block font-semibold flex-1">Calories</label>
-          <input
-            type="number"
-            value={calories === 0 ? "" : calories}
-            onChange={(e) =>
-              setCalories(e.target.value === "" ? 0 : Number(e.target.value))
-            }
-            placeholder="50"
-            className="border rounded-md w-1/3 p-2 border-gray-300"
-            required
-          />
-        </div>
-        <div className="flex w-full">
-          <label className="block font-semibold flex-1">Protein (g)</label>
-          <input
-            type="number"
-            value={protein === 0 ? "" : protein}
-            onChange={(e) =>
-              setProtein(e.target.value === "" ? 0 : Number(e.target.value))
-            }
-            placeholder="50"
-            className="border rounded-md w-1/3 p-2 border-gray-300"
-          />
-        </div>
-        <div className="flex w-full">
-          <label className="block font-semibold flex-1">Carbs (g)</label>
-          <input
-            type="number"
-            value={carbs === 0 ? "" : carbs}
-            onChange={(e) =>
-              setCarbs(e.target.value === "" ? 0 : Number(e.target.value))
-            }
-            placeholder="50"
-            className="border rounded-md w-1/3 p-2 border-gray-300"
-          />
-        </div>
-        <div className="flex w-full">
-          <label className="block font-semibold flex-1">Fats (g)</label>
-          <input
-            type="number"
-            value={fat === 0 ? "" : fat}
-            onChange={(e) =>
-              setFat(e.target.value === "" ? 0 : Number(e.target.value))
-            }
-            placeholder="50"
-            className="border rounded-md w-1/3 p-2 border-gray-300"
-          />
-        </div>
-        <div className="flex w-full">
-          <label className="block font-semibold flex-1">Sodium (mg)</label>
-          <input
-            type="number"
-            value={fat === 0 ? "" : fat}
-            onChange={(e) =>
-              setFat(e.target.value === "" ? 0 : Number(e.target.value))
-            }
-            placeholder="50"
-            className="border rounded-md w-1/3 p-2 border-gray-300"
-          />
-        </div>
         <button
           type="submit"
           className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
         >
-          Add Ingredient
+          Add Recipe
         </button>
       </form>
     </div>

@@ -91,7 +91,7 @@ function RecipesPage() {
         </div>
         {Object.keys(ingredientsList).map((ingredientId) => {
           const ingredient = ingredientsList[ingredientId];
-          return <IngredientInfo key={ingredient.id} ingredient={ingredient} />;
+          return <RecipeInfo key={ingredient.id} recipe={ingredient} />;
         })}
       </div>
     );
