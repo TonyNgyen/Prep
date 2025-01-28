@@ -158,7 +158,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
             />
           </div>
         </div>
-        <div className="flex w-full">
+        <div className="flex w-full items-center">
           <label className="block font-semibold flex-1">
             Servings Per Container
           </label>
@@ -174,7 +174,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
             className="border rounded-md w-1/3 p-2 border-gray-300"
           />
         </div>
-        <div className="flex w-full">
+        <div className="flex w-full items-center">
           <label className="block font-semibold flex-1">
             Price Per Container
           </label>
@@ -188,7 +188,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
             className="border rounded-md w-1/3 p-2 border-gray-300"
           />
         </div>
-        <div className="flex w-full">
+        <div className="flex w-full items-center">
           <label className="block font-semibold flex-1">Calories</label>
           <input
             type="number"
@@ -201,7 +201,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
             required
           />
         </div>
-        <div className="flex w-full">
+        <div className="flex w-full items-center">
           <label className="block font-semibold flex-1">Protein (g)</label>
           <input
             type="number"
@@ -213,7 +213,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
             className="border rounded-md w-1/3 p-2 border-gray-300"
           />
         </div>
-        <div className="flex w-full">
+        <div className="flex w-full items-center">
           <label className="block font-semibold flex-1">Carbs (g)</label>
           <input
             type="number"
@@ -225,7 +225,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
             className="border rounded-md w-1/3 p-2 border-gray-300"
           />
         </div>
-        <div className="flex w-full">
+        <div className="flex w-full items-center">
           <label className="block font-semibold flex-1">Fats (g)</label>
           <input
             type="number"
@@ -237,7 +237,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
             className="border rounded-md w-1/3 p-2 border-gray-300"
           />
         </div>
-        <div className="flex w-full">
+        <div className="flex w-full items-center">
           <label className="block font-semibold flex-1">Sodium (mg)</label>
           <input
             type="number"
