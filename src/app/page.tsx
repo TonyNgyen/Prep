@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import NutritionalChart from "@/components/charts/nutritionalChart/nutritionalChart";
 import WeightHistoryChart from "@/components/charts/weightHistoryChart/weightHistoryChart";
 import { FaPlusSquare } from "react-icons/fa";
-import { onAuthStateChanged, User } from "firebase/auth";
-import { auth } from "./firebase";
 import Link from "next/link";
+import { createClient } from "@/utils/supabase/client";
+import { User } from "@supabase/supabase-js";
 
 interface Nutrition {
   current: number;
@@ -34,20 +34,21 @@ export default function Home() {
   const [weightHistoryData, setWeightHistoryData] =
     useState<WeightHistoryData | null>(null);
   const [loading, setLoading] = useState(true);
+  const supabase = createClient();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser); // Set the user if logged in
-      } else {
-        setUser(null); // Set null if logged out
-      }
-      setLoading(false); // Authentication state is determined
-    });
+  const getUser = async () => {
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data?.user) {
+      console.log("no user");
+      setUser(null);
+    } else {
+      setUser(data.user);
+    }
+  };
 
-    // Cleanup the listener on component unmount
-    return () => unsubscribe();
-  }, []);
+  supabase.auth.onAuthStateChange((event, session) => {
+    getUser();
+  });
 
   useEffect(() => {
     if (!user) {

@@ -1,19 +1,36 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoHome } from "react-icons/io5";
 import { AiOutlineHistory } from "react-icons/ai";
 import { IoIosAddCircle } from "react-icons/io";
 import { MdInventory } from "react-icons/md";
 import { FiMoreHorizontal } from "react-icons/fi";
 import AddPopup from "../addPopup/addPop";
-import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
+import { User } from "@supabase/supabase-js"; // Import the User type
+import { createClient } from "@/utils/supabase/client";
 
 function NavBar() {
-  const { currentUser } = useAuth();
+  const [user, setUser] = useState<User | null>(null);
   const [addPopup, setAddPopup] = useState(false);
-  if (!currentUser) {
+  const supabase = createClient();
+
+  const getUser = async () => {
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data?.user) {
+      console.log("no user");
+      setUser(null);
+    } else {
+      setUser(data.user);
+    }
+  };
+
+  supabase.auth.onAuthStateChange((event, session) => {
+    getUser();
+  });
+
+  if (!user) {
     return (
       <div className="w-full py-5 lg:px-20 px-5 flex justify-between items-center">
         <Link href="/" className="text-mainGreen text-6xl font-bold">

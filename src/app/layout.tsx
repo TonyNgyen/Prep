@@ -1,7 +1,6 @@
 import "./globals.css";
-import { AuthProvider } from "@/context/AuthContext";
-import NavBar from "@/components/navbar/navbar";
 import Container from "@/components/container";
+import NavBar from "@/components/navbar/navbar";
 
 export const metadata = {
   title: "Prep",
@@ -15,11 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AuthProvider>
-        <body className="min-h-screen">
-          <Container>{children}</Container>
-        </body>
-      </AuthProvider>
+      <body className="min-h-screen">
+        <NavBar />
+        {children}
+      </body>
     </html>
   );
 }
