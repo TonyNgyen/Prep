@@ -1,9 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "@/app/firebase";
-import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import Link from "next/link";
 
 function SignupForm() {

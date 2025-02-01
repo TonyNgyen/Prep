@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 
 type Nutrition = {
-  [key: string]: number | { amount: number; unit: string };
+  [key: string]: number;
 };
 
 type Ingredient = {

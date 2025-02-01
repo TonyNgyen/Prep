@@ -4,10 +4,9 @@ import AddIngredientForm from "@/components/dataForms/addIngredientForm/addIngre
 import IngredientInfo from "@/components/ingredientsPage/ingredientInfo/ingredientInfo";
 import React, { useEffect, useState } from "react";
 import { getIngredients } from "@/lib/data";
-import { useAuth } from "@/context/AuthContext";
 
 type Nutrition = {
-  [key: string]: number | { amount: number; unit: string };
+  [key: string]: number;
 };
 
 type Ingredient = {

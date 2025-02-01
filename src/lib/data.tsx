@@ -1,8 +1,5 @@
-import { auth, db } from "@/app/firebase";
-import { collection, getDocs } from "firebase/firestore";
-
 type Nutrition = {
-  [key: string]: number | { amount: number; unit: string };
+  [key: string]: number;
 };
 
 // Define a type for the ingredient

@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "@/app/firebase";
 import Link from "next/link";
 
 function LoginForm() {

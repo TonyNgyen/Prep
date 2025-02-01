@@ -1,6 +1,4 @@
-import { auth, db } from "@/app/firebase";
 import Dropdown from "@/components/dropdown/dropdown";
-import { addDoc, collection } from "firebase/firestore";
 import React, { useState } from "react";
 import { IoIosClose } from "react-icons/io";
 
@@ -75,7 +73,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
           protein,
           carbs,
           fats: fat,
-          sodium: { amount: sodium, unit: "mg" }, // Replace 0 with actual sodium value if available
+          sodium, // Replace 0 with actual sodium value if available
         },
         servingSize,
         servingUnit,

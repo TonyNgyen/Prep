@@ -1,7 +1,7 @@
 import React from 'react'
 
 type Nutrition = {
-  [key: string]: number | { amount: number; unit: string };
+  [key: string]: number;
 };
 
 type Ingredient = {

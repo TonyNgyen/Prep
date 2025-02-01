@@ -3,12 +3,11 @@
 import AddIngredientForm from "@/components/dataForms/addIngredientForm/addIngredientForm";
 import React, { useEffect, useState } from "react";
 import { getIngredients, getRecipes } from "@/lib/data";
-import { useAuth } from "@/context/AuthContext";
 import RecipeInfo from "@/components/recipeInfo/recipeInfo";
 import AddRecipeForm from "@/components/dataForms/addRecipeForm/addRecipeForm";
 
 type Nutrition = {
-  [key: string]: number | { amount: number; unit: string };
+  [key: string]: number;
 };
 
 type Ingredient = {
