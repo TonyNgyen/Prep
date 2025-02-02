@@ -27,7 +27,7 @@ function NavBar() {
   };
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
-      console.log(event, session);
+      // console.log(event, session);
       getUser();
     });
   }, [supabase]);

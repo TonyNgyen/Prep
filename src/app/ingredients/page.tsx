@@ -3,75 +3,66 @@
 import AddIngredientForm from "@/components/dataForms/addIngredientForm/addIngredientForm";
 import IngredientInfo from "@/components/ingredientsPage/ingredientInfo/ingredientInfo";
 import React, { useEffect, useState } from "react";
-import { getIngredients } from "@/lib/data";
-
-type Nutrition = {
-  [key: string]: number;
-};
-
-type Ingredient = {
-  id: string;
-  name: string;
-  nutrition: Nutrition;
-  servingSize?: number;
-  servingUnit?: string;
-  servingsPerContainer?: number;
-  pricePerContainer?: number;
-  howManyTimesUsed?: number;
-  createdAt: Date;
-};
-
-type IngredientsList = {
-  [key: string]: Ingredient;
-};
+import { createClient } from "@/utils/supabase/client";
+import { Ingredient } from "@/types";
 
 function IngredientsPage() {
-  const [ingredientsList, setIngredientList] = useState<IngredientsList>({});
+  const supabase = createClient();
+  const [ingredientsList, setIngredientList] = useState<Ingredient[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
-  const { currentUser } = useAuth();
 
   useEffect(() => {
     const fetchIngredients = async () => {
-      if (!currentUser) {
-        return;
-      }
       try {
-        setLoading(true);
-        if (!currentUser) {
-          console.warn("No user is logged in");
-          setLoading(false);
+        //console.log("1");
+        const { data: userData, error: userError } =
+          await supabase.auth.getUser();
+        //console.log("8");
+
+        if (userError) {
+          console.error("Error fetching user:", userError);
           return;
         }
+        //console.log("2");
 
-        const data = await getIngredients(currentUser.uid);
+        const userId = userData?.user?.id;
 
-        if (!data) {
-          setIngredientList({});
-          setLoading(false);
+        const { data: fetchUserData, error: fetchUserError } = await supabase
+          .from("users")
+          .select()
+          .eq("uid", userId);
+
+        if (fetchUserError || !fetchUserData || fetchUserData.length === 0) {
+          console.error("Error fetching user data:", fetchUserError);
           return;
         }
+        //console.log("3");
 
-        console.log(data);
+        const ingredientIdList = fetchUserData[0].ingredients;
 
-        const formattedData: IngredientsList = data.reduce(
-          (acc, ingredient) => {
-            acc[ingredient.id] = ingredient;
-            return acc;
-          },
-          {} as IngredientsList
-        );
+        const { data: fetchIngredientData, error: fetchIngredientError } =
+          await supabase
+            .from("ingredients")
+            .select()
+            .in("id", ingredientIdList);
 
-        setIngredientList(formattedData);
-      } catch (error) {
-        console.error("Failed to load ingredients:", error);
-      } finally {
+        if (fetchIngredientError || !fetchIngredientData) {
+          console.error("Error fetching ingredients:", fetchIngredientError);
+          return;
+        }
+        //console.log("4");
+
+        setIngredientList(fetchIngredientData);
         setLoading(false);
+        //console.log("5");
+      } catch (error) {
+        console.error("Unexpected error:", error);
       }
     };
 
     fetchIngredients();
-  }, [currentUser]);
+  }, [supabase]);
 
   if (loading) {
     return <h1>Loading</h1>;
@@ -79,7 +70,7 @@ function IngredientsPage() {
     return <AddIngredientForm setShowAddForm={setShowAddForm} isForm={true} />;
   } else {
     return (
-      <div className="p-6">
+      <div className="p-6 pb-[6.5rem]">
         <h1 className="text-3xl font-bold mb-2">Ingredients</h1>
         <div className="flex gap-4  mb-4">
           <button
@@ -92,8 +83,7 @@ function IngredientsPage() {
           <button>Sort</button> */}
         </div>
         <div className="space-y-3">
-          {Object.keys(ingredientsList).map((ingredientId) => {
-            const ingredient = ingredientsList[ingredientId];
+          {ingredientsList.map((ingredient) => {
             return (
               <IngredientInfo key={ingredient.id} ingredient={ingredient} />
             );

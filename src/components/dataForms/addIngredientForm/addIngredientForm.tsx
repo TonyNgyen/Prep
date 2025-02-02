@@ -45,6 +45,8 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
 
   const required = ["servingsPerContainer", "calories"];
 
+  const [dropping, setDropping] = useState(false);
+
   const [formData, setFormData] = useState<FormDataType>({
     name: "",
     servingSize: null,
@@ -80,56 +82,12 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
     }));
   };
 
-  const testArray = async () => {
-    // const { data, error } = await supabase.rpc("addrow", {
-    //   rowid: 10,
-    //   inputarray: ["item1", "item2", "item3"],
-    // });
-    // if (error) {
-    //   console.error("Error:", error);
-    // } else {
-    //   console.log("Updated textArray:", data);
-    // }
-    // const { data, error } = await supabase.rpc("append_to_array", {
-    //   rowid: 3,
-    //   new_item: "item 69",
-    // });
-    // if (error) {
-    //   console.error("Error:", error);
-    // } else {
-    //   console.log("Updated textArray:", data);
-    // }
-    // const { data: userData, error: userError } = await supabase.auth.getUser(); // Get the current user
-    // if (userError || !userData.user) {
-    //   console.error(
-    //     "Error fetching user:",
-    //     userError?.message || "No user found"
-    //   );
-    //   return;
-    // }
-    // const userId = userData.user.id; // Get the current user's ID
-    // const { data: insertData, error } = await supabase.rpc(
-    //   "append_ingredient_user",
-    //   {
-    //     userid: userId,
-    //     ingredientid: "ingredientId",
-    //   }
-    // );
-    // console.log(insertData);
-  };
-
-  const [dropping, setDropping] = useState(false);
-
   const handleDropdownChange = (selectedValue: string) => {
     setFormData((prev) => ({ ...prev, servingUnit: selectedValue }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    console.log("Form Data Submitted:", formData);
-
-    // Insert the new ingredient into the "ingredients" table
     const { data, error } = await supabase
       .from("ingredients")
       .insert([formData])
@@ -137,43 +95,26 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
 
     if (error) {
       console.error("Error inserting data:", error.message);
-      return; // Exit if there's an error
+      return;
     }
 
-    console.log("Inserted data:", data);
-
     try {
-      const ingredientId = data?.[0]?.id; // Get the UUID of the newly inserted ingredient
+      const ingredientId = data?.[0]?.id;
       const { data: userData, error: userError } =
-        await supabase.auth.getUser(); // Get the current user
+        await supabase.auth.getUser();
 
-      if (userError || !userData.user) {
-        console.error(
-          "Error fetching user:",
-          userError?.message || "No user found"
-        );
-        return;
-      }
+      const userId = userData?.user?.id;
 
-      const userId = userData.user.id; // Get the current user's ID
-
-      const { data: insertData, error } = await supabase.rpc(
+      const { data: insertData } = await supabase.rpc(
         "append_ingredient_user",
         {
           userid: userId,
           ingredientid: ingredientId,
         }
       );
-
-      console.log(insertData);
     } catch (error) {
       console.error("Error adding ingredient to user:", error);
     }
-  };
-
-  const test = async () => {
-    const { data, error } = await supabase.auth.getUser();
-    if (data.user !== null) console.log(data.user.id);
   };
 
   return (
@@ -281,13 +222,6 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
           className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
         >
           Add Ingredient
-        </button>
-        <button
-          type="button"
-          className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
-          onClick={() => testArray()}
-        >
-          Test
         </button>
       </form>
     </div>

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useAuth } from "@/context/AuthContext";
+
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { IoHome } from "react-icons/io5";
@@ -11,7 +11,6 @@ import { FiMoreHorizontal } from "react-icons/fi";
 import AddPopup from "../components/addPopup/addPop";
 
 export default function Logout() {
-  const { logout, currentUser } = useAuth();
   const pathname = usePathname();
   const [addPopup, setAddPopup] = useState(false);
 

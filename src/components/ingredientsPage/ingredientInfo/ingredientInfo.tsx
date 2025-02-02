@@ -1,31 +1,59 @@
 "use client";
 
+import { Ingredient } from "@/types";
 import React, { useState } from "react";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
-
-type Nutrition = {
-  [key: string]: number;
-};
-
-type Ingredient = {
-  id: string;
-  name: string;
-  nutrition: Nutrition;
-  servingSize?: number;
-  servingUnit?: string;
-  servingsPerContainer?: number;
-  pricePerContainer?: number;
-  howManyTimesUsed?: number;
-  createdAt: Date;
-};
 
 type IngredientInfoProps = {
   ingredient: Ingredient;
 };
 
+const NUTRITIONAL_KEYS = {
+  calories: "Calories",
+  protein: "Protein",
+  totalFat: "Total Fat",
+  saturatedFat: "Saturated Fat",
+  polyunsaturatedFat: "Polyunsaturated Fat",
+  monounsaturatedFat: "Monounsaturated Fat",
+  transFat: "Trans Fat",
+  cholesterol: "Cholesterol",
+  sodium: "Sodium",
+  potassium: "Potassium",
+  totalCarbohydrates: "Total Carbohydrates",
+  sugars: "Sugars",
+  addedSugars: "Added Sugars",
+  sugarAlcohols: "Sugar Alcohols",
+  vitaminA: "Vitamin A",
+  vitaminC: "Vitamin C",
+  vitaminD: "Vitamin D",
+  calcium: "Calcium",
+  iron: "Iron",
+} as const;
+
+const NUTRITIONAL_UNITS: Record<string, string> = {
+  calories: "kcal",
+  protein: "g",
+  totalFat: "g",
+  saturatedFat: "g",
+  polyunsaturatedFat: "g",
+  monounsaturatedFat: "g",
+  transFat: "g",
+  cholesterol: "mg",
+  sodium: "mg",
+  potassium: "mg",
+  totalCarbohydrates: "g",
+  sugars: "g",
+  addedSugars: "g",
+  sugarAlcohols: "g",
+  vitaminA: "%",
+  vitaminC: "%",
+  vitaminD: "%",
+  calcium: "%",
+  iron: "%",
+};
+
 function IngredientInfo({ ingredient }: IngredientInfoProps) {
   const [dropdown, setDropdown] = useState(false);
-  const desiredOrder = ["calories", "protein", "carbs", "fats", "sodium"];
 
   return (
     <div className="shadow-md">
@@ -65,38 +93,31 @@ function IngredientInfo({ ingredient }: IngredientInfoProps) {
             </div>
           </div>
 
-          {Object.keys(ingredient.nutrition)
-            .sort((a, b) => desiredOrder.indexOf(a) - desiredOrder.indexOf(b))
-            .map((nutritionMacro) => (
-              <div
-                className="flex items-center justify-between text-2xl"
-                key={nutritionMacro}
+          {/* Display Nutritional Facts */}
+          <div className="space-y-2">
+            {(
+              Object.keys(NUTRITIONAL_KEYS) as Array<
+                keyof typeof NUTRITIONAL_KEYS
               >
-                <h1>
-                  {nutritionMacro.charAt(0).toUpperCase() +
-                    nutritionMacro.slice(1)}
-                </h1>
-                <p>
-                  {nutritionMacro == "calories"
-                    ? ingredient.nutrition["calories"] + ""
-                    : typeof ingredient.nutrition[
-                        nutritionMacro as keyof Nutrition
-                      ] == "number"
-                    ? ingredient.nutrition[nutritionMacro as keyof Nutrition] +
-                      "g"
-                    : (
-                        ingredient.nutrition[
-                          nutritionMacro as keyof Nutrition
-                        ] as { amount: number; unit: string }
-                      ).amount +
-                      (
-                        ingredient.nutrition[
-                          nutritionMacro as keyof Nutrition
-                        ] as { amount: number; unit: string }
-                      ).unit}
-                </p>
-              </div>
-            ))}
+            ).map((key) => {
+              const value = ingredient[key];
+              if (value === null || value === undefined) return null; // Skip null/undefined values
+
+              const unit = NUTRITIONAL_UNITS[key]; // Get the unit for the current key
+              return (
+                <div
+                  key={key}
+                  className="flex items-center justify-between text-lg"
+                >
+                  <span>{NUTRITIONAL_KEYS[key]}</span>
+                  <span>
+                    {value}
+                    {unit}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
     </div>

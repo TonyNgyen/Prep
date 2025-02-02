@@ -44,7 +44,6 @@ function RecipesPage() {
   const [recipeList, setRecipeList] = useState<RecipeList>({});
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
-  const { currentUser } = useAuth();
 
   useEffect(() => {
     const fetchRecipes = async () => {
