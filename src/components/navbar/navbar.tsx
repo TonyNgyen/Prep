@@ -25,10 +25,12 @@ function NavBar() {
       setUser(data.user);
     }
   };
-
-  supabase.auth.onAuthStateChange((event, session) => {
-    getUser();
-  });
+  useEffect(() => {
+    supabase.auth.onAuthStateChange((event, session) => {
+      console.log(event, session);
+      getUser();
+    });
+  }, [supabase]);
 
   if (!user) {
     return (
