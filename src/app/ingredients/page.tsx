@@ -1,7 +1,7 @@
 "use client";
 
 import AddIngredientForm from "@/components/dataForms/addIngredientForm/addIngredientForm";
-import IngredientInfo from "@/components/ingredientsPage/ingredientInfo/ingredientInfo";
+import IngredientInfo from "@/components/ingredientInfo/ingredientInfo";
 import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Ingredient } from "@/types";

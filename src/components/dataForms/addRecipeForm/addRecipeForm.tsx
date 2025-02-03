@@ -1,4 +1,9 @@
+"use client";
+
 import Dropdown from "@/components/dropdown/dropdown";
+import AddIngredientInfo from "@/components/ingredientInfo/addIngredientInfo";
+import { Ingredient } from "@/types";
+import { createClient } from "@/utils/supabase/client";
 import React, { useState } from "react";
 import { IoIosClose } from "react-icons/io";
 
@@ -7,42 +12,19 @@ type formProp = {
   isForm: boolean;
 };
 
-type Nutrition = {
-  [key: string]: number;
-};
-
-type Ingredient = {
-  id: string;
-  name: string;
-  nutrition: Nutrition;
-  servingSize?: number;
-  servingUnit?: string;
-  servingsPerContainer?: number;
-  pricePerContainer?: number;
-  howManyTimesUsed?: number;
-  createdAt: Date;
-};
-
-type Recipe = {
-  id: string;
-  name: string;
-  nutrition: Nutrition;
-  ingredientsList: IngredientsList;
-  howManyServings: number;
-  pricePerServing?: number;
-  howManyTimesUsed?: number;
-};
-
-type IngredientsList = {
-  [key: string]: Ingredient;
-};
-
 function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
+  const supabase = createClient();
   const [pageNumber, setPageNumber] = useState(1);
   const [addingIngredient, setAddingIngredient] = useState(false);
 
   const [name, setName] = useState("");
-  const [ingredientsList, setIngredientList] = useState<IngredientsList>({});
+
+  const [ingredientSearch, setIngredientSearch] = useState("");
+  const [ingredientOptions, setIngredientOptions] = useState<
+    Ingredient[] | null
+  >(null);
+
+  const [ingredientsList, setIngredientList] = useState<string[]>([]);
   const [servingSize, setServingSize] = useState(0);
   const [calories, setCalories] = useState(0);
   const [protein, setProtein] = useState(0);
@@ -51,71 +33,18 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
   const [sodium, setSodium] = useState(0);
   const [price, setPrice] = useState(0);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const searchIngredient = async () => {
+    const { data, error } = await supabase
+      .from("ingredients")
+      .select()
+      .eq("name", "Ground Beef");
+    if (error) console.log(error);
+    setIngredientOptions(data);
+  };
 
-    const user = auth.currentUser;
-
-    if (!user) {
-      console.error("User is not authenticated");
-      return;
-    }
-
-    try {
-      // Reference to the user's ingredients subcollection
-      const ingredientsRef = collection(db, "users", user.uid, "ingredients");
-
-      const newIngredient = {
-        name,
-        nutrition: {
-          calories,
-          protein,
-          carbs,
-          fats: fat,
-          sodium: { amount: sodium, unit: "mg" }, // Replace 0 with actual sodium value if available
-        },
-        servingSize,
-        pricePerContainer: price,
-        howManyTimesUsed: 0, // Default to 0 for a new ingredient
-        createdAt: new Date().toISOString(), // Optional: Add a timestamp
-      };
-
-      // Add the ingredient document
-      await addDoc(ingredientsRef, newIngredient);
-
-      const newIngredient2 = {
-        name,
-        nutrition: {
-          calories,
-          protein,
-          carbs,
-          fats: fat,
-          sodium: { amount: sodium, unit: "mg" }, // Replace 0 with actual sodium value if available
-        },
-        servingSize,
-        pricePerContainer: price,
-        createdAt: new Date().toISOString(), // Optional: Add a timestamp
-      };
-
-      const docRef = await addDoc(
-        collection(db, "ingredients"),
-        newIngredient2
-      );
-
-      alert("Ingredient added successfully!");
-
-      // Clear form fields
-      setName("");
-      setServingSize(0);
-      setCalories(0);
-      setProtein(0);
-      setCarbs(0);
-      setFat(0);
-      setPrice(0);
-      setSodium(0);
-    } catch (error) {
-      console.error("Error adding ingredient: ", error);
-    }
+  const addIngredient = (index: number) => {
+    if (ingredientOptions == null) return;
+    setIngredientList([...ingredientsList, ingredientOptions[index].id]);
   };
 
   return (
@@ -186,14 +115,34 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
               </div>
             </div>
             {addingIngredient ? (
-              <input
-                type="text"
-                placeholder="Lettuce"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="border rounded-md w-full p-2 border-gray-300"
-                required
-              />
+              <div>
+                <div className="flex">
+                  <input
+                    type="text"
+                    placeholder="Lettuce"
+                    value={ingredientSearch}
+                    onChange={(e) => setIngredientSearch(e.target.value)}
+                    className="border rounded-md w-full p-2 border-gray-300"
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="bg-mainGreen px-3 text-white font-semibold"
+                    onClick={searchIngredient}
+                  >
+                    Search
+                  </button>
+                </div>
+                {ingredientOptions &&
+                  ingredientOptions.map((ingredient, index) => (
+                    <AddIngredientInfo
+                      key={index}
+                      index={index}
+                      ingredient={ingredient}
+                      addIngredient={addIngredient}
+                    />
+                  ))}
+              </div>
             ) : (
               <div>Ingredient List</div>
             )}
