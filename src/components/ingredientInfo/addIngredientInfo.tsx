@@ -54,7 +54,11 @@ const NUTRITIONAL_UNITS: Record<string, string> = {
   iron: "%",
 };
 
-function AddIngredientInfo({ ingredient }: AddIngredientInfoProps) {
+function AddIngredientInfo({
+  ingredient,
+  addIngredient,
+  index,
+}: AddIngredientInfoProps) {
   const [dropdown, setDropdown] = useState(false);
 
   return (
@@ -64,7 +68,16 @@ function AddIngredientInfo({ ingredient }: AddIngredientInfoProps) {
           dropdown && "rounded-b-none"
         }`}
       >
-        <h1 className="text-2xl font-semibold">{ingredient.name}</h1>
+        <div className="flex gap-3">
+          <button
+            type="button"
+            className="bg-white text-mainGreen px-2 rounded-md text-lg font-semibold"
+            onClick={() => addIngredient(index)}
+          >
+            Add
+          </button>
+          <h1 className="text-2xl font-semibold">{ingredient.name}</h1>
+        </div>
 
         {dropdown ? (
           <IoMdArrowDropup

@@ -2,6 +2,7 @@
 
 import Dropdown from "@/components/dropdown/dropdown";
 import AddIngredientInfo from "@/components/ingredientInfo/addIngredientInfo";
+import IngredientInfo from "@/components/ingredientInfo/ingredientInfo";
 import { Ingredient } from "@/types";
 import { createClient } from "@/utils/supabase/client";
 import React, { useState } from "react";
@@ -24,7 +25,8 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
     Ingredient[] | null
   >(null);
 
-  const [ingredientsList, setIngredientList] = useState<string[]>([]);
+  const [ingredientList, setIngredientList] = useState<Ingredient[]>([]);
+  const [ingredientIdList, setIngredientIdList] = useState<string[]>([]);
   const [servingSize, setServingSize] = useState(0);
   const [calories, setCalories] = useState(0);
   const [protein, setProtein] = useState(0);
@@ -44,7 +46,9 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
 
   const addIngredient = (index: number) => {
     if (ingredientOptions == null) return;
-    setIngredientList([...ingredientsList, ingredientOptions[index].id]);
+    setIngredientList([...ingredientList, ingredientOptions[index]]);
+    setIngredientIdList([...ingredientIdList, ingredientOptions[index].id]);
+    console.log(index);
   };
 
   return (
@@ -144,7 +148,9 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
                   ))}
               </div>
             ) : (
-              <div>Ingredient List</div>
+              ingredientList.length != 0 ? ingredientList.map((ingredient) => (
+                <IngredientInfo ingredient={ingredient} />
+              )) : <div><h1>There are no ingredients yet.</h1></div>
             )}
           </form>
         )}
