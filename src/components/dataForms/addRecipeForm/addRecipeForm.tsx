@@ -2,6 +2,7 @@
 
 import Dropdown from "@/components/dropdown/dropdown";
 import AddIngredientInfo from "@/components/ingredientInfo/addIngredientInfo";
+import EditIngredientInfo from "@/components/ingredientInfo/editIngredientInfo";
 import IngredientInfo from "@/components/ingredientInfo/ingredientInfo";
 import { Ingredient } from "@/types";
 import { createClient } from "@/utils/supabase/client";
@@ -25,7 +26,17 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
     Ingredient[] | null
   >(null);
 
-  const [ingredientList, setIngredientList] = useState<Ingredient[]>([]);
+  const [ingredientList, setIngredientList] = useState<
+    Record<
+      string,
+      {
+        ingredient: Ingredient;
+        numberOfservings: number;
+        servingSize: number | null;
+      }
+    >
+  >({});
+
   const [ingredientIdList, setIngredientIdList] = useState<string[]>([]);
   const [servingSize, setServingSize] = useState(0);
   const [calories, setCalories] = useState(0);
@@ -39,17 +50,33 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
     const { data, error } = await supabase
       .from("ingredients")
       .select()
-      .eq("name", "Ground Beef");
+      .eq("name", ingredientSearch);
     if (error) console.log(error);
     setIngredientOptions(data);
   };
 
-  const addIngredient = (index: number) => {
+  const addIngredient = (
+    index: number,
+    numberOfservings: number,
+    servingSize: number | null
+  ) => {
     if (ingredientOptions == null) return;
-    setIngredientList([...ingredientList, ingredientOptions[index]]);
+    setIngredientList({
+      ...ingredientList,
+      [ingredientOptions[index].id]: {
+        ingredient: ingredientOptions[index],
+        numberOfservings: numberOfservings,
+        servingSize: servingSize,
+      },
+    });
+
     setIngredientIdList([...ingredientIdList, ingredientOptions[index].id]);
     console.log(index);
   };
+
+  const removeIngredient = (ingredientId: string) => {
+    
+  }
 
   return (
     <div className="p-6 flex flex-col relative h-[calc(100vh-5rem)]">
@@ -147,10 +174,18 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
                     />
                   ))}
               </div>
+            ) : Object.keys(ingredientList).length != 0 ? (
+              Object.keys(ingredientList).map((ingredient) => (
+                <EditIngredientInfo
+                  ingredient={ingredientList[ingredient].ingredient}
+                  numberOfServings={ingredientList[ingredient].numberOfservings}
+                  servingSize={ingredientList[ingredient].servingSize}
+                />
+              ))
             ) : (
-              ingredientList.length != 0 ? ingredientList.map((ingredient) => (
-                <IngredientInfo ingredient={ingredient} />
-              )) : <div><h1>There are no ingredients yet.</h1></div>
+              <div>
+                <h1>There are no ingredients yet.</h1>
+              </div>
             )}
           </form>
         )}

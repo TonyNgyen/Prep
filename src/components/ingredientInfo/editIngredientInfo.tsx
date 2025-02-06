@@ -1,17 +1,13 @@
 "use client";
 
 import { Ingredient } from "@/types";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 
-type AddIngredientInfoProps = {
+type EditIngredientInfoProps = {
   ingredient: Ingredient;
-  addIngredient: (
-    index: number,
-    numberOfservings: number,
-    servingSize: number | null
-  ) => void;
-  index: number;
+  numberOfServings: number | null;
+  servingSize: number | null;
 };
 
 const NUTRITIONAL_KEYS = {
@@ -58,19 +54,12 @@ const NUTRITIONAL_UNITS: Record<string, string> = {
   iron: "%",
 };
 
-function AddIngredientInfo({
+function EditIngredientInfo({
   ingredient,
-  addIngredient,
-  index,
-}: AddIngredientInfoProps) {
+  numberOfServings,
+  servingSize,
+}: EditIngredientInfoProps) {
   const [dropdown, setDropdown] = useState(false);
-  const [servingSize, setServingSize] = useState(ingredient.servingSize);
-  const [numberOfServings, setNumberOfServings] = useState(1);
-
-  useEffect(() => {
-    setServingSize(ingredient.servingSize);
-    setNumberOfServings(1);
-  }, [ingredient]);
 
   return (
     <div className="shadow-md">
@@ -79,16 +68,7 @@ function AddIngredientInfo({
           dropdown && "rounded-b-none"
         }`}
       >
-        <div className="flex gap-3">
-          <button
-            type="button"
-            className="bg-white text-mainGreen px-2 rounded-md text-lg font-semibold"
-            onClick={() => addIngredient(index, numberOfServings, servingSize)}
-          >
-            Add
-          </button>
-          <h1 className="text-2xl font-semibold">{ingredient.name}</h1>
-        </div>
+        <h1 className="text-2xl font-semibold">{ingredient.name}</h1>
 
         {dropdown ? (
           <IoMdArrowDropup
@@ -105,34 +85,13 @@ function AddIngredientInfo({
       {dropdown && (
         <div className="bg-white rounded-b-md p-3">
           <div className="border-b-8 border-b-mainGreen pb-2 mb-2">
-            <div className="flex gap-2 items-center">
-              <h1>Servings:</h1>
-              <input
-                type="number"
-                name="servingSize"
-                value={numberOfServings || ""}
-                onChange={(e) => setNumberOfServings(Number(e.target.value))}
-                placeholder="0"
-                className="border-b-2 border-gray-400 text-center w-10 font-bold"
-                step="0.01"
-                min="0"
-                required
-              />
+            <div>
+              <h1 className="text-lg">{numberOfServings} Servings</h1>
             </div>
             <div className="flex items-center justify-between text-2xl font-bold">
               <h1>Serving Size</h1>
-              <p className="flex items-center">
-                <input
-                  type="number"
-                  name="servingSize"
-                  value={servingSize || ""}
-                  onChange={(e) => setServingSize(Number(e.target.value))}
-                  placeholder="0"
-                  className="border-b-2 border-gray-400 text-center w-14"
-                  step="0.01"
-                  min="0"
-                  required
-                />
+              <p>
+                {servingSize}
                 {ingredient.servingUnit ? ingredient.servingUnit : "g"}
               </p>
             </div>
@@ -152,9 +111,11 @@ function AddIngredientInfo({
                 return null;
               }
               const value =
-                (ingredient?.[key] ?? 0) *
-                (numberOfServings ?? 1) *
-                ((servingSize ?? 1) / (ingredient?.servingSize ?? 1));
+                (Number(ingredient?.[key]) || 0) *
+                (Number(numberOfServings) || 1) *
+                ((Number(servingSize) || 1) /
+                  (Number(ingredient?.servingSize) || 1));
+
               if (value === null || value === undefined) return null;
 
               const unit = NUTRITIONAL_UNITS[key];
@@ -178,4 +139,4 @@ function AddIngredientInfo({
   );
 }
 
-export default AddIngredientInfo;
+export default EditIngredientInfo;
