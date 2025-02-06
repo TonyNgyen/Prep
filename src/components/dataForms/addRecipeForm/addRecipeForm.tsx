@@ -146,7 +146,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
               </div>
             </div>
             {addingIngredient ? (
-              <div>
+              <div className="space-y-3">
                 <div className="flex">
                   <input
                     type="text"
