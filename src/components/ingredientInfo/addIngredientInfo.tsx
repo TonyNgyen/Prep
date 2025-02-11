@@ -11,6 +11,7 @@ type AddIngredientInfoProps = {
     numberOfservings: number,
     servingSize: number | null
   ) => void;
+  setAddingIngredient: React.Dispatch<React.SetStateAction<boolean>>;
   index: number;
 };
 
@@ -61,6 +62,7 @@ const NUTRITIONAL_UNITS: Record<string, string> = {
 function AddIngredientInfo({
   ingredient,
   addIngredient,
+  setAddingIngredient,
   index,
 }: AddIngredientInfoProps) {
   const [dropdown, setDropdown] = useState(false);
@@ -83,7 +85,10 @@ function AddIngredientInfo({
           <button
             type="button"
             className="bg-white text-mainGreen px-2 rounded-md text-lg font-semibold"
-            onClick={() => addIngredient(index, numberOfServings, servingSize)}
+            onClick={() => {
+              addIngredient(index, numberOfServings, servingSize);
+              setAddingIngredient(false);
+            }}
           >
             Add
           </button>

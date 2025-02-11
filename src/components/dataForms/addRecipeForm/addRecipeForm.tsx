@@ -171,6 +171,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
                       index={index}
                       ingredient={ingredient}
                       addIngredient={addIngredient}
+                      setAddingIngredient={setAddingIngredient}
                     />
                   ))}
               </div>
