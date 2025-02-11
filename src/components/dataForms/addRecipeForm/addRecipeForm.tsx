@@ -74,21 +74,19 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
     console.log(index);
   };
 
-  const removeIngredient = (ingredientId: string) => {
-    
-  }
+  const removeIngredient = (ingredientId: string) => {};
 
   return (
-    <div className="p-6 flex flex-col relative h-[calc(100vh-5rem)]">
-      <div>
-        <div className="flex justify-between mb-3 items-center">
-          <h1 className="text-3xl font-bold">Add Recipe</h1>
-          {isForm && (
-            <button onClick={() => setShowAddForm(false)} className="flex2">
-              <IoIosClose className="text-5xl flex" />
-            </button>
-          )}
-        </div>
+    <div className="p-6 pb-[4rem] flex flex-col relative h-[calc(100vh-5rem)] gap-3">
+      <div className="flex justify-between items-center bg-red-200">
+        <h1 className="text-3xl font-bold">Add Recipe</h1>
+        {isForm && (
+          <button onClick={() => setShowAddForm(false)} className="flex2">
+            <IoIosClose className="text-5xl flex" />
+          </button>
+        )}
+      </div>
+      <div className="">
         {pageNumber == 1 && (
           <form className="space-y-3 flex-1">
             <div>
@@ -164,16 +162,18 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
                     Search
                   </button>
                 </div>
-                {ingredientOptions &&
-                  ingredientOptions.map((ingredient, index) => (
-                    <AddIngredientInfo
-                      key={index}
-                      index={index}
-                      ingredient={ingredient}
-                      addIngredient={addIngredient}
-                      setAddingIngredient={setAddingIngredient}
-                    />
-                  ))}
+                <div className="overflow-y-auto">
+                  {ingredientOptions &&
+                    ingredientOptions.map((ingredient, index) => (
+                      <AddIngredientInfo
+                        key={index}
+                        index={index}
+                        ingredient={ingredient}
+                        addIngredient={addIngredient}
+                        setAddingIngredient={setAddingIngredient}
+                      />
+                    ))}
+                </div>
               </div>
             ) : Object.keys(ingredientList).length != 0 ? (
               Object.keys(ingredientList).map((ingredient) => (
@@ -197,7 +197,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
         )}
       </div>
 
-      <div className="w-full flex justify-between absolute bottom-0 left-0 p-6">
+      <div className="w-full flex justify-between absolute bottom-0 left-0 px-6 pb-6 bg-red-200 h-16">
         {pageNumber != 1 ? (
           <button
             type="button"

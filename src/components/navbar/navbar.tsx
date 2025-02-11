@@ -32,7 +32,7 @@ function NavBar() {
     });
   }, [supabase]);
 
-  if (!user) {
+  if (false) {
     return (
       <div className="w-full py-5 lg:px-20 px-5 flex justify-between items-center">
         <Link href="/" className="text-mainGreen text-6xl font-bold">

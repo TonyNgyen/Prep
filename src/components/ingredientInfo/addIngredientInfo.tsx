@@ -108,7 +108,7 @@ function AddIngredientInfo({
         )}
       </div>
       {dropdown && (
-        <div className="bg-white rounded-b-md p-3">
+        <div className="bg-white rounded-b-md p-3 max-h-96 overflow-y-auto">
           <div className="border-b-8 border-b-mainGreen pb-2 mb-2">
             <div className="flex gap-2 items-center">
               <h1>Servings:</h1>
