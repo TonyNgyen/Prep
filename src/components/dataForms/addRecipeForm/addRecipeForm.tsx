@@ -6,7 +6,7 @@ import EditIngredientInfo from "@/components/ingredientInfo/editIngredientInfo";
 import IngredientInfo from "@/components/ingredientInfo/ingredientInfo";
 import { Ingredient } from "@/types";
 import { createClient } from "@/utils/supabase/client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 
 type formProp = {
@@ -74,6 +74,11 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
     console.log(index);
   };
 
+  useEffect(() => {
+    setIngredientOptions([]);
+    setIngredientSearch("");
+  }, [addingIngredient]);
+
   const removeIngredient = (ingredientId: string) => {};
 
   return (
@@ -86,11 +91,13 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
           </button>
         )}
       </div>
-      <div className="">
+      <div className="flex-1 flex flex-col overflow-scroll pb-6">
         {pageNumber == 1 && (
           <form className="space-y-3 flex-1">
             <div>
-              <label className="block font-semibold">Recipe Name</label>
+              <label className="block font-semibold text-2xl">
+                Recipe Name
+              </label>
               <input
                 type="text"
                 placeholder="Lettuce"
@@ -120,28 +127,26 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
           </form>
         )}
         {pageNumber == 2 && (
-          <form className="space-y-3 flex-1">
-            <div>
-              <div className="flex items-center justify-between">
-                <h2 className="block font-semibold text-2xl">Ingredients</h2>
-                {addingIngredient ? (
-                  <button
-                    type="button"
-                    className="bg-negativeRed text-white font-semibold rounded-md px-4 py-2 w-[9.5rem]"
-                    onClick={() => setAddingIngredient(false)}
-                  >
-                    Cancel
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2 w-[9.5rem]"
-                    onClick={() => setAddingIngredient(true)}
-                  >
-                    Add Ingredient
-                  </button>
-                )}
-              </div>
+          <div className="flex flex-col">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="block font-semibold text-2xl">Ingredients</h2>
+              {addingIngredient ? (
+                <button
+                  type="button"
+                  className="bg-negativeRed text-white font-semibold rounded-md px-4 py-2 w-[9.5rem]"
+                  onClick={() => setAddingIngredient(false)}
+                >
+                  Cancel
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2 w-[9.5rem]"
+                  onClick={() => setAddingIngredient(true)}
+                >
+                  Add Ingredient
+                </button>
+              )}
             </div>
             {addingIngredient ? (
               <div className="space-y-3">
@@ -150,7 +155,16 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
                     type="text"
                     placeholder="Lettuce"
                     value={ingredientSearch}
-                    onChange={(e) => setIngredientSearch(e.target.value)}
+                    onChange={(e) => {
+                      e.preventDefault();
+                      setIngredientSearch(e.target.value);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        searchIngredient();
+                      }
+                    }}
                     className="border rounded-md w-full p-2 border-gray-300"
                     required
                   />
@@ -176,19 +190,23 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
                 </div>
               </div>
             ) : Object.keys(ingredientList).length != 0 ? (
-              Object.keys(ingredientList).map((ingredient) => (
-                <EditIngredientInfo
-                  ingredient={ingredientList[ingredient].ingredient}
-                  numberOfServings={ingredientList[ingredient].numberOfservings}
-                  servingSize={ingredientList[ingredient].servingSize}
-                />
-              ))
+              <div className="space-y-3 bg-blue-200">
+                {Object.keys(ingredientList).map((ingredient) => (
+                  <EditIngredientInfo
+                    ingredient={ingredientList[ingredient].ingredient}
+                    numberOfServings={
+                      ingredientList[ingredient].numberOfservings
+                    }
+                    servingSize={ingredientList[ingredient].servingSize}
+                  />
+                ))}
+              </div>
             ) : (
               <div>
                 <h1>There are no ingredients yet.</h1>
               </div>
             )}
-          </form>
+          </div>
         )}
         {pageNumber == 3 && (
           <form className="space-y-3 flex-1">
