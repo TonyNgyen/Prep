@@ -8,6 +8,9 @@ import { Ingredient } from "@/types";
 import { createClient } from "@/utils/supabase/client";
 import React, { useEffect, useState } from "react";
 import { IoIosClose } from "react-icons/io";
+import Page3 from "./page3/page3";
+import Page2 from "./page2/page2";
+import Page1 from "./page1/page1";
 
 type formProp = {
   setShowAddForm: React.Dispatch<React.SetStateAction<boolean>>;
@@ -93,125 +96,13 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
       </div>
       <div className="flex-1 flex flex-col overflow-scroll pb-6">
         {pageNumber == 1 && (
-          <form className="space-y-3 flex-1">
-            <div>
-              <label className="block font-semibold text-2xl">
-                Recipe Name
-              </label>
-              <input
-                type="text"
-                placeholder="Lettuce"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="border rounded-md w-full p-2 border-gray-300"
-                required
-              />
-            </div>
-            <div className="flex h-full">
-              <div className="w-full flex items-center">
-                <label className="block font-semibold flex-1">Servings</label>
-                <input
-                  type="number"
-                  value={servingSize === 0 ? "" : servingSize}
-                  onChange={(e) =>
-                    setServingSize(
-                      e.target.value === "" ? 0 : Number(e.target.value)
-                    )
-                  }
-                  placeholder="10"
-                  className="border rounded-md w-1/3 p-2 border-gray-300"
-                  required
-                />
-              </div>
-            </div>
-          </form>
+          <Page1 />
         )}
         {pageNumber == 2 && (
-          <div className="flex flex-col">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="block font-semibold text-2xl">Ingredients</h2>
-              {addingIngredient ? (
-                <button
-                  type="button"
-                  className="bg-negativeRed text-white font-semibold rounded-md px-4 py-2 w-[9.5rem]"
-                  onClick={() => setAddingIngredient(false)}
-                >
-                  Cancel
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2 w-[9.5rem]"
-                  onClick={() => setAddingIngredient(true)}
-                >
-                  Add Ingredient
-                </button>
-              )}
-            </div>
-            {addingIngredient ? (
-              <div className="space-y-3">
-                <div className="flex">
-                  <input
-                    type="text"
-                    placeholder="Lettuce"
-                    value={ingredientSearch}
-                    onChange={(e) => {
-                      e.preventDefault();
-                      setIngredientSearch(e.target.value);
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        searchIngredient();
-                      }
-                    }}
-                    className="border rounded-md w-full p-2 border-gray-300"
-                    required
-                  />
-                  <button
-                    type="button"
-                    className="bg-mainGreen px-3 text-white font-semibold"
-                    onClick={searchIngredient}
-                  >
-                    Search
-                  </button>
-                </div>
-                <div className="overflow-y-auto">
-                  {ingredientOptions &&
-                    ingredientOptions.map((ingredient, index) => (
-                      <AddIngredientInfo
-                        key={index}
-                        index={index}
-                        ingredient={ingredient}
-                        addIngredient={addIngredient}
-                        setAddingIngredient={setAddingIngredient}
-                      />
-                    ))}
-                </div>
-              </div>
-            ) : Object.keys(ingredientList).length != 0 ? (
-              <div className="space-y-3 bg-blue-200">
-                {Object.keys(ingredientList).map((ingredient) => (
-                  <EditIngredientInfo
-                    ingredient={ingredientList[ingredient].ingredient}
-                    numberOfServings={
-                      ingredientList[ingredient].numberOfservings
-                    }
-                    servingSize={ingredientList[ingredient].servingSize}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div>
-                <h1>There are no ingredients yet.</h1>
-              </div>
-            )}
-          </div>
+          <Page2 />
         )}
         {pageNumber == 3 && (
-          <form className="space-y-3 flex-1">
-            <h1>Page 3</h1>
-          </form>
+          <Page3 />
         )}
       </div>
 
