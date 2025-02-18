@@ -22,8 +22,6 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
   const [pageNumber, setPageNumber] = useState(1);
   const [addingIngredient, setAddingIngredient] = useState(false);
 
-  const [name, setName] = useState("");
-
   const [ingredientSearch, setIngredientSearch] = useState("");
   const [ingredientOptions, setIngredientOptions] = useState<
     Ingredient[] | null
@@ -41,13 +39,9 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
   >({});
 
   const [ingredientIdList, setIngredientIdList] = useState<string[]>([]);
-  const [servingSize, setServingSize] = useState(0);
-  const [calories, setCalories] = useState(0);
-  const [protein, setProtein] = useState(0);
-  const [carbs, setCarbs] = useState(0);
-  const [fat, setFat] = useState(0);
-  const [sodium, setSodium] = useState(0);
-  const [price, setPrice] = useState(0);
+  const [name, setName] = useState<String>("")
+  const [servingSize, setServingSize] = useState<Number | null>(null)
+
 
   const searchIngredient = async () => {
     const { data, error } = await supabase
