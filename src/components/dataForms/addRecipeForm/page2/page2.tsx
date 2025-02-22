@@ -1,4 +1,10 @@
+import EditIngredientInfo from "@/components/ingredientInfo/editIngredientInfo";
 import React from "react";
+
+type formProp = {
+  setShowAddForm: React.Dispatch<React.SetStateAction<boolean>>;
+  isForm: boolean;
+};
 
 function Page2() {
   return (

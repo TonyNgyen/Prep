@@ -1,6 +1,13 @@
 import React from "react";
 
-function Page1() {
+type formProp = {
+  setName: React.Dispatch<React.SetStateAction<string>>;
+  setServingSize: React.Dispatch<React.SetStateAction<Number>>;
+  name: string;
+  servingSize: number;
+};
+
+function Page1({ setName, setServingSize, name, servingSize }: formProp) {
   return (
     <form className="space-y-3 flex-1">
       <div>
