@@ -1,12 +1,57 @@
+import AddIngredientInfo from "@/components/ingredientInfo/addIngredientInfo";
 import EditIngredientInfo from "@/components/ingredientInfo/editIngredientInfo";
-import React from "react";
+import { Ingredient } from "@/types";
+import { createClient } from "@/utils/supabase/client";
+import React, { useEffect, useState } from "react";
 
 type formProp = {
-  setShowAddForm: React.Dispatch<React.SetStateAction<boolean>>;
-  isForm: boolean;
+  ingredientList: Record<
+    string,
+    {
+      ingredient: Ingredient;
+      numberOfservings: number;
+      servingSize: number | null;
+    }
+  >;
 };
 
 function Page2() {
+  const [addingIngredient, setAddingIngredient] = useState(false);
+  const [ingredientSearch, setIngredientSearch] = useState("");
+  const [ingredientOptions, setIngredientOptions] = useState<
+    Ingredient[] | null
+  >(null);
+  const supabase = createClient();
+  const searchIngredient = async () => {
+    const { data, error } = await supabase
+      .from("ingredients")
+      .select()
+      .eq("name", ingredientSearch);
+    if (error) console.log(error);
+    setIngredientOptions(data);
+  };
+  const addIngredient = (
+    index: number,
+    numberOfservings: number,
+    servingSize: number | null
+  ) => {
+    if (ingredientOptions == null) return;
+    setIngredientList({
+      ...ingredientList,
+      [ingredientOptions[index].id]: {
+        ingredient: ingredientOptions[index],
+        numberOfservings: numberOfservings,
+        servingSize: servingSize,
+      },
+    });
+
+    setIngredientIdList([...ingredientIdList, ingredientOptions[index].id]);
+    console.log(index);
+  };
+  useEffect(() => {
+    setIngredientOptions([]);
+    setIngredientSearch("");
+  }, [addingIngredient]);
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between mb-3">

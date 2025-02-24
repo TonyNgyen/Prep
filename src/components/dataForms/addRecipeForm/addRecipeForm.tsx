@@ -18,14 +18,7 @@ type formProp = {
 };
 
 function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
-  const supabase = createClient();
   const [pageNumber, setPageNumber] = useState(1);
-  const [addingIngredient, setAddingIngredient] = useState(false);
-
-  const [ingredientSearch, setIngredientSearch] = useState("");
-  const [ingredientOptions, setIngredientOptions] = useState<
-    Ingredient[] | null
-  >(null);
 
   const [ingredientList, setIngredientList] = useState<
     Record<
@@ -39,42 +32,8 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
   >({});
 
   const [ingredientIdList, setIngredientIdList] = useState<string[]>([]);
-  const [name, setName] = useState<String>("")
-  const [servingSize, setServingSize] = useState<Number | null>(null)
-
-
-  const searchIngredient = async () => {
-    const { data, error } = await supabase
-      .from("ingredients")
-      .select()
-      .eq("name", ingredientSearch);
-    if (error) console.log(error);
-    setIngredientOptions(data);
-  };
-
-  const addIngredient = (
-    index: number,
-    numberOfservings: number,
-    servingSize: number | null
-  ) => {
-    if (ingredientOptions == null) return;
-    setIngredientList({
-      ...ingredientList,
-      [ingredientOptions[index].id]: {
-        ingredient: ingredientOptions[index],
-        numberOfservings: numberOfservings,
-        servingSize: servingSize,
-      },
-    });
-
-    setIngredientIdList([...ingredientIdList, ingredientOptions[index].id]);
-    console.log(index);
-  };
-
-  useEffect(() => {
-    setIngredientOptions([]);
-    setIngredientSearch("");
-  }, [addingIngredient]);
+  const [name, setName] = useState<String>("");
+  const [servingSize, setServingSize] = useState<Number | null>(null);
 
   const removeIngredient = (ingredientId: string) => {};
 
@@ -89,15 +48,9 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
         )}
       </div>
       <div className="flex-1 flex flex-col overflow-scroll pb-6">
-        {pageNumber == 1 && (
-          <Page1 />
-        )}
-        {pageNumber == 2 && (
-          <Page2 />
-        )}
-        {pageNumber == 3 && (
-          <Page3 />
-        )}
+        {pageNumber == 1 && <Page1 />}
+        {pageNumber == 2 && <Page2 />}
+        {pageNumber == 3 && <Page3 />}
       </div>
 
       <div className="w-full flex justify-between absolute bottom-0 left-0 px-6 pb-6 bg-red-200 h-16">
