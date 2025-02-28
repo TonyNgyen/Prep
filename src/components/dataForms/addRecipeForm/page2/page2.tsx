@@ -25,10 +25,11 @@ type formProp = {
       >
     >
   >;
+  ingredientIdList: string[];
   setIngredientIdList: React.Dispatch<string[]>;
 };
 
-function Page2() {
+function Page2({ ingredientList, setIngredientList, ingredientIdList, setIngredientIdList }: formProp) {
   const [addingIngredient, setAddingIngredient] = useState(false);
   const [ingredientSearch, setIngredientSearch] = useState("");
   const [ingredientOptions, setIngredientOptions] = useState<

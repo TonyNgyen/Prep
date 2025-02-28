@@ -32,8 +32,8 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
   >({});
 
   const [ingredientIdList, setIngredientIdList] = useState<string[]>([]);
-  const [name, setName] = useState<String>("");
-  const [servingSize, setServingSize] = useState<Number | null>(null);
+  const [name, setName] = useState<string>("");
+  const [servingSize, setServingSize] = useState<number>(0);
 
   const removeIngredient = (ingredientId: string) => {};
 
@@ -48,8 +48,22 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
         )}
       </div>
       <div className="overflow-scroll pb-6">
-        {pageNumber == 1 && <Page1 />}
-        {pageNumber == 2 && <Page2 />}
+        {pageNumber == 1 && (
+          <Page1
+            setName={setName}
+            setServingSize={setServingSize}
+            name={name}
+            servingSize={servingSize}
+          />
+        )}
+        {pageNumber == 2 && (
+          <Page2
+            ingredientList={ingredientList}
+            setIngredientList={setIngredientList}
+            ingredientIdList={ingredientIdList}
+            setIngredientIdList={setIngredientIdList}
+          />
+        )}
         {pageNumber == 3 && <Page3 />}
       </div>
 

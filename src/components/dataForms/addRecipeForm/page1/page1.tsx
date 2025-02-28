@@ -2,7 +2,7 @@ import React from "react";
 
 type formProp = {
   setName: React.Dispatch<React.SetStateAction<string>>;
-  setServingSize: React.Dispatch<React.SetStateAction<Number>>;
+  setServingSize: React.Dispatch<React.SetStateAction<number>>;
   name: string;
   servingSize: number;
 };
