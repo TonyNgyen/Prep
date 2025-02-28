@@ -47,7 +47,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
           </button>
         )}
       </div>
-      <div className="flex-1 flex flex-col overflow-scroll pb-6">
+      <div className="overflow-scroll pb-6">
         {pageNumber == 1 && <Page1 />}
         {pageNumber == 2 && <Page2 />}
         {pageNumber == 3 && <Page3 />}

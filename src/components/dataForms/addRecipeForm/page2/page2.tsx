@@ -13,6 +13,19 @@ type formProp = {
       servingSize: number | null;
     }
   >;
+  setIngredientList: React.Dispatch<
+    React.SetStateAction<
+      Record<
+        string,
+        {
+          ingredient: Ingredient;
+          numberOfservings: number;
+          servingSize: number | null;
+        }
+      >
+    >
+  >;
+  setIngredientIdList: React.Dispatch<string[]>;
 };
 
 function Page2() {

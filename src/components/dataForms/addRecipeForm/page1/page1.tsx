@@ -9,7 +9,7 @@ type formProp = {
 
 function Page1({ setName, setServingSize, name, servingSize }: formProp) {
   return (
-    <form className="space-y-3 flex-1">
+    <form className="space-y-3">
       <div>
         <label className="block font-semibold text-2xl">Recipe Name</label>
         <input
