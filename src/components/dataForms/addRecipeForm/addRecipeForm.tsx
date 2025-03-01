@@ -31,7 +31,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
     >
   >({});
 
-  const [ingredientIdList, setIngredientIdList] = useState<string[]>([]);
+  const [ingredientIdList, setIngredientIdList] = useState<Object>({});
   const [name, setName] = useState<string>("");
   const [servingSize, setServingSize] = useState<number>(0);
 
@@ -64,7 +64,14 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
             setIngredientIdList={setIngredientIdList}
           />
         )}
-        {pageNumber == 3 && <Page3 />}
+        {pageNumber == 3 && (
+          <Page3
+            ingredientList={ingredientList}
+            setIngredientList={setIngredientList}
+            ingredientIdList={ingredientIdList}
+            setIngredientIdList={setIngredientIdList}
+          />
+        )}
       </div>
 
       <div className="w-full flex justify-between absolute bottom-0 left-0 px-6 pb-6 bg-red-200 h-16">

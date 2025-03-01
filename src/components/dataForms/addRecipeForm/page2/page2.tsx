@@ -25,17 +25,23 @@ type formProp = {
       >
     >
   >;
-  ingredientIdList: string[];
-  setIngredientIdList: React.Dispatch<string[]>;
+  ingredientIdList: Object;
+  setIngredientIdList: React.Dispatch<Object>;
 };
 
-function Page2({ ingredientList, setIngredientList, ingredientIdList, setIngredientIdList }: formProp) {
+function Page2({
+  ingredientList,
+  setIngredientList,
+  ingredientIdList,
+  setIngredientIdList,
+}: formProp) {
   const [addingIngredient, setAddingIngredient] = useState(false);
   const [ingredientSearch, setIngredientSearch] = useState("");
   const [ingredientOptions, setIngredientOptions] = useState<
     Ingredient[] | null
   >(null);
   const supabase = createClient();
+
   const searchIngredient = async () => {
     const { data, error } = await supabase
       .from("ingredients")
@@ -44,6 +50,7 @@ function Page2({ ingredientList, setIngredientList, ingredientIdList, setIngredi
     if (error) console.log(error);
     setIngredientOptions(data);
   };
+
   const addIngredient = (
     index: number,
     numberOfservings: number,
@@ -59,13 +66,18 @@ function Page2({ ingredientList, setIngredientList, ingredientIdList, setIngredi
       },
     });
 
-    setIngredientIdList([...ingredientIdList, ingredientOptions[index].id]);
+    setIngredientIdList({
+      ...ingredientIdList,
+      [ingredientOptions[index].id]: [numberOfservings, servingSize],
+    });
     console.log(index);
   };
+
   useEffect(() => {
     setIngredientOptions([]);
     setIngredientSearch("");
   }, [addingIngredient]);
+
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between mb-3">
@@ -130,7 +142,7 @@ function Page2({ ingredientList, setIngredientList, ingredientIdList, setIngredi
           </div>
         </div>
       ) : Object.keys(ingredientList).length != 0 ? (
-        <div className="space-y-3 bg-blue-200">
+        <div className="space-y-3">
           {Object.keys(ingredientList).map((ingredient) => (
             <EditIngredientInfo
               ingredient={ingredientList[ingredient].ingredient}
