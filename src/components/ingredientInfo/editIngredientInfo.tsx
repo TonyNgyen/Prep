@@ -83,7 +83,7 @@ function EditIngredientInfo({
         )}
       </div>
       {dropdown && (
-        <div className="bg-white rounded-b-md p-3 border-mainGreen border-[3px] border-t-0">
+        <div className="bg-white rounded-b-md p-3 max-h-96 overflow-y-auto border-mainGreen border-[3px] border-t-0">
           <div className="border-b-8 border-b-mainGreen pb-2 mb-2">
             <div>
               <h1 className="text-lg">{numberOfServings} Servings</h1>

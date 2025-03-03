@@ -2,12 +2,12 @@ import React from "react";
 
 type formProp = {
   setName: React.Dispatch<React.SetStateAction<string>>;
-  setServingSize: React.Dispatch<React.SetStateAction<number>>;
+  setTotalServingSize: React.Dispatch<React.SetStateAction<number>>;
   name: string;
-  servingSize: number;
+  totalServingSize: number;
 };
 
-function Page1({ setName, setServingSize, name, servingSize }: formProp) {
+function Page1({ setName, setTotalServingSize, name, totalServingSize }: formProp) {
   return (
     <form className="space-y-3">
       <div>
@@ -26,9 +26,9 @@ function Page1({ setName, setServingSize, name, servingSize }: formProp) {
           <label className="block font-semibold flex-1">Servings</label>
           <input
             type="number"
-            value={servingSize === 0 ? "" : servingSize}
+            value={totalServingSize === 0 ? "" : totalServingSize}
             onChange={(e) =>
-              setServingSize(e.target.value === "" ? 0 : Number(e.target.value))
+              setTotalServingSize(e.target.value === "" ? 0 : Number(e.target.value))
             }
             placeholder="10"
             className="border rounded-md w-1/3 p-2 border-gray-300"

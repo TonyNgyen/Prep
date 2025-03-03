@@ -25,7 +25,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
       string,
       {
         ingredient: Ingredient;
-        numberOfservings: number;
+        numberOfServings: number;
         servingSize: number | null;
       }
     >
@@ -33,9 +33,80 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
 
   const [ingredientIdList, setIngredientIdList] = useState<Object>({});
   const [name, setName] = useState<string>("");
-  const [servingSize, setServingSize] = useState<number>(0);
+  const [totalServingSize, setTotalServingSize] = useState<number>(0);
+  const [recipeNutrition, setRecipeNutrition] = useState<
+    Omit<
+      Ingredient,
+      | "id"
+      | "name"
+      | "servingSize"
+      | "servingUnit"
+      | "servingsPerContainer"
+      | "pricePerContainer"
+    >
+  >({
+    calories: 0,
+    protein: 0,
+    totalFat: 0,
+    saturatedFat: 0,
+    polyunsaturatedFat: 0,
+    monounsaturatedFat: 0,
+    transFat: 0,
+    cholesterol: 0,
+    sodium: 0,
+    potassium: 0,
+    totalCarbohydrates: 0,
+    sugars: 0,
+    addedSugars: 0,
+    sugarAlcohols: 0,
+    vitaminA: 0,
+    vitaminC: 0,
+    vitaminD: 0,
+    calcium: 0,
+    iron: 0,
+  });
 
   const removeIngredient = (ingredientId: string) => {};
+
+  useEffect(() => {
+    const sumNutrition = () => {
+      const total = Object.values(ingredientList).reduce(
+        (acc, { ingredient, numberOfServings, servingSize }) => {
+          for (const key in acc) {
+            const typedKey = key as keyof typeof acc;
+            acc[typedKey] +=
+              (ingredient[typedKey] ?? 0) *
+              numberOfServings *
+              (servingSize ?? 0)/(ingredient.servingSize ?? 1);
+          }
+          return acc;
+        },
+        {
+          calories: 0,
+          protein: 0,
+          totalFat: 0,
+          saturatedFat: 0,
+          polyunsaturatedFat: 0,
+          monounsaturatedFat: 0,
+          transFat: 0,
+          cholesterol: 0,
+          sodium: 0,
+          potassium: 0,
+          totalCarbohydrates: 0,
+          sugars: 0,
+          addedSugars: 0,
+          sugarAlcohols: 0,
+          vitaminA: 0,
+          vitaminC: 0,
+          vitaminD: 0,
+          calcium: 0,
+          iron: 0,
+        }
+      );
+      setRecipeNutrition(total)
+    };
+    sumNutrition();
+  }, [ingredientList]);
 
   return (
     <div className="p-6 pb-[4rem] flex flex-col relative h-[calc(100vh-5rem)] gap-3">
@@ -51,9 +122,9 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
         {pageNumber == 1 && (
           <Page1
             setName={setName}
-            setServingSize={setServingSize}
+            setTotalServingSize={setTotalServingSize}
             name={name}
-            servingSize={servingSize}
+            totalServingSize={totalServingSize}
           />
         )}
         {pageNumber == 2 && (
@@ -70,6 +141,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
             setIngredientList={setIngredientList}
             ingredientIdList={ingredientIdList}
             setIngredientIdList={setIngredientIdList}
+            recipeNutrition={recipeNutrition}
           />
         )}
       </div>

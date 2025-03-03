@@ -6,7 +6,7 @@ type formProp = {
     string,
     {
       ingredient: Ingredient;
-      numberOfservings: number;
+      numberOfServings: number;
       servingSize: number | null;
     }
   >;
@@ -16,7 +16,7 @@ type formProp = {
         string,
         {
           ingredient: Ingredient;
-          numberOfservings: number;
+          numberOfServings: number;
           servingSize: number | null;
         }
       >
@@ -24,6 +24,15 @@ type formProp = {
   >;
   ingredientIdList: Object;
   setIngredientIdList: React.Dispatch<Object>;
+  recipeNutrition: Omit<
+    Ingredient,
+    | "id"
+    | "name"
+    | "servingSize"
+    | "servingUnit"
+    | "servingsPerContainer"
+    | "pricePerContainer"
+  >;
 };
 
 function Page3({
@@ -31,6 +40,7 @@ function Page3({
   setIngredientList,
   ingredientIdList,
   setIngredientIdList,
+  recipeNutrition,
 }: formProp) {
   return (
     <form className="space-y-3 flex-1">
@@ -49,6 +59,13 @@ function Page3({
           onClick={() => console.log(ingredientIdList)}
         >
           Ingredient ID List
+        </button>
+        <button
+          className="bg-mainGreen text-white p-4 rounded-md"
+          type="button"
+          onClick={() => console.log(recipeNutrition)}
+        >
+          Recipe Nutrition
         </button>
       </div>
     </form>

@@ -9,7 +9,7 @@ type formProp = {
     string,
     {
       ingredient: Ingredient;
-      numberOfservings: number;
+      numberOfServings: number;
       servingSize: number | null;
     }
   >;
@@ -19,7 +19,7 @@ type formProp = {
         string,
         {
           ingredient: Ingredient;
-          numberOfservings: number;
+          numberOfServings: number;
           servingSize: number | null;
         }
       >
@@ -53,7 +53,7 @@ function Page2({
 
   const addIngredient = (
     index: number,
-    numberOfservings: number,
+    numberOfServings: number,
     servingSize: number | null
   ) => {
     if (ingredientOptions == null) return;
@@ -61,14 +61,14 @@ function Page2({
       ...ingredientList,
       [ingredientOptions[index].id]: {
         ingredient: ingredientOptions[index],
-        numberOfservings: numberOfservings,
+        numberOfServings: numberOfServings,
         servingSize: servingSize,
       },
     });
 
     setIngredientIdList({
       ...ingredientIdList,
-      [ingredientOptions[index].id]: [numberOfservings, servingSize],
+      [ingredientOptions[index].id]: [numberOfServings, servingSize],
     });
     console.log(index);
   };
@@ -146,7 +146,7 @@ function Page2({
           {Object.keys(ingredientList).map((ingredient) => (
             <EditIngredientInfo
               ingredient={ingredientList[ingredient].ingredient}
-              numberOfServings={ingredientList[ingredient].numberOfservings}
+              numberOfServings={ingredientList[ingredient].numberOfServings}
               servingSize={ingredientList[ingredient].servingSize}
             />
           ))}
