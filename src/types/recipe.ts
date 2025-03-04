@@ -1,7 +1,7 @@
 export type Recipe = {
   id: string;
   name: string;
-  ingredientsList: string[];
+  ingredientsIdList: string[];
   howManyServings: number;
   pricePerServing: number | null;
   howManyTimesUsed: number | null;

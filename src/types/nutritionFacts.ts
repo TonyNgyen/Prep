@@ -1,0 +1,21 @@
+export type NutritionFacts = {
+  calories: number;
+  protein: number;
+  totalFat: number;
+  saturatedFat: number;
+  polyunsaturatedFat: number;
+  monounsaturatedFat: number;
+  transFat: number;
+  cholesterol: number;
+  sodium: number;
+  potassium: number;
+  totalCarbohydrates: number;
+  sugars: number;
+  addedSugars: number;
+  sugarAlcohols: number;
+  vitaminA: number;
+  vitaminC: number;
+  vitaminD: number;
+  calcium: number;
+  iron: number;
+};

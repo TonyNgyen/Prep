@@ -1,6 +1,6 @@
 "use client";
 
-import { Ingredient } from "@/types";
+import { Ingredient, NutritionFacts } from "@/types";
 import React, { useEffect, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import Page3 from "./page3/page3";
@@ -29,17 +29,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
   const [ingredientIdList, setIngredientIdList] = useState<Object>({});
   const [name, setName] = useState<string>("");
   const [totalServingSize, setTotalServingSize] = useState<number>(0);
-  const [recipeNutrition, setRecipeNutrition] = useState<
-    Omit<
-      Ingredient,
-      | "id"
-      | "name"
-      | "servingSize"
-      | "servingUnit"
-      | "servingsPerContainer"
-      | "pricePerContainer"
-    >
-  >({
+  const [recipeNutrition, setRecipeNutrition] = useState<NutritionFacts>({
     calories: 0,
     protein: 0,
     totalFat: 0,
@@ -70,9 +60,10 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
           for (const key in acc) {
             const typedKey = key as keyof typeof acc;
             acc[typedKey] +=
-              (ingredient[typedKey] ?? 0) *
-              numberOfServings *
-              (servingSize ?? 0)/(ingredient.servingSize ?? 1);
+              ((ingredient[typedKey] ?? 0) *
+                numberOfServings *
+                (servingSize ?? 0)) /
+              (ingredient.servingSize ?? 1);
           }
           return acc;
         },
@@ -98,7 +89,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
           iron: 0,
         }
       );
-      setRecipeNutrition(total)
+      setRecipeNutrition(total);
     };
     sumNutrition();
   }, [ingredientList]);
@@ -106,7 +97,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
   return (
     <div className="p-6 pb-[4rem] flex flex-col relative h-[calc(100vh-5rem)] gap-3">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Add Recipe</h1>
+        <h1 className="text-3xl font-bold">Add {name || "Recipe"}</h1>
         {isForm && (
           <button onClick={() => setShowAddForm(false)} className="flex2">
             <IoIosClose className="text-5xl flex" />
@@ -137,11 +128,13 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
             ingredientIdList={ingredientIdList}
             setIngredientIdList={setIngredientIdList}
             recipeNutrition={recipeNutrition}
+            name={name}
+            totalServingSize={totalServingSize}
           />
         )}
       </div>
 
-      <div className="w-full flex justify-between absolute bottom-0 left-0 px-6 pb-6 h-16">
+      <div className="w-full flex justify-between absolute bottom-0 left-0 px-6 py-3 h-16">
         {pageNumber != 1 ? (
           <button
             type="button"
@@ -168,7 +161,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
         ) : (
           <button
             type="submit"
-            className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2 absolute bottom-0 right-0 m-6"
+            className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
           >
             Add Recipe
           </button>

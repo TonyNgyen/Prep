@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 type Nutrition = {
   [key: string]: number;
@@ -21,10 +21,10 @@ type IngredientsList = {
 };
 
 type Recipe = {
-  id: string;
+  id?: string;
   name: string;
   nutrition: Nutrition;
-  ingredientsList: IngredientsList
+  ingredientsList: IngredientsList;
   howManyServings: number;
   pricePerServing?: number;
   howManyTimesUsed?: number;
@@ -32,12 +32,10 @@ type Recipe = {
 
 type RecipeInfoProps = {
   recipe: Recipe;
+};
+
+function DisplayRecipeInfo({ recipe }: RecipeInfoProps) {
+  return <div>DisplayRecipeInfo</div>;
 }
 
-function RecipeInfo({recipe} : RecipeInfoProps) {
-  return (
-    <div>RecipeInfo</div>
-  )
-}
-
-export default RecipeInfo
+export default DisplayRecipeInfo;
