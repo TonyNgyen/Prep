@@ -1,11 +1,6 @@
 "use client";
 
-import Dropdown from "@/components/dropdown/dropdown";
-import AddIngredientInfo from "@/components/ingredientInfo/addIngredientInfo";
-import EditIngredientInfo from "@/components/ingredientInfo/editIngredientInfo";
-import IngredientInfo from "@/components/ingredientInfo/ingredientInfo";
 import { Ingredient } from "@/types";
-import { createClient } from "@/utils/supabase/client";
 import React, { useEffect, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import Page3 from "./page3/page3";
