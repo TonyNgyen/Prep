@@ -7,13 +7,13 @@ import { createClient } from "@/utils/supabase/client";
 import { Ingredient } from "@/types";
 
 function IngredientsPage() {
-  const supabase = createClient();
   const [ingredientsList, setIngredientList] = useState<Ingredient[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
 
   useEffect(() => {
     const fetchIngredients = async () => {
+      const supabase = createClient();
       try {
         //console.log("1");
         const { data: userData, error: userError } =
@@ -63,7 +63,7 @@ function IngredientsPage() {
     };
 
     fetchIngredients();
-  }, [supabase]);
+  }, []);
 
   if (loading) {
     return <h1>Loading</h1>;

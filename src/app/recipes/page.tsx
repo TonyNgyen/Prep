@@ -4,11 +4,57 @@ import AddIngredientForm from "@/components/dataForms/addIngredientForm/addIngre
 import React, { useEffect, useState } from "react";
 import RecipeInfo from "@/components/recipeInfo/displayRecipeInfo/recipeInfo";
 import AddRecipeForm from "@/components/dataForms/addRecipeForm/addRecipeForm";
+import { createClient } from "@/utils/supabase/client";
 
 function RecipesPage() {
-  const [recipeList, setRecipeList] = useState({});
+  const [recipeIdList, setRecipeIdList] = useState({});
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
+
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      const supabase = createClient();
+      try {
+        const { data: userData, error: userError } =
+          await supabase.auth.getUser();
+        // console.log("8");
+
+        if (userError) {
+          console.error("Error fetching user:", userError);
+          return;
+        }
+        // console.log("2");
+
+        const userId = userData?.user?.id;
+
+        const { data: fetchUserData, error: fetchUserError } = await supabase
+          .from("users")
+          .select()
+          .eq("uid", userId);
+        if (fetchUserError || !fetchUserData || fetchUserData.length === 0) {
+          console.error("Error fetching user data:", fetchUserError);
+          return;
+        }
+        // console.log("3");
+
+        const recipeIdList = fetchUserData[0].recipes;
+        const { data: fetchRecipeData, error: fetchRecipeError } =
+          await supabase.from("recipes").select().in("id", recipeIdList);
+
+        if (fetchRecipeError || !fetchRecipeData) {
+          console.error("Error fetching recipes:", fetchRecipeError);
+          return;
+        }
+        //console.log("4");
+
+        setRecipeIdList(fetchRecipeData);
+        setLoading(false);
+      } catch (error) {
+        console.error("Unexpected error:", error);
+      }
+    };
+    fetchRecipes();
+  }, []);
 
   if (loading) {
     return <h1>Loading</h1>;

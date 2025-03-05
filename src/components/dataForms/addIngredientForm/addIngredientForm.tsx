@@ -47,6 +47,9 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
 
   const [dropping, setDropping] = useState(false);
 
+  const [extraNutrition, setExtraNutrition] = useState({});
+  const [addExtraNutrition, setAddExtraNutrition] = useState<boolean>(false);
+
   const [formData, setFormData] = useState<FormDataType>({
     name: "",
     servingSize: null,
@@ -217,12 +220,20 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
             )}
           </div>
         ))}
-        <button
-          type="submit"
-          className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
-        >
-          Add Ingredient
-        </button>
+        <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            className="bg-white text-mainGreen border-2 border-mainGreen font-semibold rounded-md px-4 py-3"
+          >
+            Add Nutritional Information
+          </button>
+          <button
+            type="submit"
+            className="bg-mainGreen text-white font-semibold rounded-md px-4 py-3"
+          >
+            Add Ingredient
+          </button>
+        </div>
       </form>
     </div>
   );
