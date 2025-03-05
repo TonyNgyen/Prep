@@ -6,6 +6,8 @@ import { IoIosClose } from "react-icons/io";
 import Page3 from "./page3/page3";
 import Page2 from "./page2/page2";
 import Page1 from "./page1/page1";
+import { createClient } from "@/utils/supabase/client";
+import { useRouter } from "next/navigation";
 
 type formProp = {
   setShowAddForm: React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,6 +15,8 @@ type formProp = {
 };
 
 function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
+  const supabase = createClient();
+  const router = useRouter();
   const [pageNumber, setPageNumber] = useState(1);
 
   const [ingredientList, setIngredientList] = useState<
@@ -94,6 +98,45 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
     sumNutrition();
   }, [ingredientList]);
 
+  const handleSubmit = async () => {
+    const { data, error } = await supabase
+      .from("recipes")
+      .insert({
+        ...recipeNutrition,
+        ...{
+          name: name,
+          ingredientList: ingredientIdList,
+          servingSize: 1,
+          servingUnit: "g",
+          timesUsed: 0,
+          amountOfServings: totalServingSize,
+          pricePerServing: 1,
+        },
+      })
+      .select();
+
+    if (error) {
+      console.error("Error inserting data:", error.message);
+      return;
+    }
+
+    try {
+      const recipeid = data?.[0]?.id;
+      const { data: userData, error: userError } =
+        await supabase.auth.getUser();
+
+      const userId = userData?.user?.id;
+
+      const { data: insertData } = await supabase.rpc("append_recipe_user", {
+        userid: userId,
+        recipeid: recipeid,
+      });
+      router.push("/");
+    } catch (error) {
+      console.error("Error adding recipe to user:", error);
+    }
+  };
+
   return (
     <div className="p-6 pb-[4rem] flex flex-col relative h-[calc(100vh-5rem)] gap-3">
       <div className="flex justify-between items-center">
@@ -162,6 +205,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
           <button
             type="submit"
             className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
+            onClick={() => handleSubmit()}
           >
             Add Recipe
           </button>

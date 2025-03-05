@@ -2,7 +2,7 @@
 
 import AddIngredientForm from "@/components/dataForms/addIngredientForm/addIngredientForm";
 import React, { useEffect, useState } from "react";
-import RecipeInfo from "@/components/recipeInfo/recipeInfo";
+import RecipeInfo from "@/components/recipeInfo/displayRecipeInfo/recipeInfo";
 import AddRecipeForm from "@/components/dataForms/addRecipeForm/addRecipeForm";
 
 function RecipesPage() {
@@ -28,10 +28,10 @@ function RecipesPage() {
           <button>Filter</button>
           <button>Sort</button>
         </div>
-        {Object.keys(recipeList).map((recipeID) => {
+        {/* {Object.keys(recipeList).map((recipeID) => {
           const recipe = recipeList[recipeID];
           return <RecipeInfo key={recipe.id} recipe={recipe} />;
-        })}
+        })} */}
       </div>
     );
   }

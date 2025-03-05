@@ -40,6 +40,7 @@ function IngredientsPage() {
         //console.log("3");
 
         const ingredientIdList = fetchUserData[0].ingredients;
+        console.log(ingredientIdList)
 
         const { data: fetchIngredientData, error: fetchIngredientError } =
           await supabase

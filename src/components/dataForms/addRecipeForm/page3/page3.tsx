@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Ingredient, NutritionFacts } from "@/types";
 import AddRecipeInfo from "@/components/recipeInfo/addRecipeInfo/addRecipeInfo";
 
@@ -83,9 +83,10 @@ function Page3({
   name,
   totalServingSize,
 }: formProp) {
+  const [displayTotal, setDisplayTotal] = useState<boolean>(true);
   return (
     <form className="space-y-3 flex-1">
-      <h1 className="text-3xl font-bold text-center h-10">{name}</h1>
+      {/* <h1 className="text-3xl font-bold text-center h-10">{name}</h1> */}
       {/* <div className="flex gap-4">
         <button
           className="bg-mainGreen text-white p-4 rounded-md"
@@ -109,6 +110,26 @@ function Page3({
           Recipe Nutrition
         </button>
       </div> */}
+      <div className="flex bg-mainGreen w-10/12 mx-auto h-12 rounded-md border-mainGreen border-[4px]">
+        <button
+          className={`h-full w-1/2 rounded-l-md font-bold tracking-wide ${
+            displayTotal ? "bg-white text-mainGreen" : " text-white"
+          }`}
+          type="button"
+          onClick={() => setDisplayTotal(true)}
+        >
+          Total Recipe
+        </button>
+        <button
+          className={`h-full w-1/2 rounded-r-md font-bold tracking-wide ${
+            !displayTotal ? "bg-white text-mainGreen" : " text-white"
+          }`}
+          type="button"
+          onClick={() => setDisplayTotal(false)}
+        >
+          Per Serving
+        </button>
+      </div>
       <div className="border-mainGreen border-[3px] p-3 rounded-md">
         <div className="space-y-2">
           {(
@@ -116,7 +137,15 @@ function Page3({
               keyof typeof NUTRITIONAL_KEYS
             >
           ).map((key) => {
-            const value = recipeNutrition[key];
+            let value;
+            if (displayTotal) {
+              value = Number(recipeNutrition[key].toFixed(2));
+            } else {
+              value = Number(
+                (recipeNutrition[key] / totalServingSize).toFixed(2)
+              );
+            }
+
             if (value === null || value === undefined) return null; // Skip null/undefined values
 
             const unit = NUTRITIONAL_UNITS[key]; // Get the unit for the current key
