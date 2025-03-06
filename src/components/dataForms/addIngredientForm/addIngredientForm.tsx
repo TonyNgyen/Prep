@@ -1,4 +1,5 @@
 import Dropdown from "@/components/dropdown/dropdown";
+import DropdownInverse from "@/components/dropdown/dropdownInverse";
 import { createClient } from "@/utils/supabase/client";
 import React, { useState } from "react";
 import { IoIosClose } from "react-icons/io";
@@ -35,6 +36,18 @@ type FormDataType = {
   iron: number | null;
 };
 
+function toCamelCase(input: string): string {
+  return input
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9 ]/g, "") // Remove non-alphanumeric characters except spaces
+    .split(/\s+/) // Split by spaces
+    .map((word, index) =>
+      index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1)
+    )
+    .join("");
+}
+
 function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
   const supabase = createClient();
   const options = [
@@ -43,12 +56,42 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
     { value: "c", label: "Cups (c)" },
   ];
 
+  const extraOptions = [
+    { value: "g", label: "g" },
+    { value: "mg", label: "mg" },
+    { value: "percent", label: "%" },
+  ];
+
   const required = ["servingsPerContainer", "calories"];
 
   const [dropping, setDropping] = useState(false);
+  const [extraDropping, setExtraDropping] = useState(false);
 
-  const [extraNutrition, setExtraNutrition] = useState({});
-  const [addExtraNutrition, setAddExtraNutrition] = useState<boolean>(false);
+  const [addingExtraNutrition, setAddingExtraNutrition] =
+    useState<boolean>(false);
+  const [allExtraNutrition, setAllExtraNutrition] = useState<
+    Record<
+      string,
+      {
+        key: string;
+        label: string | null;
+        unit: string | null;
+        value: number | null;
+      }
+    >
+  >({});
+
+  const [extraNutritionValues, setExtraNutritionValues] = useState<{
+    label: string | null;
+    unit: string | null;
+    value: number | null;
+    key: string | undefined;
+  }>({
+    label: null,
+    unit: "g",
+    value: null,
+    key: undefined,
+  });
 
   const [formData, setFormData] = useState<FormDataType>({
     name: "",
@@ -85,15 +128,62 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
     }));
   };
 
+  const handleExtraNutrition = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type } = e.target;
+
+    setExtraNutritionValues((prev) => {
+      const updatedLabel = name === "label" ? value : prev.label;
+      const updatedKey = updatedLabel ? toCamelCase(updatedLabel) : prev.key;
+
+      return {
+        ...prev,
+        [name]: type === "number" ? Number(value) || 0 : value,
+        key: updatedKey,
+      };
+    });
+  };
+
+  const addExtraNutrition = () => {
+    if (extraNutritionValues.key) {
+      setAllExtraNutrition((prev) => ({
+        ...prev,
+        [extraNutritionValues.key as string]: {
+          key: extraNutritionValues.key as string,
+          label: extraNutritionValues.label,
+          unit: extraNutritionValues.unit,
+          value: extraNutritionValues.value,
+        },
+      }));
+    }
+    setExtraNutritionValues({
+      label: null,
+      unit: "g",
+      value: null,
+      key: undefined,
+    });
+    setAddingExtraNutrition(false);
+  };
+
   const handleDropdownChange = (selectedValue: string) => {
     setFormData((prev) => ({ ...prev, servingUnit: selectedValue }));
   };
 
+  const handleExtraDropdown = (selectedValue: string) => {
+    setExtraNutritionValues((prev) => ({
+      ...prev,
+      unit: selectedValue,
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const submissionData = {
+      ...formData,
+      extraNutrition: allExtraNutrition, // Store extra nutrition in the JSONB column
+    };
     const { data, error } = await supabase
       .from("ingredients")
-      .insert([formData])
+      .insert([submissionData])
       .select();
 
     if (error) {
@@ -220,19 +310,96 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
             )}
           </div>
         ))}
+        {Object.values(allExtraNutrition).map(({ label, unit, value, key }) => (
+          <div key={key} className="flex w-full items-center">
+            <label className="block font-semibold flex-1">{label}</label>
+            <input
+              type="number"
+              name={key}
+              step="0.01"
+              min="0"
+              value={allExtraNutrition[key].value || ""}
+              onChange={handleChange}
+              placeholder="Optional"
+              className="border rounded-md w-1/3 p-2 border-gray-300"
+            />
+          </div>
+        ))}
+        {addingExtraNutrition && (
+          <div
+            key={"extra"}
+            className="flex w-full items-center justify-between"
+          >
+            <div className="flex w-[60%]">
+              <input
+                type="text"
+                name="label"
+                value={extraNutritionValues["label"] || ""}
+                onChange={handleExtraNutrition}
+                placeholder="Nutritional Label"
+                className="border p-2 w-11/12 border-mainGreen border-r-0 rounded-l-md"
+                required
+              />
+              <DropdownInverse
+                options={extraOptions}
+                defaultValue={extraOptions[0].label}
+                onChange={handleExtraDropdown}
+                className={`${
+                  extraDropping ? " rounded-tr-md " : " rounded-r-md "
+                } h-full min-w-[4.5rem]`}
+                drop={extraDropping}
+                onDropChange={setExtraDropping}
+              />
+            </div>
+
+            <input
+              type="number"
+              name="value"
+              step="0.01"
+              min="0"
+              value={extraNutritionValues["value"] || ""}
+              onChange={handleExtraNutrition}
+              placeholder="Value"
+              className="border rounded-md w-1/3 p-2 border-mainGreen"
+              required
+            />
+          </div>
+        )}
+
         <div className="flex flex-col gap-2">
-          <button
-            type="button"
-            className="bg-white text-mainGreen border-2 border-mainGreen font-semibold rounded-md px-4 py-3"
-          >
-            Add Nutritional Information
-          </button>
-          <button
-            type="submit"
-            className="bg-mainGreen text-white font-semibold rounded-md px-4 py-3"
-          >
-            Add Ingredient
-          </button>
+          {addingExtraNutrition ? (
+            <div className="flex gap-2 pt-12">
+              <button
+                type="button"
+                className="bg-mainGreen text-white font-semibold rounded-md px-4 py-3 flex-1"
+                onClick={() => addExtraNutrition()}
+              >
+                Add Nutrition
+              </button>
+              <div
+                className="bg-negativeRed text-white font-semibold rounded-md px-4 py-3 flex-1 text-center"
+                onClick={() => setAddingExtraNutrition(false)}
+              >
+                Cancel
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2">
+              <button
+                type="button"
+                className="bg-white text-mainGreen border-2 border-mainGreen font-semibold rounded-md px-4 py-3"
+                onClick={() => setAddingExtraNutrition(true)}
+              >
+                Add Nutritional Information
+              </button>
+              <button
+                type="submit"
+                className="bg-mainGreen text-white font-semibold rounded-md px-4 py-3"
+              >
+                Add Ingredient
+              </button>
+            </div>
+          )}
         </div>
       </form>
     </div>
