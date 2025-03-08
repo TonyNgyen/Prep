@@ -18,4 +18,5 @@ export type NutritionFacts = {
   vitaminD: number;
   calcium: number;
   iron: number;
+  extraNutrition: object;
 };

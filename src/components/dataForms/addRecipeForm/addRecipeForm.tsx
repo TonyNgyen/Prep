@@ -53,6 +53,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
     vitaminD: 0,
     calcium: 0,
     iron: 0,
+    extraNutrition: {},
   });
 
   const removeIngredient = (ingredientId: string) => {};
@@ -61,14 +62,35 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
     const sumNutrition = () => {
       const total = Object.values(ingredientList).reduce(
         (acc, { ingredient, numberOfServings, servingSize }) => {
-          for (const key in acc) {
-            const typedKey = key as keyof typeof acc;
-            acc[typedKey] +=
-              ((ingredient[typedKey] ?? 0) *
+          for (const key of Object.keys(acc)) {
+            if (key === "extraNutrition") continue;
+
+            if (
+              key in acc &&
+              typeof acc[key as keyof typeof acc] === "number"
+            ) {
+              const typedKey = key as keyof Omit<typeof acc, "extraNutrition">;
+              acc[typedKey] +=
+                ((ingredient[typedKey] ?? 0) *
+                  numberOfServings *
+                  (servingSize ?? 0)) /
+                (ingredient.servingSize ?? 1);
+            }
+          }
+
+          for (const [extraKey, extraValue] of Object.entries(
+            ingredient.extraNutrition || {}
+          )) {
+            if (!acc.extraNutrition[extraKey]) {
+              acc.extraNutrition[extraKey] = { ...extraValue, value: 0 };
+            }
+            acc.extraNutrition[extraKey].value +=
+              ((extraValue.value ?? 0) *
                 numberOfServings *
                 (servingSize ?? 0)) /
               (ingredient.servingSize ?? 1);
           }
+
           return acc;
         },
         {
@@ -91,10 +113,21 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
           vitaminD: 0,
           calcium: 0,
           iron: 0,
+          extraNutrition: {} as Record<
+            string,
+            {
+              key: string;
+              label: string | null;
+              unit: string | null;
+              value: number;
+            }
+          >,
         }
       );
+
       setRecipeNutrition(total);
     };
+
     sumNutrition();
   }, [ingredientList]);
 

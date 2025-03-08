@@ -86,30 +86,13 @@ function Page3({
   const [displayTotal, setDisplayTotal] = useState<boolean>(true);
   return (
     <form className="space-y-3 flex-1">
-      {/* <h1 className="text-3xl font-bold text-center h-10">{name}</h1> */}
-      {/* <div className="flex gap-4">
-        <button
-          className="bg-mainGreen text-white p-4 rounded-md"
-          type="button"
-          onClick={() => console.log(ingredientList)}
-        >
-          Ingredient List
-        </button>
-        <button
-          className="bg-mainGreen text-white p-4 rounded-md"
-          type="button"
-          onClick={() => console.log(ingredientIdList)}
-        >
-          Ingredient ID List
-        </button>
-        <button
-          className="bg-mainGreen text-white p-4 rounded-md"
-          type="button"
-          onClick={() => console.log(recipeNutrition)}
-        >
-          Recipe Nutrition
-        </button>
-      </div> */}
+      <button
+        className="p-2 bg-blue-200"
+        onClick={() => console.log(recipeNutrition)}
+        type="button"
+      >
+        Debug
+      </button>
       <div className="flex bg-mainGreen w-10/12 mx-auto h-12 rounded-md border-mainGreen border-[4px]">
         <button
           className={`h-full w-1/2 rounded-l-md font-bold tracking-wide ${
