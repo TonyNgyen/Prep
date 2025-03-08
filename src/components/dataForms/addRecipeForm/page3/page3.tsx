@@ -145,6 +145,42 @@ function Page3({
               </div>
             );
           })}
+          {Object.keys(recipeNutrition.extraNutrition).map((key) => {
+            let value;
+            if (displayTotal) {
+              value = Number(
+                recipeNutrition.extraNutrition[key].value.toFixed(2)
+              );
+            } else {
+              value = Number(
+                (
+                  recipeNutrition.extraNutrition[key].value / totalServingSize
+                ).toFixed(2)
+              );
+            }
+
+            if (value === null || value === undefined) return null; // Skip null/undefined values
+
+            let unit;
+            if (recipeNutrition.extraNutrition[key].unit == "percent") {
+              unit = "%";
+            } else {
+              unit = recipeNutrition.extraNutrition[key].unit;
+            } // Get the unit for the current key
+
+            return (
+              <div
+                key={key}
+                className="flex items-center justify-between text-lg"
+              >
+                <span>{recipeNutrition.extraNutrition[key].label}</span>
+                <span>
+                  {value}
+                  {unit}
+                </span>
+              </div>
+            );
+          })}
         </div>
       </div>
     </form>

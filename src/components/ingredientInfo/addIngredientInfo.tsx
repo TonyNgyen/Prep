@@ -92,6 +92,12 @@ function AddIngredientInfo({
           >
             Add
           </button>
+          {/* <div
+            className="bg-blue-200 p-2 text-black"
+            onClick={() => console.log(ingredient)}
+          >
+            Test
+          </div> */}
           <h1 className="text-2xl font-semibold">{ingredient.name}</h1>
         </div>
 
@@ -169,6 +175,37 @@ function AddIngredientInfo({
                   className="flex items-center justify-between text-lg"
                 >
                   <span>{NUTRITIONAL_KEYS[key]}</span>
+                  <span>
+                    {value}
+                    {unit}
+                  </span>
+                </div>
+              );
+            })}
+
+            {Object.keys(ingredient.extraNutrition ?? {}).map((key) => {
+              if (!ingredient.extraNutrition?.[key]) return null;
+
+              const value =
+                (ingredient.extraNutrition[key].value ?? 0) *
+                (numberOfServings ?? 1) *
+                ((servingSize ?? 1) / (ingredient?.servingSize ?? 1));
+
+              if (value === null || value === undefined) return null;
+
+              let unit;
+              if (ingredient.extraNutrition[key].unit == "percent") {
+                unit = "%";
+              } else {
+                unit = ingredient.extraNutrition[key].unit;
+              } // Get the unit for the current key
+
+              return (
+                <div
+                  key={key}
+                  className="flex items-center justify-between text-lg"
+                >
+                  <span>{ingredient.extraNutrition[key].label}</span>
                   <span>
                     {value}
                     {unit}

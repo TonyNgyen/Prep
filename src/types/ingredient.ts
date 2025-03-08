@@ -24,5 +24,8 @@ export type Ingredient = {
   vitaminD: number | null;
   calcium: number | null;
   iron: number | null;
-  extraNutrition: object | null;
+  extraNutrition: Record<
+    string,
+    { key: string; label: string | null; unit: string | null; value: number }
+  >;
 };
