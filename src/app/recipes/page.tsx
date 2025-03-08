@@ -1,13 +1,13 @@
 "use client";
 
-import AddIngredientForm from "@/components/dataForms/addIngredientForm/addIngredientForm";
 import React, { useEffect, useState } from "react";
-import RecipeInfo from "@/components/recipeInfo/displayRecipeInfo/recipeInfo";
 import AddRecipeForm from "@/components/dataForms/addRecipeForm/addRecipeForm";
 import { createClient } from "@/utils/supabase/client";
+import EditRecipeInfo from "@/components/recipeInfo/editRecipeInfo/editRecipeInfo";
+import { Recipe } from "@/types";
 
 function RecipesPage() {
-  const [recipeIdList, setRecipeIdList] = useState({});
+  const [recipeList, setRecipeList] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
 
@@ -37,9 +37,9 @@ function RecipesPage() {
         }
         // console.log("3");
 
-        const recipeIdList = fetchUserData[0].recipes;
+        const recipeList = fetchUserData[0].recipes;
         const { data: fetchRecipeData, error: fetchRecipeError } =
-          await supabase.from("recipes").select().in("id", recipeIdList);
+          await supabase.from("recipes").select().in("id", recipeList);
 
         if (fetchRecipeError || !fetchRecipeData) {
           console.error("Error fetching recipes:", fetchRecipeError);
@@ -47,7 +47,7 @@ function RecipesPage() {
         }
         //console.log("4");
 
-        setRecipeIdList(fetchRecipeData);
+        setRecipeList(fetchRecipeData);
         setLoading(false);
       } catch (error) {
         console.error("Unexpected error:", error);
@@ -71,13 +71,20 @@ function RecipesPage() {
           >
             Add Recipe
           </button>
-          <button>Filter</button>
-          <button>Sort</button>
+          {/* <button>Filter</button>
+          <button>Sort</button> */}
+          {/* <div
+            className="bg-blue-200 p-2"
+            onClick={() => console.log(recipeList)}
+          >
+            Test
+          </div> */}
         </div>
-        {/* {Object.keys(recipeList).map((recipeID) => {
-          const recipe = recipeList[recipeID];
-          return <RecipeInfo key={recipe.id} recipe={recipe} />;
-        })} */}
+        <div className="space-y-3">
+          {recipeList.map((recipe) => {
+            return <EditRecipeInfo key={recipe.id} recipe={recipe} />;
+          })}
+        </div>
       </div>
     );
   }

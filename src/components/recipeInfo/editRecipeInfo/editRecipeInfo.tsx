@@ -1,11 +1,9 @@
-"use client";
-
-import { Ingredient } from "@/types";
+import { Recipe } from "@/types";
 import React, { useState } from "react";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 
-type IngredientInfoProps = {
-  ingredient: Ingredient;
+type EditRecipeInfoProps = {
+  recipe: Recipe;
 };
 
 const NUTRITIONAL_KEYS = {
@@ -52,9 +50,8 @@ const NUTRITIONAL_UNITS: Record<string, string> = {
   iron: "%",
 };
 
-function IngredientInfo({ ingredient }: IngredientInfoProps) {
+function EditRecipeInfo({ recipe }: EditRecipeInfoProps) {
   const [dropdown, setDropdown] = useState(false);
-
   return (
     <div className="shadow-md">
       <div
@@ -62,7 +59,7 @@ function IngredientInfo({ ingredient }: IngredientInfoProps) {
           dropdown && "rounded-b-none"
         }`}
       >
-        <h1 className="text-2xl font-semibold">{ingredient.name}</h1>
+        <h1 className="text-2xl font-semibold">{recipe.name}</h1>
 
         {dropdown ? (
           <IoMdArrowDropup
@@ -77,20 +74,20 @@ function IngredientInfo({ ingredient }: IngredientInfoProps) {
         )}
       </div>
       {dropdown && (
-        <div className="bg-white rounded-b-md p-3">
+        <div className="bg-white rounded-b-md p-3 max-h-96 overflow-y-auto border-mainGreen border-[3px] border-t-0">
           <div className="border-b-8 border-b-mainGreen pb-2 mb-2">
             <div>
               <h1 className="text-lg">
-                {ingredient.servingsPerContainer} Servings Per Container
+                {recipe.amountOfServings} Servings Per Recipe
               </h1>
             </div>
-            <div className="flex items-center justify-between text-2xl font-bold">
+            {/* <div className="flex items-center justify-between text-2xl font-bold">
               <h1>Serving Size</h1>
               <p>
                 {ingredient.servingSize}
                 {ingredient.servingUnit ? ingredient.servingUnit : "g"}
               </p>
-            </div>
+            </div> */}
           </div>
 
           {/* Display Nutritional Facts */}
@@ -100,7 +97,7 @@ function IngredientInfo({ ingredient }: IngredientInfoProps) {
                 keyof typeof NUTRITIONAL_KEYS
               >
             ).map((key) => {
-              const value = ingredient[key];
+              const value = recipe[key];
               if (value === null || value === undefined) return null; // Skip null/undefined values
 
               const unit = NUTRITIONAL_UNITS[key]; // Get the unit for the current key
@@ -118,18 +115,18 @@ function IngredientInfo({ ingredient }: IngredientInfoProps) {
               );
             })}
 
-            {Object.keys(ingredient.extraNutrition ?? {}).map((key) => {
-              if (!ingredient.extraNutrition?.[key]) return null;
+            {Object.keys(recipe.extraNutrition ?? {}).map((key) => {
+              if (!recipe.extraNutrition?.[key]) return null;
 
-              const value = ingredient.extraNutrition[key].value;
+              const value = recipe.extraNutrition[key].value;
 
               if (value === null || value === undefined) return null;
 
               let unit;
-              if (ingredient.extraNutrition[key].unit == "percent") {
+              if (recipe.extraNutrition[key].unit == "percent") {
                 unit = "%";
               } else {
-                unit = ingredient.extraNutrition[key].unit;
+                unit = recipe.extraNutrition[key].unit;
               } // Get the unit for the current key
 
               return (
@@ -137,7 +134,7 @@ function IngredientInfo({ ingredient }: IngredientInfoProps) {
                   key={key}
                   className="flex items-center justify-between text-lg"
                 >
-                  <span>{ingredient.extraNutrition[key].label}</span>
+                  <span>{recipe.extraNutrition[key].label}</span>
                   <span>
                     {value}
                     {unit}
@@ -152,4 +149,4 @@ function IngredientInfo({ ingredient }: IngredientInfoProps) {
   );
 }
 
-export default IngredientInfo;
+export default EditRecipeInfo;

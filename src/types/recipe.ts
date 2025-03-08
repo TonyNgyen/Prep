@@ -4,7 +4,7 @@ export type Recipe = {
   ingredientsIdList: string[];
   howManyServings: number;
   pricePerServing: number | null;
-  howManyTimesUsed: number | null;
+  amountOfServings: number | null;
   servingSize: number | null;
   servingUnit: string | null;
   calories: number | null;
@@ -26,4 +26,8 @@ export type Recipe = {
   vitaminD: number | null;
   calcium: number | null;
   iron: number | null;
+  extraNutrition: Record<
+    string,
+    { key: string; label: string | null; unit: string | null; value: number }
+  >;
 };
