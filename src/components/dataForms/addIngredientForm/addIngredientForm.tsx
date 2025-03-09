@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { IoIosClose } from "react-icons/io";
 
 type formProp = {
-  setShowAddForm: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowAddForm?: React.Dispatch<React.SetStateAction<boolean>>; // Now optional
   isForm: boolean;
 };
 
@@ -214,7 +214,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
     <div className="p-6 pb-[6.5rem]">
       <div className="flex justify-between mb-3 items-center">
         <h1 className="text-3xl font-bold">Add Ingredient</h1>
-        {isForm && (
+        {isForm && setShowAddForm && (
           <button onClick={() => setShowAddForm(false)} className="flex2">
             <IoIosClose className="text-5xl flex" />
           </button>

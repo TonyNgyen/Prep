@@ -1,76 +1,110 @@
-type Nutrition = {
-  [key: string]: number;
-};
+import { createClient } from "@/utils/supabase/client";
 
-// Define a type for the ingredient
-type Ingredient = {
-  id: string;
-  name: string;
-  nutrition: Nutrition;
-  servingSize?: number;
-  servingUnit?: string;
-  servingsPerContainer?: number;
-  pricePerContainer?: number;
-  howManyTimesUsed?: number;
-  createdAt: Date;
-};
-
-type Recipe = {
-  id: string;
-  name: string;
-  nutrition: Nutrition;
-  ingredientsList: IngredientsList
-  howManyServings: number;
-  pricePerServing?: number;
-  howManyTimesUsed?: number;
-};
-
-type IngredientsList = {
-  [key: string]: Ingredient;
-};
-
-const getIngredients = async (userID: string): Promise<Ingredient[]> => {
+const fetchIngredients = async () => {
+  const supabase = createClient();
   try {
-    // Reference the 'ingredients' subcollection for a specific user
-    const ingredientsRef = collection(db, `users/${userID}/ingredients`);
+    //console.log("1");
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    //console.log("8");
 
-    // Fetch all documents in the subcollection
-    const ingredientsSnapshot = await getDocs(ingredientsRef);
+    if (userError) {
+      console.error("Error fetching user:", userError);
+      return;
+    }
+    //console.log("2");
 
-    // Map over the documents to get their data
-    const ingredients = ingredientsSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Ingredient[]; // Explicitly cast to Ingredient[]
+    const userId = userData?.user?.id;
 
-    console.log("Ingredients:", ingredients);
-    return ingredients;
+    const { data: fetchUserData, error: fetchUserError } = await supabase
+      .from("users")
+      .select()
+      .eq("uid", userId);
+
+    if (fetchUserError || !fetchUserData || fetchUserData.length === 0) {
+      console.error("Error fetching user data:", fetchUserError);
+      return;
+    }
+    //console.log("3");
+
+    const ingredientIdList = fetchUserData[0].ingredients;
+    console.log(ingredientIdList);
+
+    const { data: fetchIngredientData, error: fetchIngredientError } =
+      await supabase.from("ingredients").select().in("id", ingredientIdList);
+
+    if (fetchIngredientError || !fetchIngredientData) {
+      console.error("Error fetching ingredients:", fetchIngredientError);
+      return;
+    }
+    //console.log("4");
+
+    return fetchIngredientData;
+    //console.log("5");
   } catch (error) {
-    console.error("Error fetching ingredients:", error);
-    throw error;
+    console.error("Unexpected error:", error);
   }
 };
 
-const getRecipes = async (userID: string): Promise<Recipe[]> => {
+const fetchRecipes = async () => {
+  const supabase = createClient();
   try {
-    // Reference the 'ingredients' subcollection for a specific user
-    const recipesRef = collection(db, `users/${userID}/recipes`);
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    // console.log("8");
 
-    // Fetch all documents in the subcollection
-    const recipesSnapshot = await getDocs(recipesRef);
+    if (userError) {
+      console.error("Error fetching user:", userError);
+      return;
+    }
+    // console.log("2");
 
-    // Map over the documents to get their data
-    const recipes = recipesSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Recipe[]; // Explicitly cast to Ingredient[]
+    const userId = userData?.user?.id;
 
-    console.log("recipes:", recipes);
-    return recipes;
+    const { data: fetchUserData, error: fetchUserError } = await supabase
+      .from("users")
+      .select()
+      .eq("uid", userId);
+    if (fetchUserError || !fetchUserData || fetchUserData.length === 0) {
+      console.error("Error fetching user data:", fetchUserError);
+      return;
+    }
+    // console.log("3");
+
+    const recipeList = fetchUserData[0].recipes;
+    const { data: fetchRecipeData, error: fetchRecipeError } = await supabase
+      .from("recipes")
+      .select()
+      .in("id", recipeList);
+
+    if (fetchRecipeError || !fetchRecipeData) {
+      console.error("Error fetching recipes:", fetchRecipeError);
+      return;
+    }
+    //console.log("4");
+
+    return fetchRecipeData;
   } catch (error) {
-    console.error("Error fetching recipes:", error);
-    throw error;
+    console.error("Unexpected error:", error);
   }
 };
 
-export { getIngredients, getRecipes };
+const searchIngredient = async (ingredientSearch: string) => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("ingredients")
+    .select()
+    .eq("name", ingredientSearch);
+  if (error) console.log(error);
+  return data;
+};
+
+const searchRecipe = async (recipeSearch: string) => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("recipes")
+    .select()
+    .eq("name", recipeSearch);
+  if (error) console.log(error);
+  return data;
+};
+
+export { fetchIngredients, fetchRecipes, searchIngredient, searchRecipe };
