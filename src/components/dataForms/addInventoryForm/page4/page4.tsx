@@ -12,8 +12,8 @@ type PageProps = {
   ItemsToAdd: Record<string, InventoryItem>;
 };
 
-function Page2({ ItemsToAdd }: PageProps) {
-  return <div onClick={() => console.log(ItemsToAdd)}>Page2</div>;
+function Page4({ ItemsToAdd }: PageProps) {
+  return <div onClick={() => console.log(ItemsToAdd)}>Page4</div>;
 }
 
-export default Page2;
+export default Page4;
