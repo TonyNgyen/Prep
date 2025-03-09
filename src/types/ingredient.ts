@@ -1,9 +1,9 @@
 export type Ingredient = {
   id: string;
   name: string;
-  servingSize: number | null;
+  servingSize: number;
   servingUnit: string;
-  servingsPerContainer: number | null;
+  servingsPerContainer: number;
   pricePerContainer: number | null;
   calories: number | null;
   protein: number | null;

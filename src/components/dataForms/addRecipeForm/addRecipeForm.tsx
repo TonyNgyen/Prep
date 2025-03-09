@@ -142,7 +142,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
           servingSize: 1,
           servingUnit: "g",
           timesUsed: 0,
-          amountOfServings: totalServingSize,
+          numberOfServings: totalServingSize,
           pricePerServing: 1,
         },
       })

@@ -4,43 +4,64 @@ import React, { useEffect, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import Page1 from "./page1/page1";
 import Page2 from "./page2/page2";
-import Page3 from "./page3/page3";
-import Page4 from "./page4/page4";
+import { InventoryIngredient, InventoryRecipe } from "@/types";
+import { addToInventory } from "@/lib/data";
 
 type formProp = {
   setShowAddForm?: React.Dispatch<React.SetStateAction<boolean>>; // Now optional
   isForm: boolean;
 };
 
-type InventoryItem = {
-  id: string;
-  name: string;
-  servingSize: number;
-  amountOfServings: number;
-  totalAmount: number;
-};
-
-type ItemsToAdd = Record<string, InventoryItem>; // Keyed by ID
+type ItemsToAdd = Record<string, InventoryIngredient | InventoryRecipe>; // Keyed by ID
 
 function AddInventoryForm({ setShowAddForm, isForm }: formProp) {
   const [pageNumber, setPageNumber] = useState(1);
   const [itemsToAdd, setItemsToAdd] = useState<ItemsToAdd>({});
 
-  const addInventoryItem = (
+  const addInventoryIngredient = (
     id: string,
     name: string,
+    containers: number,
     servingSize: number,
-    amountOfServings: number,
-    totalAmount: number
+    numberOfServings: number,
+    totalAmount: number,
+    unit: string,
+    type: string
   ) => {
     setItemsToAdd((prev) => ({
       ...prev,
       [id]: {
         id,
         name,
+        containers,
         servingSize,
-        amountOfServings,
+        numberOfServings,
         totalAmount,
+        unit,
+        type,
+      },
+    }));
+  };
+
+  const addInventoryRecipe = (
+    id: string,
+    name: string,
+    servings: number,
+    servingSize: number,
+    totalAmount: number,
+    unit: string,
+    type: string
+  ) => {
+    setItemsToAdd((prev) => ({
+      ...prev,
+      [id]: {
+        id,
+        name,
+        servings,
+        servingSize,
+        totalAmount,
+        unit,
+        type,
       },
     }));
   };
@@ -58,7 +79,10 @@ function AddInventoryForm({ setShowAddForm, isForm }: formProp) {
 
       <div className="overflow-scroll pb-6">
         {pageNumber == 1 && (
-          <Page1 addInventoryItem={addInventoryItem} />
+          <Page1
+            addInventoryIngredient={addInventoryIngredient}
+            addInventoryRecipe={addInventoryRecipe}
+          />
         )}
         {pageNumber == 2 && <Page2 ItemsToAdd={itemsToAdd} />}
       </div>
@@ -77,7 +101,7 @@ function AddInventoryForm({ setShowAddForm, isForm }: formProp) {
         ) : (
           <div></div>
         )}
-        {pageNumber != 3 ? (
+        {pageNumber != 2 ? (
           <button
             type="button"
             className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
@@ -91,9 +115,9 @@ function AddInventoryForm({ setShowAddForm, isForm }: formProp) {
           <button
             type="submit"
             className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
-            // onClick={() => handleSubmit()}
+            onClick={() => addToInventory(itemsToAdd)}
           >
-            Add Recipe
+            Add Inventory
           </button>
         )}
       </div>

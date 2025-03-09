@@ -2,11 +2,10 @@ export type Recipe = {
   id: string;
   name: string;
   ingredientsIdList: string[];
-  howManyServings: number;
   pricePerServing: number | null;
-  amountOfServings: number | null;
-  servingSize: number | null;
-  servingUnit: string | null;
+  numberOfServings: number;
+  servingSize: number;
+  servingUnit: string;
   calories: number | null;
   protein: number | null;
   totalFat: number | null;

@@ -1,19 +1,20 @@
+import { InventoryIngredient, InventoryRecipe } from "@/types";
 import React from "react";
 
-type InventoryItem = {
-  id: string;
-  name: string;
-  servingSize: number;
-  amountOfServings: number;
-  totalAmount: number;
-};
-
 type PageProps = {
-  ItemsToAdd: Record<string, InventoryItem>;
+  ItemsToAdd: Record<string, InventoryIngredient | InventoryRecipe>;
 };
 
 function Page2({ ItemsToAdd }: PageProps) {
-  return <div onClick={() => console.log(ItemsToAdd)}>Page2</div>;
+  return (
+    <div>
+      <h1>Page 2</h1>
+      <div onClick={() => console.log(ItemsToAdd)}>Debug</div>
+      {Object.values(ItemsToAdd).map((item) => (
+        <div>{item.name}</div>
+      ))}
+    </div>
+  );
 }
 
 export default Page2;

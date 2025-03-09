@@ -54,6 +54,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
     { value: "g", label: "Grams (g)" },
     { value: "oz", label: "Ounces (oz)" },
     { value: "c", label: "Cups (c)" },
+    { value: "x", label: "Unit (x)" },
   ];
 
   const extraOptions = [

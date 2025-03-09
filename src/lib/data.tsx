@@ -1,3 +1,4 @@
+import { InventoryIngredient, InventoryRecipe } from "@/types";
 import { createClient } from "@/utils/supabase/client";
 
 const fetchIngredients = async () => {
@@ -107,4 +108,42 @@ const searchRecipe = async (recipeSearch: string) => {
   return data;
 };
 
-export { fetchIngredients, fetchRecipes, searchIngredient, searchRecipe };
+const addToInventory = async (
+  inventoryItems: Record<string, InventoryIngredient | InventoryRecipe>
+) => {
+  const supabase = createClient();
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+
+  const userId = userData?.user?.id;
+
+  const { data, error } = await supabase
+    .from("users")
+    .select("inventory")
+    .eq("uid", userId)
+    .single();
+
+  if (error) {
+    console.error("Error fetching data:", error);
+    return;
+  }
+  const existingJson = data?.inventory || {};
+  const updatedJson = { ...existingJson, ...inventoryItems };
+  const { error: updateError } = await supabase
+    .from("users")
+    .update({ inventory: updatedJson })
+    .eq("uid", userId);
+
+  if (updateError) {
+    console.error("Error updating JSONB column:", updateError);
+  } else {
+    console.log("JSONB column updated successfully!");
+  }
+};
+
+export {
+  fetchIngredients,
+  fetchRecipes,
+  searchIngredient,
+  searchRecipe,
+  addToInventory,
+};

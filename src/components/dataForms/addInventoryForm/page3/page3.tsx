@@ -6,16 +6,16 @@ import React, { useState } from "react";
 
 type PageProps = {
   addType: string | null;
-  addInventoryItem: (
+  addInventoryIngredient: (
     id: string,
     name: string,
     servingSize: number,
-    amountOfServings: number,
+    numberOfServings: number,
     totalAmount: number
   ) => void;
 };
 
-function Page3({ addType, addInventoryItem }: PageProps) {
+function Page3({ addType, addInventoryIngredient }: PageProps) {
   const [search, setSearch] = useState<string>("");
   const [searchResult, setSearchResult] = useState<Recipe[] | Ingredient[]>([]);
   const searchItem = async () => {
@@ -32,10 +32,10 @@ function Page3({ addType, addInventoryItem }: PageProps) {
     id: string,
     name: string,
     servingSize: number,
-    amountOfServings: number,
+    numberOfServings: number,
     totalAmount: number
   ) => {
-    addInventoryItem(id, name, servingSize, amountOfServings, totalAmount);
+    addInventoryIngredient(id, name, servingSize, numberOfServings, totalAmount);
     setSearch("");
     setSearchResult([]);
   };

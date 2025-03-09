@@ -1,5 +1,6 @@
 "use client";
 
+import { addToInventory } from "@/lib/data";
 import { Ingredient } from "@/types";
 import React, { useState } from "react";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
@@ -9,9 +10,11 @@ type InventoryIngredientInfoProps = {
   add: (
     id: string,
     name: string,
+    containers: number,
     servingSize: number,
     numberOfServings: number,
-    totalNumber: number
+    totalNumber: number,
+    unit: string
   ) => void;
 };
 
@@ -74,13 +77,11 @@ function InventoryIngredientInfo({
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const value = e.target.value;
-    // Set to empty string if the input is empty, otherwise convert to number
     setContainerNumber(value === "" ? null : Number(value));
   };
 
   const handleServingSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // Set to empty string if the input is empty, otherwise convert to number
     setServingSize(value === "" ? null : Number(value));
   };
 
@@ -88,8 +89,47 @@ function InventoryIngredientInfo({
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const value = e.target.value;
-    // Set to empty string if the input is empty, otherwise convert to number
     setNumberOfServings(value === "" ? null : Number(value));
+  };
+
+  const handleAddContainers = () => {
+    if (!containerNumber) {
+      return;
+    }
+    add(
+      ingredient.id,
+      ingredient.name,
+      containerNumber,
+      ingredient.servingSize,
+      ingredient.servingsPerContainer,
+      ingredient.servingSize *
+        ingredient.servingsPerContainer *
+        containerNumber,
+      ingredient.servingUnit
+    );
+  };
+
+  const handleAddServings = () => {
+    if (!servingSize || !numberOfServings) {
+      return;
+    }
+    add(
+      ingredient.id,
+      ingredient.name,
+      1,
+      servingSize,
+      numberOfServings,
+      servingSize * numberOfServings,
+      ingredient.servingUnit
+    );
+  };
+
+  const handleAdd = () => {
+    if (addType == "containers") {
+      handleAddContainers();
+    } else {
+      handleAddServings();
+    }
   };
 
   return (
@@ -222,7 +262,7 @@ function InventoryIngredientInfo({
               type="button"
               onClick={() => setAddType("servings")}
             >
-              Per Serving
+              Servings
             </button>
           </div>
           <div>
@@ -249,7 +289,7 @@ function InventoryIngredientInfo({
                     type="number"
                     name="name"
                     placeholder="1"
-                    value={containerNumber === null ? "" : containerNumber}
+                    value={servingSize === null ? "" : servingSize}
                     onChange={handleServingSizeChange}
                     className="border rounded-md w-full p-2 border-gray-300"
                     required
@@ -261,7 +301,7 @@ function InventoryIngredientInfo({
                     type="number"
                     name="name"
                     placeholder="1"
-                    value={containerNumber === null ? "" : containerNumber}
+                    value={numberOfServings === null ? "" : numberOfServings}
                     onChange={handleNumberOfServingsChange}
                     className="border rounded-md w-full p-2 border-gray-300"
                     required
@@ -281,7 +321,10 @@ function InventoryIngredientInfo({
             >
               Cancel
             </button>
-            <button className="w-1/2 bg-mainGreen p-1 text-lg font-bold text-white rounded-md">
+            <button
+              className="w-1/2 bg-mainGreen p-1 text-lg font-bold text-white rounded-md"
+              onClick={() => handleAdd()}
+            >
               Confirm
             </button>
           </div>

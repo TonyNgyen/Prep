@@ -78,7 +78,7 @@ function EditRecipeInfo({ recipe }: EditRecipeInfoProps) {
           <div className="border-b-8 border-b-mainGreen pb-2 mb-2">
             <div>
               <h1 className="text-lg">
-                {recipe.amountOfServings} Servings Per Recipe
+                {recipe.numberOfServings} Servings Per Recipe
               </h1>
             </div>
             {/* <div className="flex items-center justify-between text-2xl font-bold">

@@ -7,9 +7,10 @@ type InventoryRecipeInfoProps = {
   add: (
     id: string,
     name: string,
+    servings: number,
     servingSize: number,
-    amountOfServings: number,
-    totalAmount: number
+    totalAmount: number,
+    unit: string
   ) => void;
 };
 
@@ -59,6 +60,57 @@ const NUTRITIONAL_UNITS: Record<string, string> = {
 
 function InventoryRecipeInfo({ recipe, add }: InventoryRecipeInfoProps) {
   const [dropdown, setDropdown] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [addType, setAddType] = useState<string>("numberOfRecipes");
+  const [numberOfRecipes, setAmount] = useState<number | null>(1);
+  const [numberOfServings, setNumberOfServings] = useState<number | null>(1);
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setAmount(value === "" ? null : Number(value));
+  };
+
+  const handleServingSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setNumberOfServings(value === "" ? null : Number(value));
+  };
+
+  const handleAddAmount = () => {
+    if (!numberOfRecipes || !recipe.servingSize) {
+      return;
+    }
+    add(
+      recipe.id,
+      recipe.name,
+      numberOfRecipes * recipe.numberOfServings,
+      recipe.servingSize,
+      numberOfRecipes * recipe.numberOfServings * recipe.servingSize,
+      recipe.servingUnit
+    );
+  };
+
+  const handleAddServings = () => {
+    if (!numberOfServings) {
+      return;
+    }
+    add(
+      recipe.id,
+      recipe.name,
+      numberOfServings,
+      recipe.servingSize,
+      numberOfServings * recipe.servingSize,
+      recipe.servingUnit
+    );
+  };
+
+  const handleAdd = () => {
+    if (addType == "numberOfRecipes") {
+      handleAddAmount();
+    } else {
+      handleAddServings();
+    }
+  };
+
   return (
     <div className="shadow-md">
       <div
@@ -66,35 +118,49 @@ function InventoryRecipeInfo({ recipe, add }: InventoryRecipeInfoProps) {
           dropdown && "rounded-b-none"
         }`}
       >
-        <h1 className="text-2xl font-semibold">{recipe.name}</h1>
+        <div className="flex gap-3">
+          {!adding && (
+            <button
+              type="button"
+              className="bg-white text-mainGreen px-2 rounded-md text-lg font-semibold"
+              onClick={() => {
+                setAdding(true);
+              }}
+            >
+              Add
+            </button>
+          )}
+          <h1 className="text-2xl font-semibold">{recipe.name}</h1>
+        </div>
 
-        {dropdown ? (
-          <IoMdArrowDropup
-            className="text-4xl"
-            onClick={() => setDropdown(false)}
-          />
-        ) : (
-          <IoMdArrowDropdown
-            className="text-4xl"
-            onClick={() => setDropdown(true)}
-          />
-        )}
+        {!adding &&
+          (dropdown ? (
+            <IoMdArrowDropup
+              className="text-4xl"
+              onClick={() => setDropdown(false)}
+            />
+          ) : (
+            <IoMdArrowDropdown
+              className="text-4xl"
+              onClick={() => setDropdown(true)}
+            />
+          ))}
       </div>
-      {dropdown && (
+      {!adding && dropdown && (
         <div className="bg-white rounded-b-md p-3 max-h-96 overflow-y-auto border-mainGreen border-[3px] border-t-0">
           <div className="border-b-8 border-b-mainGreen pb-2 mb-2">
             <div>
               <h1 className="text-lg">
-                {recipe.amountOfServings} Servings Per Recipe
+                {recipe.numberOfServings} Servings Per Recipe
               </h1>
             </div>
-            {/* <div className="flex items-center justify-between text-2xl font-bold">
+            <div className="flex items-center justify-between text-2xl font-bold">
               <h1>Serving Size</h1>
               <p>
-                {ingredient.servingSize}
-                {ingredient.servingUnit ? ingredient.servingUnit : "g"}
+                {recipe.servingSize}
+                {recipe.servingUnit ? recipe.servingUnit : "g"}
               </p>
-            </div> */}
+            </div>
           </div>
 
           {/* Display Nutritional Facts */}
@@ -149,6 +215,87 @@ function InventoryRecipeInfo({ recipe, add }: InventoryRecipeInfoProps) {
                 </div>
               );
             })}
+          </div>
+        </div>
+      )}
+      {adding && (
+        <div className="bg-white rounded-b-md p-3">
+          <div className="flex bg-mainGreen w-12/12 mx-auto h-10 rounded-md border-mainGreen border-[4px]">
+            <button
+              className={`w-1/2 rounded-l-md font-bold tracking-wide ${
+                addType == "numberOfRecipes"
+                  ? "bg-white text-mainGreen"
+                  : " text-white"
+              }`}
+              type="button"
+              onClick={() => setAddType("numberOfRecipes")}
+            >
+              Recipes
+            </button>
+            <button
+              className={`w-1/2 rounded-r-md font-bold tracking-wide ${
+                addType == "servings"
+                  ? "bg-white text-mainGreen"
+                  : " text-white"
+              }`}
+              type="button"
+              onClick={() => setAddType("servings")}
+            >
+              Servings
+            </button>
+          </div>
+          <div>
+            <div className="my-4">
+              {addType == "numberOfRecipes" ? (
+                <div>
+                  <label className="block font-semibold">
+                    Number of Recipes
+                  </label>
+                  <input
+                    type="number"
+                    name="name"
+                    placeholder="1"
+                    value={numberOfRecipes === null ? "" : numberOfRecipes}
+                    onChange={handleAmountChange}
+                    className="border rounded-md w-full p-2 border-gray-300"
+                    required
+                  />
+                </div>
+              ) : (
+                <div>
+                  <label className="block font-semibold">
+                    Number of Servings
+                  </label>
+                  <input
+                    type="number"
+                    name="name"
+                    placeholder="1"
+                    value={numberOfServings === null ? "" : numberOfServings}
+                    onChange={handleServingSizeChange}
+                    className="border rounded-md w-full p-2 border-gray-300"
+                    required
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="flex items-center justify-center gap-4">
+            <button
+              className="w-1/2 bg-negativeRed p-1 text-lg font-bold text-white rounded-md"
+              type="button"
+              onClick={() => {
+                setAdding(false);
+                setDropdown(false);
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              className="w-1/2 bg-mainGreen p-1 text-lg font-bold text-white rounded-md"
+              onClick={() => handleAdd()}
+            >
+              Confirm
+            </button>
           </div>
         </div>
       )}

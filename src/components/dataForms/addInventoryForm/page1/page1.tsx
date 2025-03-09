@@ -5,12 +5,24 @@ import { Ingredient, Recipe } from "@/types";
 import React, { useState } from "react";
 
 type PageProps = {
-  addInventoryItem: (
+  addInventoryIngredient: (
     id: string,
     name: string,
+    containers: number,
     servingSize: number,
-    amountOfServings: number,
-    totalAmount: number
+    numberOfServings: number,
+    totalAmount: number,
+    unit: string,
+    type: string
+  ) => void;
+  addInventoryRecipe: (
+    id: string,
+    name: string,
+    servings: number,
+    servingSize: number,
+    totalAmount: number,
+    unit: string,
+    type: string
   ) => void;
 };
 
@@ -19,7 +31,7 @@ type SearchResultType = {
   ingredients: Ingredient[];
 };
 
-function Page1({ addInventoryItem }: PageProps) {
+function Page1({ addInventoryIngredient, addInventoryRecipe }: PageProps) {
   const [search, setSearch] = useState<string>("");
   const [searchResult, setSearchResult] = useState<SearchResultType>({
     recipes: [],
@@ -39,14 +51,49 @@ function Page1({ addInventoryItem }: PageProps) {
     });
   };
 
-  const add = (
+  const addIngredient = (
     id: string,
     name: string,
+    containers: number,
     servingSize: number,
-    amountOfServings: number,
-    totalAmount: number
+    numberOfServings: number,
+    totalAmount: number,
+    unit: string
   ) => {
-    addInventoryItem(id, name, servingSize, amountOfServings, totalAmount);
+    addInventoryIngredient(
+      id,
+      name,
+      containers,
+      servingSize,
+      numberOfServings,
+      totalAmount,
+      unit,
+      "ingredient"
+    );
+    setSearch("");
+    setSearchResult({
+      recipes: [],
+      ingredients: [],
+    });
+  };
+
+  const addRecipe = (
+    id: string,
+    name: string,
+    servings: number,
+    servingSize: number,
+    totalAmount: number,
+    unit: string
+  ) => {
+    addInventoryRecipe(
+      id,
+      name,
+      servings,
+      servingSize,
+      totalAmount,
+      unit,
+      "recipe"
+    );
     setSearch("");
     setSearchResult({
       recipes: [],
@@ -90,11 +137,15 @@ function Page1({ addInventoryItem }: PageProps) {
               <InventoryIngredientInfo
                 key={ingredient.id}
                 ingredient={ingredient}
-                add={add}
+                add={addIngredient}
               />
             ))}
             {searchResult.recipes.map((recipe) => (
-              <InventoryRecipeInfo add={add} key={recipe.id} recipe={recipe} />
+              <InventoryRecipeInfo
+                add={addRecipe}
+                key={recipe.id}
+                recipe={recipe}
+              />
             ))}
           </div>
         </div>

@@ -1,15 +1,15 @@
 import React from "react";
 
-type InventoryItem = {
+type InventoryIngredient = {
   id: string;
   name: string;
   servingSize: number;
-  amountOfServings: number;
+  numberOfServings: number;
   totalAmount: number;
 };
 
 type PageProps = {
-  ItemsToAdd: Record<string, InventoryItem>;
+  ItemsToAdd: Record<string, InventoryIngredient>;
 };
 
 function Page4({ ItemsToAdd }: PageProps) {
