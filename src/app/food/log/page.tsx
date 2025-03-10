@@ -1,13 +1,12 @@
 "use client";
 
-import { searchIngredient, searchRecipe } from "@/lib/data";
+import { fetchInventory } from "@/lib/data";
 import {
-  Ingredient,
   InventoryIngredient,
   InventoryRecipe,
-  Recipe,
+  NutritionFacts,
 } from "@/types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Page1 from "./page1";
 import Page2 from "./page2";
 
@@ -15,10 +14,32 @@ type ItemsToAdd = Record<string, InventoryIngredient | InventoryRecipe>;
 
 function LogFoodPage() {
   const [logFood, setLogFood] = useState<ItemsToAdd>({});
-  const [nutrients, setNutrients] = useState({});
+    const [nutrition, setNutrition] = useState<NutritionFacts>({
+      calories: 0,
+      protein: 0,
+      totalFat: 0,
+      saturatedFat: 0,
+      polyunsaturatedFat: 0,
+      monounsaturatedFat: 0,
+      transFat: 0,
+      cholesterol: 0,
+      sodium: 0,
+      potassium: 0,
+      totalCarbohydrates: 0,
+      sugars: 0,
+      addedSugars: 0,
+      sugarAlcohols: 0,
+      vitaminA: 0,
+      vitaminC: 0,
+      vitaminD: 0,
+      calcium: 0,
+      iron: 0,
+      extraNutrition: {},
+    });
   const [pageNumber, setPageNumber] = useState(1);
+  const [inventory, setInventory] = useState<ItemsToAdd>({});
 
-  const addIngredient = (
+  const addLogIngredient = (
     id: string,
     name: string,
     containers: number,
@@ -43,7 +64,7 @@ function LogFoodPage() {
     }));
   };
 
-  const addRecipe = (
+  const addLogRecipe = (
     id: string,
     name: string,
     servings: number,
@@ -66,12 +87,27 @@ function LogFoodPage() {
     }));
   };
 
+  useEffect(() => {
+    const getInventory = async () => {
+      const fetch = await fetchInventory();
+      setInventory(fetch || {});
+    };
+  
+    getInventory();
+  }, []);
+  
+
   return (
     <div className="p-6 pb-[4rem] flex flex-col relative h-[calc(100vh-5rem)] gap-3">
       <div className="">
         <h1 className="text-3xl font-bold mb-2">Log Food</h1>
         <div className="overflow-scroll pb-6">
-          {pageNumber == 1 && <Page1 />}
+          {pageNumber == 1 && (
+            <Page1
+              addLogIngredient={addLogIngredient}
+              addLogRecipe={addLogRecipe}
+            />
+          )}
           {pageNumber == 2 && <Page2 />}
         </div>
         <div className="w-full flex justify-between absolute bottom-0 left-0 px-6 py-3 h-16">

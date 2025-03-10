@@ -1,18 +1,15 @@
-"use client";
-
-import { Ingredient } from "@/types";
+import { Recipe } from "@/types";
 import React, { useState } from "react";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 
-type InventoryIngredientInfoProps = {
-  ingredient: Ingredient;
+type InventoryRecipeInfoProps = {
+  recipe: Recipe;
   add: (
     id: string,
     name: string,
-    containers: number,
+    servings: number,
     servingSize: number,
-    numberOfServings: number,
-    totalNumber: number,
+    totalAmount: number,
     unit: string
   ) => void;
 };
@@ -61,71 +58,54 @@ const NUTRITIONAL_UNITS: Record<string, string> = {
   iron: "%",
 };
 
-function LogIngredientInfo({
-  ingredient,
-  add,
-}: InventoryIngredientInfoProps) {
+function LogRecipeInfo({ recipe, add }: InventoryRecipeInfoProps) {
   const [dropdown, setDropdown] = useState(false);
   const [adding, setAdding] = useState(false);
-  const [addType, setAddType] = useState<string>("containers");
-  const [containerNumber, setContainerNumber] = useState<number | null>(1);
-  const [servingSize, setServingSize] = useState<number | null>(1);
+  const [addType, setAddType] = useState<string>("numberOfRecipes");
+  const [numberOfRecipes, setAmount] = useState<number | null>(1);
   const [numberOfServings, setNumberOfServings] = useState<number | null>(1);
 
-  const handleContainerNumberChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setContainerNumber(value === "" ? null : Number(value));
+    setAmount(value === "" ? null : Number(value));
   };
 
   const handleServingSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setServingSize(value === "" ? null : Number(value));
-  };
-
-  const handleNumberOfServingsChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = e.target.value;
     setNumberOfServings(value === "" ? null : Number(value));
   };
 
-  const handleAddContainers = () => {
-    if (!containerNumber) {
+  const handleAddAmount = () => {
+    if (!numberOfRecipes || !recipe.servingSize) {
       return;
     }
     add(
-      ingredient.id,
-      ingredient.name,
-      containerNumber,
-      ingredient.servingSize,
-      ingredient.servingsPerContainer,
-      ingredient.servingSize *
-        ingredient.servingsPerContainer *
-        containerNumber,
-      ingredient.servingUnit
+      recipe.id,
+      recipe.name,
+      numberOfRecipes * recipe.numberOfServings,
+      recipe.servingSize,
+      numberOfRecipes * recipe.numberOfServings * recipe.servingSize,
+      recipe.servingUnit
     );
   };
 
   const handleAddServings = () => {
-    if (!servingSize || !numberOfServings) {
+    if (!numberOfServings) {
       return;
     }
     add(
-      ingredient.id,
-      ingredient.name,
-      1,
-      servingSize,
+      recipe.id,
+      recipe.name,
       numberOfServings,
-      servingSize * numberOfServings,
-      ingredient.servingUnit
+      recipe.servingSize,
+      numberOfServings * recipe.servingSize,
+      recipe.servingUnit
     );
   };
 
   const handleAdd = () => {
-    if (addType == "containers") {
-      handleAddContainers();
+    if (addType == "numberOfRecipes") {
+      handleAddAmount();
     } else {
       handleAddServings();
     }
@@ -150,7 +130,7 @@ function LogIngredientInfo({
               Add
             </button>
           )}
-          <h1 className="text-2xl font-semibold">{ingredient.name}</h1>
+          <h1 className="text-2xl font-semibold">{recipe.name}</h1>
         </div>
 
         {!adding &&
@@ -167,18 +147,18 @@ function LogIngredientInfo({
           ))}
       </div>
       {!adding && dropdown && (
-        <div className="bg-white rounded-b-md p-3">
+        <div className="bg-white rounded-b-md p-3 max-h-96 overflow-y-auto border-mainGreen border-[3px] border-t-0">
           <div className="border-b-8 border-b-mainGreen pb-2 mb-2">
             <div>
               <h1 className="text-lg">
-                {ingredient.servingsPerContainer} Servings Per Container
+                {recipe.numberOfServings} Servings Per Recipe
               </h1>
             </div>
             <div className="flex items-center justify-between text-2xl font-bold">
               <h1>Serving Size</h1>
               <p>
-                {ingredient.servingSize}
-                {ingredient.servingUnit ? ingredient.servingUnit : "g"}
+                {recipe.servingSize}
+                {recipe.servingUnit ? recipe.servingUnit : "g"}
               </p>
             </div>
           </div>
@@ -190,10 +170,10 @@ function LogIngredientInfo({
                 keyof typeof NUTRITIONAL_KEYS
               >
             ).map((key) => {
-              const value = ingredient[key];
-              if (value === null || value === undefined) return null;
+              const value = recipe[key];
+              if (value === null || value === undefined) return null; // Skip null/undefined values
 
-              const unit = NUTRITIONAL_UNITS[key];
+              const unit = NUTRITIONAL_UNITS[key]; // Get the unit for the current key
               return (
                 <div
                   key={key}
@@ -208,18 +188,18 @@ function LogIngredientInfo({
               );
             })}
 
-            {Object.keys(ingredient.extraNutrition ?? {}).map((key) => {
-              if (!ingredient.extraNutrition?.[key]) return null;
+            {Object.keys(recipe.extraNutrition ?? {}).map((key) => {
+              if (!recipe.extraNutrition?.[key]) return null;
 
-              const value = ingredient.extraNutrition[key].value;
+              const value = recipe.extraNutrition[key].value;
 
               if (value === null || value === undefined) return null;
 
               let unit;
-              if (ingredient.extraNutrition[key].unit == "percent") {
+              if (recipe.extraNutrition[key].unit == "percent") {
                 unit = "%";
               } else {
-                unit = ingredient.extraNutrition[key].unit;
+                unit = recipe.extraNutrition[key].unit;
               } // Get the unit for the current key
 
               return (
@@ -227,7 +207,7 @@ function LogIngredientInfo({
                   key={key}
                   className="flex items-center justify-between text-lg"
                 >
-                  <span>{ingredient.extraNutrition[key].label}</span>
+                  <span>{recipe.extraNutrition[key].label}</span>
                   <span>
                     {value}
                     {unit}
@@ -243,14 +223,14 @@ function LogIngredientInfo({
           <div className="flex bg-mainGreen w-12/12 mx-auto h-10 rounded-md border-mainGreen border-[4px]">
             <button
               className={`w-1/2 rounded-l-md font-bold tracking-wide ${
-                addType == "containers"
+                addType == "numberOfRecipes"
                   ? "bg-white text-mainGreen"
                   : " text-white"
               }`}
               type="button"
-              onClick={() => setAddType("containers")}
+              onClick={() => setAddType("numberOfRecipes")}
             >
-              Containers
+              Recipes
             </button>
             <button
               className={`w-1/2 rounded-r-md font-bold tracking-wide ${
@@ -266,33 +246,23 @@ function LogIngredientInfo({
           </div>
           <div>
             <div className="my-4">
-              {addType == "containers" ? (
+              {addType == "numberOfRecipes" ? (
                 <div>
                   <label className="block font-semibold">
-                    Number of Containers
+                    Number of Recipes
                   </label>
                   <input
                     type="number"
                     name="name"
                     placeholder="1"
-                    value={containerNumber === null ? "" : containerNumber}
-                    onChange={handleContainerNumberChange}
+                    value={numberOfRecipes === null ? "" : numberOfRecipes}
+                    onChange={handleAmountChange}
                     className="border rounded-md w-full p-2 border-gray-300"
                     required
                   />
                 </div>
               ) : (
                 <div>
-                  <label className="block font-semibold">Serving Size</label>
-                  <input
-                    type="number"
-                    name="name"
-                    placeholder="1"
-                    value={servingSize === null ? "" : servingSize}
-                    onChange={handleServingSizeChange}
-                    className="border rounded-md w-full p-2 border-gray-300"
-                    required
-                  />
                   <label className="block font-semibold">
                     Number of Servings
                   </label>
@@ -301,7 +271,7 @@ function LogIngredientInfo({
                     name="name"
                     placeholder="1"
                     value={numberOfServings === null ? "" : numberOfServings}
-                    onChange={handleNumberOfServingsChange}
+                    onChange={handleServingSizeChange}
                     className="border rounded-md w-full p-2 border-gray-300"
                     required
                   />
@@ -333,4 +303,4 @@ function LogIngredientInfo({
   );
 }
 
-export default LogIngredientInfo;
+export default LogRecipeInfo;

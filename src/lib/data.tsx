@@ -4,15 +4,12 @@ import { createClient } from "@/utils/supabase/client";
 const fetchIngredients = async () => {
   const supabase = createClient();
   try {
-    //console.log("1");
     const { data: userData, error: userError } = await supabase.auth.getUser();
-    //console.log("8");
 
     if (userError) {
       console.error("Error fetching user:", userError);
       return;
     }
-    //console.log("2");
 
     const userId = userData?.user?.id;
 
@@ -25,7 +22,6 @@ const fetchIngredients = async () => {
       console.error("Error fetching user data:", fetchUserError);
       return;
     }
-    //console.log("3");
 
     const ingredientIdList = fetchUserData[0].ingredients;
     console.log(ingredientIdList);
@@ -37,10 +33,8 @@ const fetchIngredients = async () => {
       console.error("Error fetching ingredients:", fetchIngredientError);
       return;
     }
-    //console.log("4");
 
     return fetchIngredientData;
-    //console.log("5");
   } catch (error) {
     console.error("Unexpected error:", error);
   }
@@ -50,13 +44,11 @@ const fetchRecipes = async () => {
   const supabase = createClient();
   try {
     const { data: userData, error: userError } = await supabase.auth.getUser();
-    // console.log("8");
 
     if (userError) {
       console.error("Error fetching user:", userError);
       return;
     }
-    // console.log("2");
 
     const userId = userData?.user?.id;
 
@@ -68,7 +60,6 @@ const fetchRecipes = async () => {
       console.error("Error fetching user data:", fetchUserError);
       return;
     }
-    // console.log("3");
 
     const recipeList = fetchUserData[0].recipes;
     const { data: fetchRecipeData, error: fetchRecipeError } = await supabase
@@ -80,11 +71,36 @@ const fetchRecipes = async () => {
       console.error("Error fetching recipes:", fetchRecipeError);
       return;
     }
-    //console.log("4");
 
     return fetchRecipeData;
   } catch (error) {
     console.error("Unexpected error:", error);
+  }
+};
+
+const fetchInventory = async () => {
+  const supabase = createClient();
+  try {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError) {
+      console.error("Error fetching user:", userError);
+      return;
+    }
+
+    const userId = userData?.user?.id;
+    const { data, error } = await supabase
+      .from("users")
+      .select("inventory")
+      .eq("uid", userId)
+      .single();
+    if (!data) {
+      return {}
+    }
+    console.log(data["inventory"])
+    if (error) console.log(error);
+    return data;
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -143,6 +159,7 @@ const addToInventory = async (
 export {
   fetchIngredients,
   fetchRecipes,
+  fetchInventory,
   searchIngredient,
   searchRecipe,
   addToInventory,

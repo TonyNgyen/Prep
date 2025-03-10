@@ -6,9 +6,7 @@ import React, { useState } from "react";
 function AddRecipesPage() {
   const [showAddForm, setShowAddForm] = useState(false);
   return (
-    <div>
       <AddRecipeForm setShowAddForm={setShowAddForm} isForm={false} />
-    </div>
   );
 }
 
