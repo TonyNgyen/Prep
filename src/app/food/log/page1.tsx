@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { fetchInventory, searchIngredient, searchRecipe } from "@/lib/data";
 import {
   Ingredient,
+  InventoryIngredient,
+  InventoryRecipe,
+  NutritionFacts,
   Recipe,
 } from "@/types";
 import LogIngredientInfo from "@/components/ingredientInfo/logIngredientInfo";
@@ -51,6 +54,8 @@ const NUTRITIONAL_UNITS: Record<string, string> = {
   iron: "%",
 };
 
+type ItemsToAdd = Record<string, InventoryIngredient | InventoryRecipe>;
+
 type SearchResultType = {
   recipes: Recipe[];
   ingredients: Ingredient[];
@@ -76,9 +81,20 @@ type PageProps = {
     unit: string,
     type: string
   ) => void;
+  nutrition: NutritionFacts;
+  setNutrition: React.Dispatch<React.SetStateAction<NutritionFacts>>;
+  inventory: ItemsToAdd;
+  setInventory: React.Dispatch<React.SetStateAction<ItemsToAdd>>;
 };
 
-function Page1({ addLogIngredient, addLogRecipe }: PageProps) {
+function Page1({
+  addLogIngredient,
+  addLogRecipe,
+  nutrition,
+  setNutrition,
+  inventory,
+  setInventory,
+}: PageProps) {
   const [search, setSearch] = useState<string>("");
   const [searchResult, setSearchResult] = useState<SearchResultType>({
     recipes: [],
@@ -144,9 +160,6 @@ function Page1({ addLogIngredient, addLogRecipe }: PageProps) {
     <div>
       <div>
         <label className="block font-semibold text-2xl">Food Name</label>
-        <button type="button" onClick={() => fetchInventory()}>
-          Inventory
-        </button>
         <div className="flex mb-4">
           <input
             type="text"
@@ -180,6 +193,10 @@ function Page1({ addLogIngredient, addLogRecipe }: PageProps) {
             key={ingredient.id}
             ingredient={ingredient}
             add={addIngredient}
+            inventory={inventory}
+            setInventory={setInventory}
+            setNutrition={setNutrition}
+            nutrition={nutrition}
           />
         ))}
         {searchResult.recipes.map((recipe) => (

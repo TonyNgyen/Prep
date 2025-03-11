@@ -1,11 +1,7 @@
 "use client";
 
 import { fetchInventory } from "@/lib/data";
-import {
-  InventoryIngredient,
-  InventoryRecipe,
-  NutritionFacts,
-} from "@/types";
+import { InventoryIngredient, InventoryRecipe, NutritionFacts } from "@/types";
 import React, { useEffect, useState } from "react";
 import Page1 from "./page1";
 import Page2 from "./page2";
@@ -14,28 +10,28 @@ type ItemsToAdd = Record<string, InventoryIngredient | InventoryRecipe>;
 
 function LogFoodPage() {
   const [logFood, setLogFood] = useState<ItemsToAdd>({});
-    const [nutrition, setNutrition] = useState<NutritionFacts>({
-      calories: 0,
-      protein: 0,
-      totalFat: 0,
-      saturatedFat: 0,
-      polyunsaturatedFat: 0,
-      monounsaturatedFat: 0,
-      transFat: 0,
-      cholesterol: 0,
-      sodium: 0,
-      potassium: 0,
-      totalCarbohydrates: 0,
-      sugars: 0,
-      addedSugars: 0,
-      sugarAlcohols: 0,
-      vitaminA: 0,
-      vitaminC: 0,
-      vitaminD: 0,
-      calcium: 0,
-      iron: 0,
-      extraNutrition: {},
-    });
+  const [nutrition, setNutrition] = useState<NutritionFacts>({
+    calories: 0,
+    protein: 0,
+    totalFat: 0,
+    saturatedFat: 0,
+    polyunsaturatedFat: 0,
+    monounsaturatedFat: 0,
+    transFat: 0,
+    cholesterol: 0,
+    sodium: 0,
+    potassium: 0,
+    totalCarbohydrates: 0,
+    sugars: 0,
+    addedSugars: 0,
+    sugarAlcohols: 0,
+    vitaminA: 0,
+    vitaminC: 0,
+    vitaminD: 0,
+    calcium: 0,
+    iron: 0,
+    extraNutrition: {},
+  });
   const [pageNumber, setPageNumber] = useState(1);
   const [inventory, setInventory] = useState<ItemsToAdd>({});
 
@@ -92,10 +88,9 @@ function LogFoodPage() {
       const fetch = await fetchInventory();
       setInventory(fetch || {});
     };
-  
+
     getInventory();
   }, []);
-  
 
   return (
     <div className="p-6 pb-[4rem] flex flex-col relative h-[calc(100vh-5rem)] gap-3">
@@ -106,9 +101,19 @@ function LogFoodPage() {
             <Page1
               addLogIngredient={addLogIngredient}
               addLogRecipe={addLogRecipe}
+              nutrition={nutrition}
+              setNutrition={setNutrition}
+              inventory={inventory}
+              setInventory={setInventory}
             />
           )}
-          {pageNumber == 2 && <Page2 />}
+          {pageNumber == 2 && (
+            <Page2
+              nutrition={nutrition}
+              logFood={logFood}
+              inventory={inventory}
+            />
+          )}
         </div>
         <div className="w-full flex justify-between absolute bottom-0 left-0 px-6 py-3 h-16">
           {pageNumber != 1 ? (

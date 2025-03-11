@@ -96,9 +96,8 @@ const fetchInventory = async () => {
     if (!data) {
       return {}
     }
-    console.log(data["inventory"])
     if (error) console.log(error);
-    return data;
+    return data["inventory"];
   } catch (error) {
     console.log(error);
   }
