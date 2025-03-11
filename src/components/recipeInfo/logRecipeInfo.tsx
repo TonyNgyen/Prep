@@ -1,6 +1,14 @@
-import { Recipe } from "@/types";
-import React, { useState } from "react";
+import {
+  InventoryIngredient,
+  InventoryRecipe,
+  NutritionFacts,
+  Recipe,
+} from "@/types";
+import React, { useEffect, useState } from "react";
+import { FaCheck } from "react-icons/fa";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
+
+type ItemsToAdd = Record<string, InventoryIngredient | InventoryRecipe>;
 
 type InventoryRecipeInfoProps = {
   recipe: Recipe;
@@ -12,6 +20,10 @@ type InventoryRecipeInfoProps = {
     totalAmount: number,
     unit: string
   ) => void;
+  inventory: ItemsToAdd;
+  setInventory: React.Dispatch<React.SetStateAction<ItemsToAdd>>;
+  setNutrition: React.Dispatch<React.SetStateAction<NutritionFacts>>;
+  nutrition: NutritionFacts;
 };
 
 const NUTRITIONAL_KEYS = {
@@ -58,12 +70,22 @@ const NUTRITIONAL_UNITS: Record<string, string> = {
   iron: "%",
 };
 
-function LogRecipeInfo({ recipe, add }: InventoryRecipeInfoProps) {
+function LogRecipeInfo({
+  recipe,
+  add,
+  inventory,
+  setInventory,
+  setNutrition,
+  nutrition,
+}: InventoryRecipeInfoProps) {
   const [dropdown, setDropdown] = useState(false);
   const [adding, setAdding] = useState(false);
   const [addType, setAddType] = useState<string>("numberOfRecipes");
   const [numberOfRecipes, setAmount] = useState<number | null>(1);
+  const [servingSize, setServingSize] = useState<number | null>(1);
   const [numberOfServings, setNumberOfServings] = useState<number | null>(1);
+  const [checkInventory, setCheckInventory] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -72,10 +94,76 @@ function LogRecipeInfo({ recipe, add }: InventoryRecipeInfoProps) {
 
   const handleServingSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    setServingSize(value === "" ? null : Number(value));
+  };
+
+  const handleNumberOfServingsChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = e.target.value;
     setNumberOfServings(value === "" ? null : Number(value));
   };
 
-  const handleAddAmount = () => {
+  const checkInventoryAmount = () => {
+    if (addType == "numberOfRecipes") {
+      if (!numberOfRecipes) {
+        setError("Please fill in the number of recipes");
+        return false;
+      }
+      if (!inventory[recipe.id]) {
+        setError("Food not in inventory");
+        return false;
+      }
+      const total =
+        numberOfRecipes * recipe.servingSize * recipe.numberOfServings;
+      if (total > inventory[recipe.id].totalAmount) {
+        setError("Not enough amount in inventory");
+        return false;
+      }
+    } else {
+      if (!servingSize) {
+        setError("Please fill in the serving size");
+        return false;
+      }
+      if (!numberOfServings) {
+        setError("Please fill in the number of servings");
+        return false;
+      }
+      if (!inventory[recipe.id]) {
+        setError("Food not in inventory");
+        return false;
+      }
+      const total = servingSize * numberOfServings;
+      if (total > inventory[recipe.id].totalAmount) {
+        setError("Not enough amount in inventory");
+        return false;
+      }
+    }
+    setError(null);
+    return true;
+  };
+
+  const checkValidInput = () => {
+    if (addType == "numberOfRecipes") {
+      if (!numberOfRecipes) {
+        setError("Please fill in the number of recipes");
+        return false;
+      }
+    } else {
+      if (!servingSize) {
+        setError("Please fill in the serving size");
+        return false;
+      }
+      if (!numberOfServings) {
+        setError("Please fill in the number of servings");
+        return false;
+      }
+    }
+    setError(null);
+    return true;
+  };
+
+  const handleAddRecipes = () => {
     if (!numberOfRecipes || !recipe.servingSize) {
       return;
     }
@@ -103,18 +191,95 @@ function LogRecipeInfo({ recipe, add }: InventoryRecipeInfoProps) {
     );
   };
 
+  const updateInventoryAmount = (total: number) => {
+    setInventory((prevInventory) => ({
+      ...prevInventory,
+      [recipe.id]: {
+        ...prevInventory[recipe.id],
+        totalAmount: prevInventory[recipe.id].totalAmount - total,
+      },
+    }));
+  };
+
   const handleAdd = () => {
     if (addType == "numberOfRecipes") {
-      handleAddAmount();
+      if (!numberOfRecipes) {
+        setError("Please fill in the number of recipes");
+        return false;
+      }
+      if (!checkValidInput()) {
+        return;
+      }
+      if (checkInventory) {
+        if (!checkInventoryAmount()) {
+          return;
+        }
+        const total =
+          numberOfRecipes * recipe.servingSize * recipe.numberOfServings;
+        updateInventoryAmount(total);
+      }
+      handleAddRecipes();
     } else {
+      if (!servingSize) {
+        setError("Please fill in the serving size");
+        return;
+      }
+      if (!numberOfServings) {
+        setError("Please fill in the number of servings");
+        return;
+      }
+      if (checkInventory) {
+        if (!checkInventoryAmount()) {
+          return;
+        }
+        const total = servingSize * numberOfServings;
+        updateInventoryAmount(total);
+      }
       handleAddServings();
     }
+    addNutrition();
   };
+
+  const addNutrition = () => {
+    let multiplier;
+    if (addType == "numberOfRecipes") {
+      multiplier = (numberOfRecipes ?? 0) * recipe.numberOfServings;
+    } else {
+      multiplier =
+        ((servingSize ?? 0) * (numberOfServings ?? 0)) / recipe.servingSize;
+    }
+    const newNutrition = { ...nutrition };
+
+    Object.keys(NUTRITIONAL_KEYS).map((nutritionalKey) => {
+      const key = nutritionalKey as keyof NutritionFacts;
+
+      if (key === "extraNutrition") return;
+
+      const recipeValue = (recipe[key] as number | null) ?? 0;
+
+      newNutrition[key] += recipeValue * multiplier;
+    });
+    Object.keys(recipe.extraNutrition).map((key) => {
+      const recipeExtra = recipe.extraNutrition[key];
+
+      if (!newNutrition.extraNutrition[key]) {
+        newNutrition.extraNutrition[key] = { ...recipeExtra, value: 0 };
+      }
+      newNutrition.extraNutrition[key].value += recipeExtra.value * multiplier;
+    });
+    setNutrition(newNutrition);
+  };
+
+  useEffect(() => {
+    if (checkInventory) {
+      checkInventoryAmount();
+    }
+  }, [numberOfRecipes, checkInventory, servingSize, numberOfServings]);
 
   return (
     <div className="shadow-md">
       <div
-        className={`bg-mainGreen text-white p-3 rounded-md flex items-center justify-between ${
+        className={`bg-blue-900 text-white p-3 rounded-md flex items-center justify-between ${
           dropdown && "rounded-b-none"
         }`}
       >
@@ -263,6 +428,16 @@ function LogRecipeInfo({ recipe, add }: InventoryRecipeInfoProps) {
                 </div>
               ) : (
                 <div>
+                  <label className="block font-semibold">Serving Size</label>
+                  <input
+                    type="number"
+                    name="name"
+                    placeholder="1"
+                    value={servingSize === null ? "" : servingSize}
+                    onChange={handleServingSizeChange}
+                    className="border rounded-md w-full p-2 border-gray-300"
+                    required
+                  />
                   <label className="block font-semibold">
                     Number of Servings
                   </label>
@@ -271,17 +446,53 @@ function LogRecipeInfo({ recipe, add }: InventoryRecipeInfoProps) {
                     name="name"
                     placeholder="1"
                     value={numberOfServings === null ? "" : numberOfServings}
-                    onChange={handleServingSizeChange}
+                    onChange={handleNumberOfServingsChange}
                     className="border rounded-md w-full p-2 border-gray-300"
                     required
                   />
+                </div>
+              )}
+              <label className="flex items-center gap-2 cursor-pointer mt-2">
+                <input
+                  type="checkbox"
+                  checked={checkInventory}
+                  onChange={() => {
+                    setCheckInventory((prev) => {
+                      const newValue = !prev;
+                      if (newValue) {
+                        checkInventoryAmount();
+                      } else {
+                        checkValidInput();
+                      }
+                      return newValue;
+                    });
+                  }}
+                  className="hidden"
+                />
+                <div
+                  className={`w-6 h-6 flex items-center justify-center border border-gray-300 rounded-md transition ${
+                    checkInventory
+                      ? "bg-mainGreen border-mainGreen"
+                      : "bg-white"
+                  }`}
+                >
+                  {checkInventory && (
+                    <FaCheck size={16} className="text-white" />
+                  )}
+                </div>
+                <span>Update Inventory</span>
+              </label>
+
+              {error && (
+                <div className="bg-negativeRed text-center p-2 mt-2 rounded-md text-white font-bold">
+                  {error}
                 </div>
               )}
             </div>
           </div>
           <div className="flex items-center justify-center gap-4">
             <button
-              className="w-1/2 bg-negativeRed p-1 text-lg font-bold text-white rounded-md"
+              className="w-1/2 bg-white border-mainGreen border-2 p-1 text-lg font-bold text-mainGreen rounded-md"
               type="button"
               onClick={() => {
                 setAdding(false);
@@ -291,10 +502,16 @@ function LogRecipeInfo({ recipe, add }: InventoryRecipeInfoProps) {
               Cancel
             </button>
             <button
-              className="w-1/2 bg-mainGreen p-1 text-lg font-bold text-white rounded-md"
+              className="w-1/2 bg-mainGreen p-1 text-lg font-bold border-mainGreen border-2 text-white rounded-md"
               onClick={() => handleAdd()}
             >
               Confirm
+            </button>
+            <button
+              className="w-1/2 bg-mainGreen p-1 text-lg font-bold border-mainGreen border-2 text-white rounded-md"
+              onClick={() => addNutrition()}
+            >
+              Test
             </button>
           </div>
         </div>

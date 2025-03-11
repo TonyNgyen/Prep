@@ -94,60 +94,58 @@ function LogFoodPage() {
 
   return (
     <div className="p-6 pb-[4rem] flex flex-col relative h-[calc(100vh-5rem)] gap-3">
-      <div className="">
-        <h1 className="text-3xl font-bold mb-2">Log Food</h1>
-        <div className="overflow-scroll pb-6">
-          {pageNumber == 1 && (
-            <Page1
-              addLogIngredient={addLogIngredient}
-              addLogRecipe={addLogRecipe}
-              nutrition={nutrition}
-              setNutrition={setNutrition}
-              inventory={inventory}
-              setInventory={setInventory}
-            />
-          )}
-          {pageNumber == 2 && (
-            <Page2
-              nutrition={nutrition}
-              logFood={logFood}
-              inventory={inventory}
-            />
-          )}
-        </div>
-        <div className="w-full flex justify-between absolute bottom-0 left-0 px-6 py-3 h-16">
-          {pageNumber != 1 ? (
-            <button
-              type="button"
-              className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
-              onClick={() =>
-                setPageNumber((prevPageNumber) => prevPageNumber - 1)
-              }
-            >
-              Previous
-            </button>
-          ) : (
-            <div></div>
-          )}
-          {pageNumber != 2 ? (
-            <button
-              type="button"
-              className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
-              onClick={() =>
-                setPageNumber((prevPageNumber) => prevPageNumber + 1)
-              }
-            >
-              Next
-            </button>
-          ) : (
-            <button
-              type="submit"
-              className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
-            >
-              Log Food
-            </button>
-          )}
-        </div>
+      <h1 className="text-3xl font-bold mb-2">Log Food</h1>
+      <div className="overflow-scroll pb-6">
+        {pageNumber == 1 && (
+          <Page1
+            addLogIngredient={addLogIngredient}
+            addLogRecipe={addLogRecipe}
+            nutrition={nutrition}
+            setNutrition={setNutrition}
+            inventory={inventory}
+            setInventory={setInventory}
+          />
+        )}
+        {pageNumber == 2 && (
+          <Page2
+            nutrition={nutrition}
+            logFood={logFood}
+            inventory={inventory}
+          />
+        )}
+      </div>
+      <div className="w-full flex justify-between absolute bottom-0 left-0 px-6 py-3 h-16">
+        {pageNumber != 1 ? (
+          <button
+            type="button"
+            className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
+            onClick={() =>
+              setPageNumber((prevPageNumber) => prevPageNumber - 1)
+            }
+          >
+            Previous
+          </button>
+        ) : (
+          <div></div>
+        )}
+        {pageNumber != 2 ? (
+          <button
+            type="button"
+            className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
+            onClick={() =>
+              setPageNumber((prevPageNumber) => prevPageNumber + 1)
+            }
+          >
+            Next
+          </button>
+        ) : (
+          <button
+            type="submit"
+            className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
+          >
+            Log Food
+          </button>
+        )}
       </div>
     </div>
   );

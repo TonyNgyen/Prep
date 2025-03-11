@@ -200,7 +200,15 @@ function Page1({
           />
         ))}
         {searchResult.recipes.map((recipe) => (
-          <LogRecipeInfo add={addRecipe} key={recipe.id} recipe={recipe} />
+          <LogRecipeInfo
+            add={addRecipe}
+            key={recipe.id}
+            recipe={recipe}
+            inventory={inventory}
+            setInventory={setInventory}
+            setNutrition={setNutrition}
+            nutrition={nutrition}
+          />
         ))}
       </div>
     </div>

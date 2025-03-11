@@ -6,7 +6,7 @@ import {
   InventoryRecipe,
   NutritionFacts,
 } from "@/types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import { FaCheck } from "react-icons/fa";
 
@@ -90,8 +90,13 @@ function LogIngredientInfo({
   const [servingSize, setServingSize] = useState<number | null>(1);
   const [numberOfServings, setNumberOfServings] = useState<number | null>(1);
   const [checkInventory, setCheckInventory] = useState<boolean>(true);
-  const [inventoryValid, setInventoryValid] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (checkInventory) {
+      checkInventoryAmount();
+    }
+  }, [numberOfContainers, checkInventory, servingSize, numberOfServings]);
 
   const handleContainerNumberChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -148,11 +153,11 @@ function LogIngredientInfo({
     if (addType == "containers") {
       if (!numberOfContainers) {
         setError("Please fill in the number of containers");
-        return;
+        return false;
       }
       if (!inventory[ingredient.id]) {
         setError("Food not in inventory");
-        return;
+        return false;
       }
       const total =
         numberOfContainers *
@@ -160,47 +165,49 @@ function LogIngredientInfo({
         ingredient.servingsPerContainer;
       if (total > inventory[ingredient.id].totalAmount) {
         setError("Not enough amount in inventory");
-        return;
+        return false;
       }
     } else {
       if (!servingSize) {
         setError("Please fill in the serving size");
-        return;
+        return false;
       }
       if (!numberOfServings) {
         setError("Please fill in the number of servings");
-        return;
+        return false;
       }
       if (!inventory[ingredient.id]) {
         setError("Food not in inventory");
-        return;
+        return false;
       }
       const total = servingSize * numberOfServings;
       if (total > inventory[ingredient.id].totalAmount) {
         setError("Not enough amount in inventory");
-        return;
+        return false;
       }
     }
     setError(null);
+    return true;
   };
 
   const checkValidInput = () => {
     if (addType == "containers") {
       if (!numberOfContainers) {
         setError("Please fill in the number of containers");
-        return;
+        return false;
       }
     } else {
       if (!servingSize) {
         setError("Please fill in the serving size");
-        return;
+        return false;
       }
       if (!numberOfServings) {
         setError("Please fill in the number of servings");
-        return;
+        return false;
       }
     }
     setError(null);
+    return true;
   };
 
   const updateInventoryAmount = (total: number) => {
@@ -219,14 +226,20 @@ function LogIngredientInfo({
         setError("Please fill in the number of containers");
         return;
       }
-      handleAddContainers();
+      if (!checkValidInput()) {
+        return;
+      }
       if (checkInventory) {
+        if (!checkInventoryAmount()) {
+          return;
+        }
         const total =
           numberOfContainers *
           ingredient.servingSize *
           ingredient.servingsPerContainer;
         updateInventoryAmount(total);
       }
+      handleAddContainers();
     } else {
       if (!servingSize) {
         setError("Please fill in the serving size");
@@ -236,15 +249,19 @@ function LogIngredientInfo({
         setError("Please fill in the number of servings");
         return;
       }
-      handleAddServings();
       if (checkInventory) {
+        if (!checkInventoryAmount()) {
+          return;
+        }
         const total = servingSize * numberOfServings;
         updateInventoryAmount(total);
       }
+      handleAddServings();
     }
+    addNutrition();
   };
 
-  const testAdd = () => {
+  const addNutrition = () => {
     let multiplier;
     if (addType == "containers") {
       multiplier = (numberOfContainers ?? 0) * ingredient.servingsPerContainer;
@@ -254,7 +271,7 @@ function LogIngredientInfo({
     }
     const newNutrition = { ...nutrition };
 
-    Object.keys(NUTRITIONAL_KEYS).forEach((nutritionalKey) => {
+    Object.keys(NUTRITIONAL_KEYS).map((nutritionalKey) => {
       const key = nutritionalKey as keyof NutritionFacts;
 
       if (key === "extraNutrition") return;
@@ -262,13 +279,17 @@ function LogIngredientInfo({
       const ingredientValue = (ingredient[key] as number | null) ?? 0;
 
       newNutrition[key] += ingredientValue * multiplier;
-
-      console.log(
-        `${key}: ${nutrition[key]} + ${ingredientValue} = ${newNutrition[key]}`
-      );
     });
-    setNutrition(newNutrition)
-    console.log(newNutrition);
+    Object.keys(ingredient.extraNutrition).map((key) => {
+      const ingredientExtra = ingredient.extraNutrition[key];
+
+      if (!newNutrition.extraNutrition[key]) {
+        newNutrition.extraNutrition[key] = { ...ingredientExtra, value: 0 };
+      }
+      newNutrition.extraNutrition[key].value +=
+        ingredientExtra.value * multiplier;
+    });
+    setNutrition(newNutrition);
   };
 
   return (
@@ -418,7 +439,9 @@ function LogIngredientInfo({
                     value={
                       numberOfContainers === null ? "" : numberOfContainers
                     }
-                    onChange={handleContainerNumberChange}
+                    onChange={(e) => {
+                      handleContainerNumberChange(e);
+                    }}
                     className="border rounded-md w-full p-2 border-gray-300"
                     required
                   />
@@ -506,7 +529,7 @@ function LogIngredientInfo({
             </button>
             <button
               className="w-1/2 bg-mainGreen p-1 text-lg font-bold border-mainGreen border-2 text-white rounded-md"
-              onClick={() => testAdd()}
+              onClick={() => addNutrition()}
             >
               Test
             </button>
