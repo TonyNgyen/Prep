@@ -71,8 +71,25 @@ function Page2({ nutrition, logFood, inventory }: PageProps) {
         </div> */}
       </div>
 
-      <div>
+      <div className="mb-10">
         <h1 className="text-3xl font-bold mb-2">Food To Log</h1>
+        <div className="space-y-2">
+          {Object.values(logFood).map((food) => {
+            if (food.type == "ingredient") {
+              return (
+                <div key={food.id} className="bg-mainGreen p-3 rounded-md font-semibold text-lg text-white">
+                  {food.name}
+                </div>
+              );
+            } else {
+              return (
+                <div key={food.id} className="bg-blue-900 p-3 rounded-md font-semibold text-lg text-white">
+                  {food.name}
+                </div>
+              );
+            }
+          })}
+        </div>
       </div>
 
       <div>

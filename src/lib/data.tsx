@@ -1,4 +1,4 @@
-import { InventoryIngredient, InventoryRecipe } from "@/types";
+import { InventoryIngredient, InventoryRecipe, NutritionFacts } from "@/types";
 import { createClient } from "@/utils/supabase/client";
 
 const fetchIngredients = async () => {
@@ -94,7 +94,7 @@ const fetchInventory = async () => {
       .eq("uid", userId)
       .single();
     if (!data) {
-      return {}
+      return {};
     }
     if (error) console.log(error);
     return data["inventory"];
@@ -153,6 +153,29 @@ const addToInventory = async (
   } else {
     console.log("JSONB column updated successfully!");
   }
+};
+
+const addToNutritionalHistory = async (nutrition: NutritionFacts) => {
+  const supabase = createClient();
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+
+  const userId = userData?.user?.id;
+  const today = new Date().toISOString().split("T")[0];
+
+  const { data, error } = await supabase
+    .from("users")
+    .update({
+      nutritionalHistory: supabase.rpc("jsonb_set", {
+        field: "nutritionalHistory",
+        path: `{${today}}`,
+        value: JSON.stringify(nutrition),
+        create_missing: true,
+      }),
+    })
+    .eq("uid", userId);
+
+  if (error) console.error("Error updating nutritional history:", error);
+  else console.log("Successfully updated:", data);
 };
 
 export {
