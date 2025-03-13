@@ -1,3 +1,4 @@
+import { addToNutritionalHistory } from "@/lib/data";
 import { InventoryIngredient, InventoryRecipe, NutritionFacts } from "@/types";
 import React from "react";
 
@@ -69,6 +70,12 @@ function Page2({ nutrition, logFood, inventory }: PageProps) {
         >
           Current Nutrition
         </div> */}
+        <div
+          className="bg-green-200 p-4"
+          onClick={() => addToNutritionalHistory(nutrition)}
+        >
+          Current Nutrition
+        </div>
       </div>
 
       <div className="mb-10">
@@ -77,13 +84,19 @@ function Page2({ nutrition, logFood, inventory }: PageProps) {
           {Object.values(logFood).map((food) => {
             if (food.type == "ingredient") {
               return (
-                <div key={food.id} className="bg-mainGreen p-3 rounded-md font-semibold text-lg text-white">
+                <div
+                  key={food.id}
+                  className="bg-mainGreen p-3 rounded-md font-semibold text-lg text-white"
+                >
                   {food.name}
                 </div>
               );
             } else {
               return (
-                <div key={food.id} className="bg-blue-900 p-3 rounded-md font-semibold text-lg text-white">
+                <div
+                  key={food.id}
+                  className="bg-blue-900 p-3 rounded-md font-semibold text-lg text-white"
+                >
                   {food.name}
                 </div>
               );

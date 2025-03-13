@@ -185,4 +185,5 @@ export {
   searchIngredient,
   searchRecipe,
   addToInventory,
+  addToNutritionalHistory,
 };
