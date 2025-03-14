@@ -9,6 +9,7 @@ import {
 } from "@/types";
 import LogIngredientInfo from "@/components/ingredientInfo/logIngredientInfo";
 import LogRecipeInfo from "@/components/recipeInfo/logRecipeInfo";
+import Dropdown from "@/components/dropdown/dropdown";
 
 const NUTRITIONAL_KEYS = {
   calories: "Calories",
@@ -85,6 +86,8 @@ type PageProps = {
   setNutrition: React.Dispatch<React.SetStateAction<NutritionFacts>>;
   inventory: ItemsToAdd;
   setInventory: React.Dispatch<React.SetStateAction<ItemsToAdd>>;
+  meal: string | null;
+  setMeal: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 function Page1({
@@ -94,12 +97,22 @@ function Page1({
   setNutrition,
   inventory,
   setInventory,
+  meal,
+  setMeal,
 }: PageProps) {
   const [search, setSearch] = useState<string>("");
   const [searchResult, setSearchResult] = useState<SearchResultType>({
     recipes: [],
     ingredients: [],
   });
+
+  const options = [
+    { value: "breakfast", label: "Breakfast" },
+    { value: "lunch", label: "Lunch" },
+    { value: "dinner", label: "Dinner" },
+    { value: "snack", label: "Snack" },
+    { value: "misc", label: "Miscellaneous" },
+  ];
 
   const searchItem = async () => {
     let ingredientData: Ingredient[] = [];
@@ -156,6 +169,10 @@ function Page1({
     });
   };
 
+  const handleDropdownChange = (selectedValue: string) => {
+    setMeal(selectedValue);
+  };
+
   return (
     <div>
       <div>
@@ -186,6 +203,17 @@ function Page1({
             Search
           </button>
         </div>
+        <div>
+          <label className="block font-semibold text-2xl">Meal</label>
+          <Dropdown
+            options={options}
+            className="rounded-md"
+            onChange={handleDropdownChange}
+            defaultValue="Select a meal"
+          />
+        </div>
+
+        {/* <div className="bg-orange-200 h-96"></div> */}
       </div>
       <div className="flex flex-col gap-2">
         {searchResult.ingredients.map((ingredient) => (

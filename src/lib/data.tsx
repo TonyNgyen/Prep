@@ -231,7 +231,7 @@ const addToNutritionalHistory = async (nutrition: NutritionFacts) => {
       if (key === "extraNutrition") return;
 
       const nutritionValue = (nutrition[key] as number | null) ?? 0;
-      updatedData[key] = (updatedData[key] as number || 0) + nutritionValue;
+      updatedData[key] = ((updatedData[key] as number) || 0) + nutritionValue;
     });
 
     Object.keys(nutrition.extraNutrition).forEach((key) => {
@@ -264,6 +264,7 @@ const addToNutritionalHistory = async (nutrition: NutritionFacts) => {
   }
 };
 
+const addToMealHistory = async () => {};
 
 export {
   fetchIngredients,
@@ -273,4 +274,5 @@ export {
   searchRecipe,
   addToInventory,
   addToNutritionalHistory,
+  addToMealHistory,
 };

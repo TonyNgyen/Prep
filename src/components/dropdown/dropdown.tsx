@@ -49,7 +49,9 @@ const Dropdown: React.FC<DropdownProps> = ({
     "bg-mainGreen w-full flex-1 p-2 flex flex-col text-white font-semibold";
 
   // Merge default classes with custom classes
-  const dropdownClasses = clsx(defaultClasses, className);
+  const dropdownClasses = clsx(defaultClasses, className, {
+    "rounded-b-none": isDropping, // Remove bottom rounding when dropdown is open
+  });
 
   return (
     <div className="relative">

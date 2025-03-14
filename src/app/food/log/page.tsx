@@ -34,6 +34,7 @@ function LogFoodPage() {
   });
   const [pageNumber, setPageNumber] = useState(1);
   const [inventory, setInventory] = useState<ItemsToAdd>({});
+  const [meal, setMeal] = useState<string | null>("")
 
   const addLogIngredient = (
     id: string,
@@ -95,7 +96,7 @@ function LogFoodPage() {
   return (
     <div className="p-6 pb-[4rem] flex flex-col relative h-[calc(100vh-5rem)] gap-3">
       <h1 className="text-3xl font-bold mb-2">Log Food</h1>
-      <div className="overflow-scroll pb-6">
+      <div className="overflow-scroll pb-6 h-[calc(100vh-5rem)]">
         {pageNumber == 1 && (
           <Page1
             addLogIngredient={addLogIngredient}
@@ -104,6 +105,8 @@ function LogFoodPage() {
             setNutrition={setNutrition}
             inventory={inventory}
             setInventory={setInventory}
+            meal={meal}
+            setMeal={setMeal}
           />
         )}
         {pageNumber == 2 && (
@@ -146,6 +149,7 @@ function LogFoodPage() {
             Log Food
           </button>
         )}
+        {/* <div className="p-2 bg-purple-200">All information</div> */}
       </div>
     </div>
   );
