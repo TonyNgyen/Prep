@@ -64,17 +64,17 @@ function Page2({ nutrition, logFood, inventory }: PageProps) {
         <div className="bg-red-200 p-4" onClick={() => console.log(inventory)}>
           Current Inventory
         </div>
-        {/* <div
+        <div
           className="bg-green-200 p-4"
           onClick={() => console.log(nutrition)}
         >
           Current Nutrition
-        </div> */}
+        </div>
         <div
           className="bg-green-200 p-4"
           onClick={() => addToNutritionalHistory(nutrition)}
         >
-          Current Nutrition
+          Add Nutrition
         </div>
       </div>
 

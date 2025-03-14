@@ -1,6 +1,50 @@
 import { InventoryIngredient, InventoryRecipe, NutritionFacts } from "@/types";
 import { createClient } from "@/utils/supabase/client";
 
+const NUTRITIONAL_KEYS = {
+  calories: "Calories",
+  protein: "Protein",
+  totalFat: "Total Fat",
+  saturatedFat: "Saturated Fat",
+  polyunsaturatedFat: "Polyunsaturated Fat",
+  monounsaturatedFat: "Monounsaturated Fat",
+  transFat: "Trans Fat",
+  cholesterol: "Cholesterol",
+  sodium: "Sodium",
+  potassium: "Potassium",
+  totalCarbohydrates: "Total Carbohydrates",
+  sugars: "Sugars",
+  addedSugars: "Added Sugars",
+  sugarAlcohols: "Sugar Alcohols",
+  vitaminA: "Vitamin A",
+  vitaminC: "Vitamin C",
+  vitaminD: "Vitamin D",
+  calcium: "Calcium",
+  iron: "Iron",
+};
+
+const NUTRITIONAL_UNITS: Record<string, string> = {
+  calories: "kcal",
+  protein: "g",
+  totalFat: "g",
+  saturatedFat: "g",
+  polyunsaturatedFat: "g",
+  monounsaturatedFat: "g",
+  transFat: "g",
+  cholesterol: "mg",
+  sodium: "mg",
+  potassium: "mg",
+  totalCarbohydrates: "g",
+  sugars: "g",
+  addedSugars: "g",
+  sugarAlcohols: "g",
+  vitaminA: "%",
+  vitaminC: "%",
+  vitaminD: "%",
+  calcium: "%",
+  iron: "%",
+};
+
 const fetchIngredients = async () => {
   const supabase = createClient();
   try {
@@ -164,19 +208,62 @@ const addToNutritionalHistory = async (nutrition: NutritionFacts) => {
 
   const { data, error } = await supabase
     .from("users")
+    .select("nutritionalHistory")
+    .eq("uid", userId)
+    .single();
+
+  if (error) {
+    console.error("Error fetching data:", error);
+    return;
+  }
+
+  const nutritionalHistory = data?.nutritionalHistory || {}; // Default to empty object
+  const existingEntry: NutritionFacts | undefined = nutritionalHistory[today]; // Get today's data if it exists
+  let updatedData: NutritionFacts; // Explicitly define the type
+
+  if (existingEntry) {
+    // Merge the new values with the existing ones
+    updatedData = { ...existingEntry }; // Use existing data instead of overriding
+
+    Object.keys(NUTRITIONAL_KEYS).forEach((nutritionalKey) => {
+      const key = nutritionalKey as keyof NutritionFacts;
+
+      if (key === "extraNutrition") return;
+
+      const nutritionValue = (nutrition[key] as number | null) ?? 0;
+      updatedData[key] = (updatedData[key] as number || 0) + nutritionValue;
+    });
+
+    Object.keys(nutrition.extraNutrition).forEach((key) => {
+      const nutritionExtra = nutrition.extraNutrition[key];
+
+      if (!updatedData.extraNutrition[key]) {
+        updatedData.extraNutrition[key] = { ...nutritionExtra, value: 0 };
+      }
+      updatedData.extraNutrition[key].value += nutritionExtra.value;
+    });
+  } else {
+    // If no existing data, use new data as is
+    updatedData = nutrition;
+  }
+
+  const { error: updateError } = await supabase
+    .from("users")
     .update({
-      nutritionalHistory: supabase.rpc("jsonb_set", {
-        field: "nutritionalHistory",
-        path: `{${today}}`,
-        value: JSON.stringify(nutrition),
-        create_missing: true,
-      }),
+      nutritionalHistory: {
+        ...nutritionalHistory, // Keep all existing dates
+        [today]: updatedData, // Update today's data
+      },
     })
     .eq("uid", userId);
 
-  if (error) console.error("Error updating nutritional history:", error);
-  else console.log("Successfully updated:", data);
+  if (updateError) {
+    console.error("Error updating nutritional history:", updateError);
+  } else {
+    console.log("Nutritional history updated successfully!");
+  }
 };
+
 
 export {
   fetchIngredients,
