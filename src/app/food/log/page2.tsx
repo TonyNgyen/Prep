@@ -1,4 +1,4 @@
-import { addToNutritionalHistory } from "@/lib/data";
+import { addToMealHistory, addToNutritionalHistory } from "@/lib/data";
 import { InventoryIngredient, InventoryRecipe, NutritionFacts } from "@/types";
 import React from "react";
 
@@ -71,10 +71,13 @@ function Page2({ nutrition, logFood, inventory }: PageProps) {
           Current Nutrition
         </div>
         <div
-          className="bg-green-200 p-4"
+          className="bg-yellow-200 p-4"
           onClick={() => addToNutritionalHistory(nutrition)}
         >
           Add Nutrition
+        </div>
+        <div className="bg-purple-200 p-4" onClick={() => addToMealHistory("breakfast", {})}>
+          Test Function
         </div>
       </div>
 

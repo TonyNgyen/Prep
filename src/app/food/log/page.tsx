@@ -1,6 +1,6 @@
 "use client";
 
-import { fetchInventory } from "@/lib/data";
+import { addToMealHistory, fetchInventory } from "@/lib/data";
 import { InventoryIngredient, InventoryRecipe, NutritionFacts } from "@/types";
 import React, { useEffect, useState } from "react";
 import Page1 from "./page1";
@@ -34,7 +34,7 @@ function LogFoodPage() {
   });
   const [pageNumber, setPageNumber] = useState(1);
   const [inventory, setInventory] = useState<ItemsToAdd>({});
-  const [meal, setMeal] = useState<string | null>("")
+  const [meal, setMeal] = useState<string>("");
 
   const addLogIngredient = (
     id: string,
@@ -149,7 +149,26 @@ function LogFoodPage() {
             Log Food
           </button>
         )}
-        {/* <div className="p-2 bg-purple-200">All information</div> */}
+        <div
+          className="p-2 bg-purple-200"
+          onClick={() =>
+            addToMealHistory(meal, { nutrition: nutrition, food: logFood })
+          }
+        >
+          Test Function
+        </div>
+        <div
+          className="p-2 bg-orange-200"
+          onClick={() =>
+            addToMealHistory(meal, {
+              meal: meal,
+              nutrition: nutrition,
+              food: logFood,
+            })
+          }
+        >
+          Meal History
+        </div>
       </div>
     </div>
   );

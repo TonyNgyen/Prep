@@ -45,6 +45,53 @@ const NUTRITIONAL_UNITS: Record<string, string> = {
   iron: "%",
 };
 
+type DailyMealEntry = {
+  [meal: string]: {
+    food: {
+      [foodId: string]: {
+        id: string;
+        name: string;
+        type: string;
+        unit: string;
+        containers: number;
+        servingSize: number;
+        totalAmount: number;
+        numberOfServings: number;
+      };
+    };
+    meal: string;
+    nutrition: {
+      iron: number;
+      sodium: number;
+      sugars: number;
+      calcium: number;
+      protein: number;
+      calories: number;
+      totalFat: number;
+      transFat: number;
+      vitaminA: number;
+      vitaminC: number;
+      vitaminD: number;
+      potassium: number;
+      addedSugars: number;
+      cholesterol: number;
+      saturatedFat: number;
+      sugarAlcohols: number;
+      extraNutrition: {
+        [key: string]: {
+          key: string;
+          unit: string;
+          label: string;
+          value: number;
+        };
+      };
+      monounsaturatedFat: number;
+      polyunsaturatedFat: number;
+      totalCarbohydrates: number;
+    };
+  };
+};
+
 const fetchIngredients = async () => {
   const supabase = createClient();
   try {
@@ -217,13 +264,12 @@ const addToNutritionalHistory = async (nutrition: NutritionFacts) => {
     return;
   }
 
-  const nutritionalHistory = data?.nutritionalHistory || {}; // Default to empty object
-  const existingEntry: NutritionFacts | undefined = nutritionalHistory[today]; // Get today's data if it exists
-  let updatedData: NutritionFacts; // Explicitly define the type
+  const nutritionalHistory = data?.nutritionalHistory || {};
+  const existingEntry: NutritionFacts | undefined = nutritionalHistory[today];
+  let updatedData: NutritionFacts;
 
   if (existingEntry) {
-    // Merge the new values with the existing ones
-    updatedData = { ...existingEntry }; // Use existing data instead of overriding
+    updatedData = { ...existingEntry };
 
     Object.keys(NUTRITIONAL_KEYS).forEach((nutritionalKey) => {
       const key = nutritionalKey as keyof NutritionFacts;
@@ -264,7 +310,55 @@ const addToNutritionalHistory = async (nutrition: NutritionFacts) => {
   }
 };
 
-const addToMealHistory = async () => {};
+const addToMealHistory = async (meal: string, information: object) => {
+  const supabase = createClient();
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+
+  const userId = userData?.user?.id;
+  const today = new Date().toISOString().split("T")[0];
+
+  const { data, error } = await supabase
+    .from("users")
+    .select("mealHistory")
+    .eq("uid", userId)
+    .single();
+
+  if (error) {
+    console.error("Error fetching data:", error);
+    return;
+  }
+
+  const mealHistory = data?.mealHistory || {};
+  console.log(mealHistory);
+  console.log(today);
+  const existingEntry: DailyMealEntry | undefined = mealHistory[today];
+  let updatedData: NutritionFacts;
+
+  if (existingEntry) {
+    if (meal in existingEntry) {
+      // console.log(existingEntry[meal]);
+      Object.keys(existingEntry[meal].food).map((id) => console.log(id));
+    }
+  } else {
+    console.log("No existing entry");
+  }
+
+  // const { error: updateError } = await supabase
+  //   .from("users")
+  //   .update({
+  //     mealHistory: {
+  //       ...mealHistory, // Keep all existing dates
+  //       [today]: { ...mealHistory[today], [meal]: information }, // Update today's data
+  //     },
+  //   })
+  //   .eq("uid", userId);
+
+  // if (updateError) {
+  //   console.error("Error updating nutritional history:", updateError);
+  // } else {
+  //   console.log("Nutritional history updated successfully!");
+  // }
+};
 
 export {
   fetchIngredients,

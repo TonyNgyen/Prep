@@ -86,8 +86,8 @@ type PageProps = {
   setNutrition: React.Dispatch<React.SetStateAction<NutritionFacts>>;
   inventory: ItemsToAdd;
   setInventory: React.Dispatch<React.SetStateAction<ItemsToAdd>>;
-  meal: string | null;
-  setMeal: React.Dispatch<React.SetStateAction<string | null>>;
+  meal: string;
+  setMeal: React.Dispatch<React.SetStateAction<string>>;
 };
 
 function Page1({
@@ -175,6 +175,15 @@ function Page1({
 
   return (
     <div>
+      <div className="mb-4">
+        <label className="block font-semibold text-2xl">Meal</label>
+        <Dropdown
+          options={options}
+          className="rounded-md"
+          onChange={handleDropdownChange}
+          defaultValue="Select a meal"
+        />
+      </div>
       <div>
         <label className="block font-semibold text-2xl">Food Name</label>
         <div className="flex mb-4">
@@ -202,15 +211,6 @@ function Page1({
           >
             Search
           </button>
-        </div>
-        <div>
-          <label className="block font-semibold text-2xl">Meal</label>
-          <Dropdown
-            options={options}
-            className="rounded-md"
-            onChange={handleDropdownChange}
-            defaultValue="Select a meal"
-          />
         </div>
 
         {/* <div className="bg-orange-200 h-96"></div> */}
