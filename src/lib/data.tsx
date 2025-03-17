@@ -177,7 +177,6 @@ const fetchMealHistory = async () => {
       return {};
     }
     if (error) console.log(error);
-    console.log(data["mealHistory"]);
     return data["mealHistory"];
   } catch (error) {
     console.log(error);
@@ -260,24 +259,7 @@ const addToNutritionalHistory = async (nutrition: NutritionFacts) => {
 
   if (existingEntry) {
     updatedData = { ...existingEntry };
-
-    Object.keys(NUTRITIONAL_KEYS).forEach((nutritionalKey) => {
-      const key = nutritionalKey as keyof NutritionFacts;
-
-      if (key === "extraNutrition") return;
-
-      const nutritionValue = (nutrition[key] as number | null) ?? 0;
-      updatedData[key] = ((updatedData[key] as number) || 0) + nutritionValue;
-    });
-
-    Object.keys(nutrition.extraNutrition).forEach((key) => {
-      const nutritionExtra = nutrition.extraNutrition[key];
-
-      if (!updatedData.extraNutrition[key]) {
-        updatedData.extraNutrition[key] = { ...nutritionExtra, value: 0 };
-      }
-      updatedData.extraNutrition[key].value += nutritionExtra.value;
-    });
+    updatedData = addNutrition(updatedData, nutrition);
   } else {
     updatedData = nutrition;
   }
@@ -313,6 +295,51 @@ const isInventoryRecipe = (
   return !isInventoryIngredient(item);
 };
 
+const updateMealHistory = async (
+  date: string,
+  meal: string,
+  information: DailyMealEntry
+) => {
+  try {
+    const supabase = createClient();
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    const userId = userData?.user?.id;
+    const { data, error } = await supabase
+      .from("users")
+      .select("mealHistory")
+      .eq("uid", userId)
+      .single();
+
+    if (error) {
+      console.error("Error fetching data:", error);
+      return;
+    }
+
+    const mealHistory = data?.mealHistory || {};
+    const { error: updateError } = await supabase
+      .from("users")
+      .update({
+        mealHistory: {
+          ...mealHistory,
+          [date]: {
+            ...mealHistory[date],
+            [meal]: information,
+          },
+        },
+      })
+      .eq("uid", userId);
+
+    if (updateError) {
+      console.error("Error updating nutritional history:", updateError);
+    } else {
+      console.log("Nutritional history updated successfully!");
+    }
+    return;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const addToMealHistory = async (
   meal: string,
   information: {
@@ -325,7 +352,6 @@ const addToMealHistory = async (
 
   const userId = userData?.user?.id;
   const today = new Date().toISOString().split("T")[0];
-  // const today = "2025-03-15";
 
   const { data, error } = await supabase
     .from("users")
@@ -342,24 +368,7 @@ const addToMealHistory = async (
   const mealsForToday = mealHistory[today];
 
   if (!mealsForToday) {
-    const { error: updateError } = await supabase
-      .from("users")
-      .update({
-        mealHistory: {
-          ...mealHistory,
-          [today]: {
-            ...mealHistory[today],
-            [meal]: { ...information, meal: meal },
-          },
-        },
-      })
-      .eq("uid", userId);
-
-    if (updateError) {
-      console.error("Error updating nutritional history:", updateError);
-    } else {
-      console.log("Nutritional history updated successfully!");
-    }
+    updateMealHistory(today, meal, { ...information, meal: meal });
     return;
   }
 
@@ -396,44 +405,10 @@ const addToMealHistory = async (
       information.nutrition
     );
 
-    const { error: updateError } = await supabase
-      .from("users")
-      .update({
-        mealHistory: {
-          ...mealHistory,
-          [today]: {
-            ...mealHistory[today],
-            [meal]: existingMealEntry,
-          },
-        },
-      })
-      .eq("uid", userId);
-
-    if (updateError) {
-      console.error("Error updating nutritional history:", updateError);
-    } else {
-      console.log("Nutritional history updated successfully!");
-    }
+    updateMealHistory(today, meal, existingMealEntry);
     return;
   } else {
-    const { error: updateError } = await supabase
-      .from("users")
-      .update({
-        mealHistory: {
-          ...mealHistory,
-          [today]: {
-            ...mealHistory[today],
-            [meal]: { ...information, meal: meal },
-          },
-        },
-      })
-      .eq("uid", userId);
-
-    if (updateError) {
-      console.error("Error updating nutritional history:", updateError);
-    } else {
-      console.log("Nutritional history updated successfully!");
-    }
+    updateMealHistory(today, meal, { ...information, meal: meal });
     return;
   }
 };

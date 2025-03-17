@@ -4,7 +4,6 @@ import {
   addToMealHistory,
   addToNutritionalHistory,
   fetchInventory,
-  fetchMealHistory,
 } from "@/lib/data";
 import { InventoryIngredient, InventoryRecipe, NutritionFacts } from "@/types";
 import React, { useEffect, useState } from "react";
@@ -139,10 +138,13 @@ function LogFoodPage() {
         {pageNumber != 2 ? (
           <button
             type="button"
-            className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
+            className={`bg-mainGreen text-white font-semibold rounded-md px-4 py-2 ${
+              (!meal || !Object.keys(logFood).length) && "opacity-50"
+            }`}
             onClick={() =>
               setPageNumber((prevPageNumber) => prevPageNumber + 1)
             }
+            disabled={!meal || !Object.keys(logFood).length}
           >
             Next
           </button>
@@ -158,17 +160,6 @@ function LogFoodPage() {
             Log Food
           </button>
         )}
-        {/* <div
-          className="p-2 bg-purple-200"
-          onClick={() =>
-            addToMealHistory(meal, { nutrition: nutrition, food: logFood })
-          }
-        >
-          Test Function
-        </div>
-        <div className="p-2 bg-orange-200" onClick={() => fetchMealHistory()}>
-          Meal History
-        </div> */}
       </div>
     </div>
   );

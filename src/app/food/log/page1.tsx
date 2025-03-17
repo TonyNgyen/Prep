@@ -179,9 +179,9 @@ function Page1({
         <label className="block font-semibold text-2xl">Meal</label>
         <Dropdown
           options={options}
-          className="rounded-md"
+          className="rounded-md text-xl"
           onChange={handleDropdownChange}
-          defaultValue="Select a meal"
+          defaultValue="Please select a meal"
         />
       </div>
       <div>
