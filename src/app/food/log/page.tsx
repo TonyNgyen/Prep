@@ -1,6 +1,11 @@
 "use client";
 
-import { addToMealHistory, fetchInventory } from "@/lib/data";
+import {
+  addToMealHistory,
+  addToNutritionalHistory,
+  fetchInventory,
+  fetchMealHistory,
+} from "@/lib/data";
 import { InventoryIngredient, InventoryRecipe, NutritionFacts } from "@/types";
 import React, { useEffect, useState } from "react";
 import Page1 from "./page1";
@@ -143,13 +148,17 @@ function LogFoodPage() {
           </button>
         ) : (
           <button
-            type="submit"
+            type="button"
             className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
+            onClick={() => {
+              addToNutritionalHistory(nutrition);
+              addToMealHistory(meal, { nutrition: nutrition, food: logFood });
+            }}
           >
             Log Food
           </button>
         )}
-        <div
+        {/* <div
           className="p-2 bg-purple-200"
           onClick={() =>
             addToMealHistory(meal, { nutrition: nutrition, food: logFood })
@@ -157,18 +166,9 @@ function LogFoodPage() {
         >
           Test Function
         </div>
-        <div
-          className="p-2 bg-orange-200"
-          onClick={() =>
-            addToMealHistory(meal, {
-              meal: meal,
-              nutrition: nutrition,
-              food: logFood,
-            })
-          }
-        >
+        <div className="p-2 bg-orange-200" onClick={() => fetchMealHistory()}>
           Meal History
-        </div>
+        </div> */}
       </div>
     </div>
   );

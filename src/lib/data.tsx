@@ -1,5 +1,6 @@
 import { InventoryIngredient, InventoryRecipe, NutritionFacts } from "@/types";
 import { createClient } from "@/utils/supabase/client";
+import { addNutrition } from "./functions";
 
 const NUTRITIONAL_KEYS = {
   calories: "Calories",
@@ -45,51 +46,14 @@ const NUTRITIONAL_UNITS: Record<string, string> = {
   iron: "%",
 };
 
+type ItemsToAdd = Record<string, InventoryIngredient | InventoryRecipe>;
+
 type DailyMealEntry = {
-  [meal: string]: {
-    food: {
-      [foodId: string]: {
-        id: string;
-        name: string;
-        type: string;
-        unit: string;
-        containers: number;
-        servingSize: number;
-        totalAmount: number;
-        numberOfServings: number;
-      };
-    };
-    meal: string;
-    nutrition: {
-      iron: number;
-      sodium: number;
-      sugars: number;
-      calcium: number;
-      protein: number;
-      calories: number;
-      totalFat: number;
-      transFat: number;
-      vitaminA: number;
-      vitaminC: number;
-      vitaminD: number;
-      potassium: number;
-      addedSugars: number;
-      cholesterol: number;
-      saturatedFat: number;
-      sugarAlcohols: number;
-      extraNutrition: {
-        [key: string]: {
-          key: string;
-          unit: string;
-          label: string;
-          value: number;
-        };
-      };
-      monounsaturatedFat: number;
-      polyunsaturatedFat: number;
-      totalCarbohydrates: number;
-    };
+  food: {
+    [foodId: string]: InventoryIngredient | InventoryRecipe;
   };
+  meal: string;
+  nutrition: NutritionFacts;
 };
 
 const fetchIngredients = async () => {
@@ -194,6 +158,32 @@ const fetchInventory = async () => {
   }
 };
 
+const fetchMealHistory = async () => {
+  const supabase = createClient();
+  try {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError) {
+      console.error("Error fetching user:", userError);
+      return;
+    }
+
+    const userId = userData?.user?.id;
+    const { data, error } = await supabase
+      .from("users")
+      .select("mealHistory")
+      .eq("uid", userId)
+      .single();
+    if (!data) {
+      return {};
+    }
+    if (error) console.log(error);
+    console.log(data["mealHistory"]);
+    return data["mealHistory"];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const searchIngredient = async (ingredientSearch: string) => {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -289,7 +279,6 @@ const addToNutritionalHistory = async (nutrition: NutritionFacts) => {
       updatedData.extraNutrition[key].value += nutritionExtra.value;
     });
   } else {
-    // If no existing data, use new data as is
     updatedData = nutrition;
   }
 
@@ -310,12 +299,33 @@ const addToNutritionalHistory = async (nutrition: NutritionFacts) => {
   }
 };
 
-const addToMealHistory = async (meal: string, information: object) => {
+const isInventoryIngredient = (
+  item: InventoryIngredient | InventoryRecipe
+): item is InventoryIngredient => {
+  return (
+    "containers" in item && "numberOfServings" in item && "totalAmount" in item
+  );
+};
+
+const isInventoryRecipe = (
+  item: InventoryIngredient | InventoryRecipe
+): item is InventoryRecipe => {
+  return !isInventoryIngredient(item);
+};
+
+const addToMealHistory = async (
+  meal: string,
+  information: {
+    nutrition: NutritionFacts;
+    food: ItemsToAdd;
+  }
+) => {
   const supabase = createClient();
   const { data: userData, error: userError } = await supabase.auth.getUser();
 
   const userId = userData?.user?.id;
   const today = new Date().toISOString().split("T")[0];
+  // const today = "2025-03-15";
 
   const { data, error } = await supabase
     .from("users")
@@ -329,41 +339,110 @@ const addToMealHistory = async (meal: string, information: object) => {
   }
 
   const mealHistory = data?.mealHistory || {};
-  console.log(mealHistory);
-  console.log(today);
-  const existingEntry: DailyMealEntry | undefined = mealHistory[today];
-  let updatedData: NutritionFacts;
+  const mealsForToday = mealHistory[today];
 
-  if (existingEntry) {
-    if (meal in existingEntry) {
-      // console.log(existingEntry[meal]);
-      Object.keys(existingEntry[meal].food).map((id) => console.log(id));
+  if (!mealsForToday) {
+    const { error: updateError } = await supabase
+      .from("users")
+      .update({
+        mealHistory: {
+          ...mealHistory,
+          [today]: {
+            ...mealHistory[today],
+            [meal]: { ...information, meal: meal },
+          },
+        },
+      })
+      .eq("uid", userId);
+
+    if (updateError) {
+      console.error("Error updating nutritional history:", updateError);
+    } else {
+      console.log("Nutritional history updated successfully!");
     }
-  } else {
-    console.log("No existing entry");
+    return;
   }
 
-  // const { error: updateError } = await supabase
-  //   .from("users")
-  //   .update({
-  //     mealHistory: {
-  //       ...mealHistory, // Keep all existing dates
-  //       [today]: { ...mealHistory[today], [meal]: information }, // Update today's data
-  //     },
-  //   })
-  //   .eq("uid", userId);
+  const existingMealEntry: DailyMealEntry | undefined =
+    mealHistory[today][meal];
+  if (existingMealEntry) {
+    Object.keys(information.food).forEach((id) => {
+      const foodItem = information.food[id];
 
-  // if (updateError) {
-  //   console.error("Error updating nutritional history:", updateError);
-  // } else {
-  //   console.log("Nutritional history updated successfully!");
-  // }
+      if (id in existingMealEntry.food) {
+        const existingItem = existingMealEntry.food[id];
+
+        if (
+          isInventoryIngredient(existingItem) &&
+          isInventoryIngredient(foodItem)
+        ) {
+          existingItem.containers += foodItem.containers;
+          existingItem.numberOfServings += foodItem.numberOfServings;
+          existingItem.totalAmount += foodItem.totalAmount;
+        } else if (
+          isInventoryRecipe(existingItem) &&
+          isInventoryRecipe(foodItem)
+        ) {
+          existingItem.servings += foodItem.servings;
+          existingItem.totalAmount += foodItem.totalAmount;
+        }
+      } else {
+        existingMealEntry.food[id] = foodItem;
+      }
+    });
+
+    existingMealEntry.nutrition = addNutrition(
+      existingMealEntry.nutrition,
+      information.nutrition
+    );
+
+    const { error: updateError } = await supabase
+      .from("users")
+      .update({
+        mealHistory: {
+          ...mealHistory,
+          [today]: {
+            ...mealHistory[today],
+            [meal]: existingMealEntry,
+          },
+        },
+      })
+      .eq("uid", userId);
+
+    if (updateError) {
+      console.error("Error updating nutritional history:", updateError);
+    } else {
+      console.log("Nutritional history updated successfully!");
+    }
+    return;
+  } else {
+    const { error: updateError } = await supabase
+      .from("users")
+      .update({
+        mealHistory: {
+          ...mealHistory,
+          [today]: {
+            ...mealHistory[today],
+            [meal]: { ...information, meal: meal },
+          },
+        },
+      })
+      .eq("uid", userId);
+
+    if (updateError) {
+      console.error("Error updating nutritional history:", updateError);
+    } else {
+      console.log("Nutritional history updated successfully!");
+    }
+    return;
+  }
 };
 
 export {
   fetchIngredients,
   fetchRecipes,
   fetchInventory,
+  fetchMealHistory,
   searchIngredient,
   searchRecipe,
   addToInventory,

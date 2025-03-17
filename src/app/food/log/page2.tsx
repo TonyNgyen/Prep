@@ -57,7 +57,7 @@ type PageProps = {
 function Page2({ nutrition, logFood, inventory }: PageProps) {
   return (
     <div className="">
-      <div>
+      {/* <div>
         <div className="bg-blue-200 p-4" onClick={() => console.log(logFood)}>
           Current Log
         </div>
@@ -79,7 +79,7 @@ function Page2({ nutrition, logFood, inventory }: PageProps) {
         <div className="bg-purple-200 p-4" onClick={() => addToMealHistory("breakfast", {})}>
           Test Function
         </div>
-      </div>
+      </div> */}
 
       <div className="mb-10">
         <h1 className="text-3xl font-bold mb-2">Food To Log</h1>
