@@ -115,11 +115,13 @@ function Page1({
   ];
 
   const searchItem = async () => {
+    console.log("Working")
     let ingredientData: Ingredient[] = [];
     let recipeData: Recipe[] = [];
 
     ingredientData = (await searchIngredient(search)) ?? [];
     recipeData = (await searchRecipe(search)) ?? [];
+    console.log("1")
 
     setSearchResult({
       recipes: recipeData,
