@@ -1,5 +1,5 @@
-import InventoryIngredientInfo from "@/components/ingredientInfo/inventoryIngredientInfo";
-import InventoryRecipeInfo from "@/components/recipeInfo/inventoryRecipeInfo";
+import InventoryIngredientInfo from "@/components/ingredientInfo/addInventoryIngredientInfo";
+import InventoryRecipeInfo from "@/components/recipeInfo/addInventoryRecipeInfo";
 import { searchIngredient, searchRecipe } from "@/lib/data";
 import { Ingredient, Recipe } from "@/types";
 import React, { useState } from "react";

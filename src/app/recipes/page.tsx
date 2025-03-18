@@ -5,6 +5,7 @@ import AddRecipeForm from "@/components/dataForms/addRecipeForm/addRecipeForm";
 import { createClient } from "@/utils/supabase/client";
 import EditRecipeInfo from "@/components/recipeInfo/editRecipeInfo/editRecipeInfo";
 import { Recipe } from "@/types";
+import PageHeader from "@/components/pageHeader/pageHeader";
 
 function RecipesPage() {
   const [recipeList, setRecipeList] = useState<Recipe[]>([]);
@@ -63,7 +64,7 @@ function RecipesPage() {
   } else {
     return (
       <div className="p-6">
-        <h1 className="text-3xl font-bold mb-2">Recipes</h1>
+        <PageHeader>Recipes</PageHeader>
         <div className="flex gap-4  mb-4">
           <button
             className="bg-mainGreen text-white p-2 px-4 rounded-md font-semibold text-lg"

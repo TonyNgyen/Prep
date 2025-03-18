@@ -5,6 +5,7 @@ import IngredientInfo from "@/components/ingredientInfo/ingredientInfo";
 import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Ingredient } from "@/types";
+import PageHeader from "@/components/pageHeader/pageHeader";
 
 function IngredientsPage() {
   const [ingredientsList, setIngredientList] = useState<Ingredient[]>([]);
@@ -15,16 +16,13 @@ function IngredientsPage() {
     const fetchIngredients = async () => {
       const supabase = createClient();
       try {
-        //console.log("1");
         const { data: userData, error: userError } =
           await supabase.auth.getUser();
-        //console.log("8");
 
         if (userError) {
           console.error("Error fetching user:", userError);
           return;
         }
-        //console.log("2");
 
         const userId = userData?.user?.id;
 
@@ -37,10 +35,9 @@ function IngredientsPage() {
           console.error("Error fetching user data:", fetchUserError);
           return;
         }
-        //console.log("3");
 
         const ingredientIdList = fetchUserData[0].ingredients;
-        console.log(ingredientIdList)
+        console.log(ingredientIdList);
 
         const { data: fetchIngredientData, error: fetchIngredientError } =
           await supabase
@@ -52,11 +49,9 @@ function IngredientsPage() {
           console.error("Error fetching ingredients:", fetchIngredientError);
           return;
         }
-        //console.log("4");
 
         setIngredientList(fetchIngredientData);
         setLoading(false);
-        //console.log("5");
       } catch (error) {
         console.error("Unexpected error:", error);
       }
@@ -72,7 +67,7 @@ function IngredientsPage() {
   } else {
     return (
       <div className="p-6 pb-[6.5rem]">
-        <h1 className="text-3xl font-bold mb-2">Ingredients</h1>
+        <PageHeader>Ingredients</PageHeader>
         <div className="flex gap-4  mb-4">
           <button
             className="bg-mainGreen text-white p-2 px-4 rounded-md font-semibold text-lg"
@@ -80,8 +75,6 @@ function IngredientsPage() {
           >
             Add Ingredient
           </button>
-          {/* <button>Filter</button>
-          <button>Sort</button> */}
         </div>
         <div className="space-y-3">
           {ingredientsList.map((ingredient) => {

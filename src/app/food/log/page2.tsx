@@ -1,3 +1,4 @@
+import PageHeader from "@/components/pageHeader/pageHeader";
 import { addToMealHistory, addToNutritionalHistory } from "@/lib/data";
 import { InventoryIngredient, InventoryRecipe, NutritionFacts } from "@/types";
 import React from "react";
@@ -82,7 +83,7 @@ function Page2({ nutrition, logFood, inventory }: PageProps) {
       </div> */}
 
       <div className="mb-10">
-        <h1 className="text-3xl font-bold mb-2">Food To Log</h1>
+        <PageHeader>Food To Log</PageHeader>
         {Object.values(logFood).length ? (
           <div className="space-y-2">
             {Object.values(logFood).map((food) => {
@@ -113,7 +114,7 @@ function Page2({ nutrition, logFood, inventory }: PageProps) {
       </div>
 
       <div>
-        <h1 className="text-3xl font-bold mb-2">Nutrition for Food</h1>
+        <PageHeader>Nutrition For Food</PageHeader>
         <div className="border-mainGreen border-[3px] p-3 rounded-md">
           <div className="space-y-2">
             {(

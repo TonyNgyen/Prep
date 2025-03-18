@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import Page1 from "./page1";
 import Page2 from "./page2";
 import { useRouter } from "next/navigation";
+import PageHeader from "@/components/pageHeader/pageHeader";
 
 type ItemsToAdd = Record<string, InventoryIngredient | InventoryRecipe>;
 
@@ -124,7 +125,7 @@ function LogFoodPage() {
 
   return (
     <div className="p-6 pb-[4rem] flex flex-col relative h-[calc(100vh-5rem)] gap-3">
-      <h1 className="text-3xl font-bold mb-2">Log Food</h1>
+      <PageHeader>Log Food</PageHeader>
       <div className="overflow-scroll pb-6 h-[calc(100vh-5rem)]">
         {pageNumber == 1 && (
           <Page1
