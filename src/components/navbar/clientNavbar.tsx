@@ -11,15 +11,20 @@ import Link from "next/link";
 
 function ClientNavbar() {
   const [addPopup, setAddPopup] = useState(false);
+
+  const handleLinkClick = () => {
+    setAddPopup(false);
+  };
+
   return (
     <div className="w-full py-5 lg:px-20 px-2 flex justify-between items-center fixed bottom-0 left-0 bg-mainGreen h-20 z-50">
-      <Link href="/">
+      <Link href="/" onClick={handleLinkClick}>
         <button className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1">
           <IoHome className="w-full h-full" />
           <p className="font-semibold text-sm">Home</p>
         </button>
       </Link>
-      <Link href="/history">
+      <Link href="/history" onClick={handleLinkClick}>
         <button className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1 ">
           <AiOutlineHistory className="w-full h-full" />
           <p className="font-semibold text-sm">History</p>
@@ -38,13 +43,13 @@ function ClientNavbar() {
         </button>
       </div>
 
-      <Link href="/inventory">
+      <Link href="/inventory" onClick={handleLinkClick}>
         <button className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1">
           <MdInventory className="w-full h-full" />
           <p className="font-semibold text-sm">Inventory</p>
         </button>
       </Link>
-      <Link href="/more">
+      <Link href="/more" onClick={handleLinkClick}>
         <button className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1 ">
           <FiMoreHorizontal className="w-full h-full" />
           <p className="font-semibold text-sm">More</p>
