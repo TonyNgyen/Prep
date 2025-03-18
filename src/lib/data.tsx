@@ -56,17 +56,21 @@ type DailyMealEntry = {
   nutrition: NutritionFacts;
 };
 
+const getUserId = async () => {
+  const supabase = createClient();
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  if (userError) {
+    console.error("Error fetching user:", userError);
+    return;
+  }
+  const userId = userData?.user?.id;
+  return userId;
+};
+
 const fetchIngredients = async () => {
   const supabase = createClient();
   try {
-    const { data: userData, error: userError } = await supabase.auth.getUser();
-
-    if (userError) {
-      console.error("Error fetching user:", userError);
-      return;
-    }
-
-    const userId = userData?.user?.id;
+    const userId = await getUserId();
 
     const { data: fetchUserData, error: fetchUserError } = await supabase
       .from("users")
@@ -98,14 +102,7 @@ const fetchIngredients = async () => {
 const fetchRecipes = async () => {
   const supabase = createClient();
   try {
-    const { data: userData, error: userError } = await supabase.auth.getUser();
-
-    if (userError) {
-      console.error("Error fetching user:", userError);
-      return;
-    }
-
-    const userId = userData?.user?.id;
+    const userId = await getUserId();
 
     const { data: fetchUserData, error: fetchUserError } = await supabase
       .from("users")
@@ -136,13 +133,7 @@ const fetchRecipes = async () => {
 const fetchInventory = async () => {
   const supabase = createClient();
   try {
-    const { data: userData, error: userError } = await supabase.auth.getUser();
-    if (userError) {
-      console.error("Error fetching user:", userError);
-      return;
-    }
-
-    const userId = userData?.user?.id;
+    const userId = await getUserId();
     const { data, error } = await supabase
       .from("users")
       .select("inventory")
@@ -161,13 +152,7 @@ const fetchInventory = async () => {
 const fetchMealHistory = async () => {
   const supabase = createClient();
   try {
-    const { data: userData, error: userError } = await supabase.auth.getUser();
-    if (userError) {
-      console.error("Error fetching user:", userError);
-      return;
-    }
-
-    const userId = userData?.user?.id;
+    const userId = await getUserId();
     const { data, error } = await supabase
       .from("users")
       .select("mealHistory")
@@ -203,13 +188,58 @@ const searchRecipe = async (recipeSearch: string) => {
   return data;
 };
 
+const updateInventoryItem = async (
+  inventory: ItemsToAdd,
+  inventoryItem: InventoryIngredient | InventoryRecipe
+) => {
+  try {
+    if (inventoryItem.id in inventory) {
+      let currentInventoryItem = inventory[inventoryItem.id];
+      let updatedTotalAmount =
+        currentInventoryItem.totalAmount - inventoryItem.totalAmount;
+      if (updatedTotalAmount == 0) {
+        delete inventory[inventoryItem.id];
+      } else {
+        inventory[inventoryItem.id].totalAmount = updatedTotalAmount;
+      }
+    } else {
+      inventory[inventoryItem.id] = inventoryItem;
+    }
+
+    return inventory;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updateInventoryItems = async (itemsToUpdate: ItemsToAdd) => {
+  let inventory = await fetchInventory();
+
+  for (const item of Object.values(itemsToUpdate)) {
+    inventory = await updateInventoryItem(inventory, item);
+  }
+  await updateInventory(inventory);
+  return inventory;
+};
+
+const updateInventory = async (inventory: ItemsToAdd) => {
+  const supabase = createClient();
+  try {
+    const userId = await getUserId();
+    const { error: updateError } = await supabase
+      .from("users")
+      .update({ inventory })
+      .eq("uid", userId);
+
+    if (updateError) console.log(updateError);
+  } catch (error) {}
+};
+
 const addToInventory = async (
   inventoryItems: Record<string, InventoryIngredient | InventoryRecipe>
 ) => {
   const supabase = createClient();
-  const { data: userData, error: userError } = await supabase.auth.getUser();
-
-  const userId = userData?.user?.id;
+  const userId = await getUserId();
 
   const { data, error } = await supabase
     .from("users")
@@ -237,9 +267,7 @@ const addToInventory = async (
 
 const addToNutritionalHistory = async (nutrition: NutritionFacts) => {
   const supabase = createClient();
-  const { data: userData, error: userError } = await supabase.auth.getUser();
-
-  const userId = userData?.user?.id;
+  const userId = await getUserId();
   const today = new Date().toISOString().split("T")[0];
 
   const { data, error } = await supabase
@@ -302,8 +330,7 @@ const updateMealHistory = async (
 ) => {
   try {
     const supabase = createClient();
-    const { data: userData, error: userError } = await supabase.auth.getUser();
-    const userId = userData?.user?.id;
+    const userId = await getUserId();
     const { data, error } = await supabase
       .from("users")
       .select("mealHistory")
@@ -348,9 +375,7 @@ const addToMealHistory = async (
   }
 ) => {
   const supabase = createClient();
-  const { data: userData, error: userError } = await supabase.auth.getUser();
-
-  const userId = userData?.user?.id;
+  const userId = await getUserId();
   const today = new Date().toISOString().split("T")[0];
 
   const { data, error } = await supabase
@@ -423,4 +448,6 @@ export {
   addToInventory,
   addToNutritionalHistory,
   addToMealHistory,
+  updateInventoryItem,
+  updateInventoryItems,
 };

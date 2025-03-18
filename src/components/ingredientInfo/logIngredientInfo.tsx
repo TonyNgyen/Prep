@@ -96,7 +96,13 @@ function LogIngredientInfo({
     if (checkInventory) {
       checkInventoryAmount();
     }
-  }, [numberOfContainers, checkInventory, servingSize, numberOfServings]);
+  }, [
+    numberOfContainers,
+    checkInventory,
+    servingSize,
+    numberOfServings,
+    addType,
+  ]);
 
   const handleContainerNumberChange = (
     e: React.ChangeEvent<HTMLInputElement>

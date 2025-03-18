@@ -115,13 +115,11 @@ function Page1({
   ];
 
   const searchItem = async () => {
-    console.log("Working")
     let ingredientData: Ingredient[] = [];
     let recipeData: Recipe[] = [];
 
     ingredientData = (await searchIngredient(search)) ?? [];
     recipeData = (await searchRecipe(search)) ?? [];
-    console.log("1")
 
     setSearchResult({
       recipes: recipeData,
@@ -214,8 +212,6 @@ function Page1({
             Search
           </button>
         </div>
-
-        {/* <div className="bg-orange-200 h-96"></div> */}
       </div>
       <div className="flex flex-col gap-2">
         {searchResult.ingredients.map((ingredient) => (

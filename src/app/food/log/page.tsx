@@ -4,15 +4,18 @@ import {
   addToMealHistory,
   addToNutritionalHistory,
   fetchInventory,
+  updateInventoryItems,
 } from "@/lib/data";
 import { InventoryIngredient, InventoryRecipe, NutritionFacts } from "@/types";
 import React, { useEffect, useState } from "react";
 import Page1 from "./page1";
 import Page2 from "./page2";
+import { useRouter } from "next/navigation";
 
 type ItemsToAdd = Record<string, InventoryIngredient | InventoryRecipe>;
 
 function LogFoodPage() {
+  const router = useRouter();
   const [logFood, setLogFood] = useState<ItemsToAdd>({});
   const [nutrition, setNutrition] = useState<NutritionFacts>({
     calories: 0,
@@ -50,19 +53,30 @@ function LogFoodPage() {
     unit: string,
     type: string
   ) => {
-    setLogFood((prev) => ({
-      ...prev,
-      [id]: {
-        id,
-        name,
-        containers,
-        servingSize,
-        numberOfServings,
-        totalAmount,
-        unit,
-        type,
-      },
-    }));
+    setLogFood((prev) => {
+      if (prev[id]) {
+        return {
+          ...prev,
+          [id]: {
+            ...prev[id],
+            totalAmount: prev[id].totalAmount + totalAmount,
+          },
+        };
+      }
+      return {
+        ...prev,
+        [id]: {
+          id,
+          name,
+          containers,
+          servingSize,
+          numberOfServings,
+          totalAmount,
+          unit,
+          type,
+        },
+      };
+    });
   };
 
   const addLogRecipe = (
@@ -74,18 +88,29 @@ function LogFoodPage() {
     unit: string,
     type: string
   ) => {
-    setLogFood((prev) => ({
-      ...prev,
-      [id]: {
-        id,
-        name,
-        servings,
-        servingSize,
-        totalAmount,
-        unit,
-        type,
-      },
-    }));
+    setLogFood((prev) => {
+      if (prev[id]) {
+        return {
+          ...prev,
+          [id]: {
+            ...prev[id],
+            totalAmount: prev[id].totalAmount + totalAmount,
+          },
+        };
+      }
+      return {
+        ...prev,
+        [id]: {
+          id,
+          name,
+          servings,
+          servingSize,
+          totalAmount,
+          unit,
+          type,
+        },
+      };
+    });
   };
 
   useEffect(() => {
@@ -152,14 +177,28 @@ function LogFoodPage() {
           <button
             type="button"
             className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
-            onClick={() => {
-              addToNutritionalHistory(nutrition);
-              addToMealHistory(meal, { nutrition: nutrition, food: logFood });
+            onClick={async () => {
+              await addToNutritionalHistory(nutrition);
+              await addToMealHistory(meal, {
+                nutrition: nutrition,
+                food: logFood,
+              });
+              await updateInventoryItems(logFood);
+              router.push("/");
             }}
           >
             Log Food
           </button>
         )}
+        {/* <div className="bg-blue-200 p-2" onClick={() => console.log(inventory)}>
+          Print Inventory
+        </div>
+        <div
+          className="bg-red-200 p-2"
+          onClick={() => updateInventoryItems(logFood)}
+        >
+          Test Update Inventory
+        </div> */}
       </div>
     </div>
   );
