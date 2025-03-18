@@ -438,6 +438,26 @@ const addToMealHistory = async (
   }
 };
 
+const fetchGoals = async () => {
+  const supabase = createClient();
+  try {
+    const userId = await getUserId();
+    const { data, error } = await supabase
+      .from("users")
+      .select("goals")
+      .eq("uid", userId)
+      .single();
+    if (!data) {
+      return {};
+    }
+    if (error) console.log(error);
+    console.log(data["goals"]);
+    return data["goals"];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
   fetchIngredients,
   fetchRecipes,
@@ -450,4 +470,5 @@ export {
   addToMealHistory,
   updateInventoryItem,
   updateInventoryItems,
+  fetchGoals,
 };
