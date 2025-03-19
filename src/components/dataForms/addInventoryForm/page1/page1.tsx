@@ -1,6 +1,6 @@
 import InventoryIngredientInfo from "@/components/ingredientInfo/addInventoryIngredientInfo";
 import InventoryRecipeInfo from "@/components/recipeInfo/addInventoryRecipeInfo";
-import { searchIngredient, searchRecipe } from "@/lib/data";
+import { searchIngredientByName, searchRecipeByName } from "@/lib/data";
 import { Ingredient, Recipe } from "@/types";
 import React, { useState } from "react";
 
@@ -42,8 +42,8 @@ function Page1({ addInventoryIngredient, addInventoryRecipe }: PageProps) {
     let ingredientData: Ingredient[] = [];
     let recipeData: Recipe[] = [];
 
-    ingredientData = (await searchIngredient(search)) ?? [];
-    recipeData = (await searchRecipe(search)) ?? [];
+    ingredientData = (await searchIngredientByName(search)) ?? [];
+    recipeData = (await searchRecipeByName(search)) ?? [];
 
     setSearchResult({
       recipes: recipeData,

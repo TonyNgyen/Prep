@@ -5,7 +5,7 @@ import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 interface DropdownProps {
   options: { value: string; label: string }[];
   defaultValue?: string;
-  onChange?: (selectedValue: string) => void;
+  onChange: (selectedValue: string) => void;
   className?: string; // Allow custom Tailwind classes
   drop?: boolean; // External control for dropdown state
   onDropChange?: (isDropping: boolean) => void; // Callback for drop state changes

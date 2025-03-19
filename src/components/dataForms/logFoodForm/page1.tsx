@@ -11,50 +11,6 @@ import LogIngredientInfo from "@/components/ingredientInfo/logIngredientInfo";
 import LogRecipeInfo from "@/components/recipeInfo/logRecipeInfo";
 import Dropdown from "@/components/dropdown/dropdown";
 
-const NUTRITIONAL_KEYS = {
-  calories: "Calories",
-  protein: "Protein",
-  totalFat: "Total Fat",
-  saturatedFat: "Saturated Fat",
-  polyunsaturatedFat: "Polyunsaturated Fat",
-  monounsaturatedFat: "Monounsaturated Fat",
-  transFat: "Trans Fat",
-  cholesterol: "Cholesterol",
-  sodium: "Sodium",
-  potassium: "Potassium",
-  totalCarbohydrates: "Total Carbohydrates",
-  sugars: "Sugars",
-  addedSugars: "Added Sugars",
-  sugarAlcohols: "Sugar Alcohols",
-  vitaminA: "Vitamin A",
-  vitaminC: "Vitamin C",
-  vitaminD: "Vitamin D",
-  calcium: "Calcium",
-  iron: "Iron",
-};
-
-const NUTRITIONAL_UNITS: Record<string, string> = {
-  calories: "kcal",
-  protein: "g",
-  totalFat: "g",
-  saturatedFat: "g",
-  polyunsaturatedFat: "g",
-  monounsaturatedFat: "g",
-  transFat: "g",
-  cholesterol: "mg",
-  sodium: "mg",
-  potassium: "mg",
-  totalCarbohydrates: "g",
-  sugars: "g",
-  addedSugars: "g",
-  sugarAlcohols: "g",
-  vitaminA: "%",
-  vitaminC: "%",
-  vitaminD: "%",
-  calcium: "%",
-  iron: "%",
-};
-
 type ItemsToAdd = Record<string, InventoryIngredient | InventoryRecipe>;
 
 type SearchResultType = {
@@ -106,13 +62,21 @@ function Page1({
     ingredients: [],
   });
 
-  const options = [
-    { value: "breakfast", label: "Breakfast" },
-    { value: "lunch", label: "Lunch" },
-    { value: "dinner", label: "Dinner" },
-    { value: "snack", label: "Snack" },
-    { value: "misc", label: "Miscellaneous" },
-  ];
+  // const options = [
+  //   { value: "breakfast", label: "Breakfast" },
+  //   { value: "lunch", label: "Lunch" },
+  //   { value: "dinner", label: "Dinner" },
+  //   { value: "snack", label: "Snack" },
+  //   { value: "misc", label: "Miscellaneous" },
+  // ];
+
+  const options = {
+    breakfast: { value: "breakfast", label: "Breakfast" },
+    lunch: { value: "lunch", label: "Lunch" },
+    dinner: { value: "dinner", label: "Dinner" },
+    snack: { value: "snack", label: "Snack" },
+    misc: { value: "miscellaneous", label: "Miscellaneous" },
+  };
 
   const searchItem = async () => {
     let ingredientData: Ingredient[] = [];
@@ -170,7 +134,7 @@ function Page1({
   };
 
   const handleDropdownChange = (selectedValue: string) => {
-    setMeal(selectedValue);
+    setMeal(selectedValue as keyof typeof options);
   };
 
   return (
@@ -178,10 +142,14 @@ function Page1({
       <div className="mb-4">
         <label className="block font-semibold text-2xl">Meal</label>
         <Dropdown
-          options={options}
+          options={Object.values(options)}
           className="rounded-md text-xl"
           onChange={handleDropdownChange}
-          defaultValue="Please select a meal"
+          defaultValue={
+            meal && meal in options
+              ? options[meal as keyof typeof options].label
+              : "Please select a meal"
+          }
         />
       </div>
       <div>

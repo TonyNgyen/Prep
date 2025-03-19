@@ -42,7 +42,7 @@ function Page2({
   >(null);
   const supabase = createClient();
 
-  const searchIngredient = async () => {
+  const searchIngredientByName = async () => {
     const { data, error } = await supabase
       .from("ingredients")
       .select()
@@ -114,7 +114,7 @@ function Page2({
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
-                  searchIngredient();
+                  searchIngredientByName();
                 }
               }}
               className="border rounded-md w-full p-2 border-gray-300"
@@ -123,7 +123,7 @@ function Page2({
             <button
               type="button"
               className="bg-mainGreen px-3 text-white font-semibold"
-              onClick={searchIngredient}
+              onClick={searchIngredientByName}
             >
               Search
             </button>

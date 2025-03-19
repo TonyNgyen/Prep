@@ -1,6 +1,6 @@
 import InventoryIngredientInfo from "@/components/ingredientInfo/addInventoryIngredientInfo";
 import InventoryRecipeInfo from "@/components/recipeInfo/addInventoryRecipeInfo";
-import { searchIngredient, searchRecipe } from "@/lib/data";
+import { searchIngredientByName, searchRecipeByName } from "@/lib/data";
 import { Ingredient, Recipe } from "@/types";
 import React, { useState } from "react";
 
@@ -21,9 +21,9 @@ function Page3({ addType, addInventoryIngredient }: PageProps) {
   const searchItem = async () => {
     let data;
     if (addType == "ingredient") {
-      data = await searchIngredient(search);
+      data = await searchIngredientByName(search);
     } else {
-      data = await searchRecipe(search);
+      data = await searchRecipeByName(search);
     }
     setSearchResult(data ?? []);
   };

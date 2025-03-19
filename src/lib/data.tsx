@@ -168,7 +168,7 @@ const fetchMealHistory = async () => {
   }
 };
 
-const searchIngredient = async (ingredientSearch: string) => {
+const searchIngredientByName = async (ingredientSearch: string) => {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("ingredients")
@@ -178,12 +178,32 @@ const searchIngredient = async (ingredientSearch: string) => {
   return data;
 };
 
-const searchRecipe = async (recipeSearch: string) => {
+const searchIngredientById = async (idSearch: string) => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("ingredients")
+    .select()
+    .eq("id", idSearch);
+  if (error) console.log(error);
+  return data;
+};
+
+const searchRecipeByName = async (recipeSearch: string) => {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("recipes")
     .select()
     .eq("name", recipeSearch);
+  if (error) console.log(error);
+  return data;
+};
+
+const searchRecipeById = async (idSearch: string) => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("recipes")
+    .select()
+    .eq("id", idSearch);
   if (error) console.log(error);
   return data;
 };
@@ -372,11 +392,11 @@ const addToMealHistory = async (
   information: {
     nutrition: NutritionFacts;
     food: ItemsToAdd;
-  }
+  },
+  date: string
 ) => {
   const supabase = createClient();
   const userId = await getUserId();
-  const today = new Date().toISOString().split("T")[0];
 
   const { data, error } = await supabase
     .from("users")
@@ -390,15 +410,14 @@ const addToMealHistory = async (
   }
 
   const mealHistory = data?.mealHistory || {};
-  const mealsForToday = mealHistory[today];
+  const mealsForDay = mealHistory[date];
 
-  if (!mealsForToday) {
-    updateMealHistory(today, meal, { ...information, meal: meal });
+  if (!mealsForDay) {
+    updateMealHistory(date, meal, { ...information, meal: meal });
     return;
   }
 
-  const existingMealEntry: DailyMealEntry | undefined =
-    mealHistory[today][meal];
+  const existingMealEntry: DailyMealEntry | undefined = mealHistory[date][meal];
   if (existingMealEntry) {
     Object.keys(information.food).forEach((id) => {
       const foodItem = information.food[id];
@@ -430,10 +449,10 @@ const addToMealHistory = async (
       information.nutrition
     );
 
-    updateMealHistory(today, meal, existingMealEntry);
+    updateMealHistory(date, meal, existingMealEntry);
     return;
   } else {
-    updateMealHistory(today, meal, { ...information, meal: meal });
+    updateMealHistory(date, meal, { ...information, meal: meal });
     return;
   }
 };
@@ -458,17 +477,37 @@ const fetchGoals = async () => {
   }
 };
 
+const fetchNutritionalHistory = async () => {
+  const supabase = createClient();
+  try {
+    const userId = await getUserId();
+    const { data, error } = await supabase
+      .from("users")
+      .select("nutritionalHistory")
+      .eq("uid", userId)
+      .single();
+    if (!data) {
+      return {};
+    }
+    if (error) console.log(error);
+    return data["nutritionalHistory"];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
   fetchIngredients,
   fetchRecipes,
   fetchInventory,
   fetchMealHistory,
-  searchIngredient,
-  searchRecipe,
+  searchIngredientByName,
+  searchRecipeByName,
   addToInventory,
   addToNutritionalHistory,
   addToMealHistory,
   updateInventoryItem,
   updateInventoryItems,
   fetchGoals,
+  fetchNutritionalHistory,
 };
