@@ -34,8 +34,24 @@ function DatePicker({ dates, date, setDate }: DatePickerProps) {
           onClick={() => setDropdown(!dropdown)}
         >
           <h1 className="text-2xl font-bold">
-            {date === today ? "Today" : date}
+            {date === today
+              ? "Today"
+              : date ===
+                new Date(new Date().setDate(new Date().getDate() - 1))
+                  .toISOString()
+                  .split("T")[0]
+              ? "Yesterday"
+              : date ===
+                new Date(new Date().setDate(new Date().getDate() + 1))
+                  .toISOString()
+                  .split("T")[0]
+              ? "Tomorrow"
+              : new Date(date).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                })}
           </h1>
+
           {/* {dropdown ? (
             <IoMdArrowDropup className="text-2xl" />
           ) : (

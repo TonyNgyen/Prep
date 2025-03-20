@@ -48,7 +48,7 @@ function HistoryContainer() {
   return (
     <div className="space-y-4">
       <DatePicker dates={dates} date={date} setDate={setDate} />
-      <div>
+      <div className="space-y-2">
         <Dropdown
           options={options}
           onChange={setNutritionalValue}
