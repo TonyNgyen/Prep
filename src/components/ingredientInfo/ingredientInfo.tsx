@@ -93,7 +93,7 @@ function IngredientInfo({ ingredient }: IngredientInfoProps) {
             </div>
           </div>
 
-          {/* Display Nutritional Facts */}
+
           <div className="space-y-2">
             {(
               Object.keys(NUTRITIONAL_KEYS) as Array<
@@ -101,9 +101,9 @@ function IngredientInfo({ ingredient }: IngredientInfoProps) {
               >
             ).map((key) => {
               const value = ingredient[key];
-              if (value === null || value === undefined) return null; // Skip null/undefined values
+              if (value === null || value === undefined) return null;
 
-              const unit = NUTRITIONAL_UNITS[key]; // Get the unit for the current key
+              const unit = NUTRITIONAL_UNITS[key];
               return (
                 <div
                   key={key}
@@ -130,7 +130,7 @@ function IngredientInfo({ ingredient }: IngredientInfoProps) {
                 unit = "%";
               } else {
                 unit = ingredient.extraNutrition[key].unit;
-              } // Get the unit for the current key
+              }
 
               return (
                 <div

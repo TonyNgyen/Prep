@@ -349,8 +349,7 @@ function LogIngredientInfo({
               </p>
             </div>
           </div>
-
-          {/* Display Nutritional Facts */}
+          
           <div className="space-y-2">
             {(
               Object.keys(NUTRITIONAL_KEYS) as Array<
@@ -387,7 +386,7 @@ function LogIngredientInfo({
                 unit = "%";
               } else {
                 unit = ingredient.extraNutrition[key].unit;
-              } // Get the unit for the current key
+              }
 
               return (
                 <div

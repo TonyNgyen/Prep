@@ -98,9 +98,9 @@ function EditRecipeInfo({ recipe }: EditRecipeInfoProps) {
               >
             ).map((key) => {
               const value = recipe[key];
-              if (value === null || value === undefined) return null; // Skip null/undefined values
+              if (value === null || value === undefined) return null;
 
-              const unit = NUTRITIONAL_UNITS[key]; // Get the unit for the current key
+              const unit = NUTRITIONAL_UNITS[key];
               return (
                 <div
                   key={key}
@@ -127,7 +127,7 @@ function EditRecipeInfo({ recipe }: EditRecipeInfoProps) {
                 unit = "%";
               } else {
                 unit = recipe.extraNutrition[key].unit;
-              } // Get the unit for the current key
+              }
 
               return (
                 <div

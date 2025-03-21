@@ -122,9 +122,9 @@ function Page3({
               );
             }
 
-            if (value === null || value === undefined) return null; // Skip null/undefined values
+            if (value === null || value === undefined) return null;
 
-            const unit = NUTRITIONAL_UNITS[key]; // Get the unit for the current key
+            const unit = NUTRITIONAL_UNITS[key];
             return (
               <div
                 key={key}
@@ -152,14 +152,14 @@ function Page3({
               );
             }
 
-            if (value === null || value === undefined) return null; // Skip null/undefined values
+            if (value === null || value === undefined) return null;
 
             let unit;
             if (recipeNutrition.extraNutrition[key].unit == "percent") {
               unit = "%";
             } else {
               unit = recipeNutrition.extraNutrition[key].unit;
-            } // Get the unit for the current key
+            }
 
             return (
               <div

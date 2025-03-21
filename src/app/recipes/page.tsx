@@ -18,13 +18,11 @@ function RecipesPage() {
       try {
         const { data: userData, error: userError } =
           await supabase.auth.getUser();
-        // console.log("8");
 
         if (userError) {
           console.error("Error fetching user:", userError);
           return;
         }
-        // console.log("2");
 
         const userId = userData?.user?.id;
 
@@ -36,7 +34,6 @@ function RecipesPage() {
           console.error("Error fetching user data:", fetchUserError);
           return;
         }
-        // console.log("3");
 
         const recipeList = fetchUserData[0].recipes;
         const { data: fetchRecipeData, error: fetchRecipeError } =
@@ -46,7 +43,6 @@ function RecipesPage() {
           console.error("Error fetching recipes:", fetchRecipeError);
           return;
         }
-        //console.log("4");
 
         setRecipeList(fetchRecipeData);
         setLoading(false);
@@ -72,14 +68,6 @@ function RecipesPage() {
           >
             Add Recipe
           </button>
-          {/* <button>Filter</button>
-          <button>Sort</button> */}
-          {/* <div
-            className="bg-blue-200 p-2"
-            onClick={() => console.log(recipeList)}
-          >
-            Test
-          </div> */}
         </div>
         <div className="space-y-3">
           {recipeList.map((recipe) => {

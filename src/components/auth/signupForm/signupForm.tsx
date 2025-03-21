@@ -21,7 +21,6 @@ function SignupForm() {
       const user = userCredential.user;
       const userRef = doc(db, "users", user.uid);
 
-      // Add user data to Firestore
       await setDoc(userRef, { createdAt: serverTimestamp() }, { merge: true });
       const settingsRef = doc(collection(userRef, "settings"));
       await setDoc(settingsRef, {});

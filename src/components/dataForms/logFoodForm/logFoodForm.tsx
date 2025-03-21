@@ -19,7 +19,7 @@ type ItemsToAdd = Record<string, InventoryIngredient | InventoryRecipe>;
 type LogFoodFormProps = {
   dateInput: string | null;
   mealInput: string | null;
-  setShowAddForm?: React.Dispatch<React.SetStateAction<boolean>>; // Now optional
+  setShowAddForm?: React.Dispatch<React.SetStateAction<boolean>>;
   isForm: boolean;
 };
 

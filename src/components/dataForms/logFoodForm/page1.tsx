@@ -62,14 +62,6 @@ function Page1({
     ingredients: [],
   });
 
-  // const options = [
-  //   { value: "breakfast", label: "Breakfast" },
-  //   { value: "lunch", label: "Lunch" },
-  //   { value: "dinner", label: "Dinner" },
-  //   { value: "snack", label: "Snack" },
-  //   { value: "misc", label: "Miscellaneous" },
-  // ];
-
   const options = {
     breakfast: { value: "breakfast", label: "Breakfast" },
     lunch: { value: "lunch", label: "Lunch" },

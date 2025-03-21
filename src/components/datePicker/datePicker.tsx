@@ -25,7 +25,7 @@ function DatePicker({ dates, date, setDate }: DatePickerProps) {
   return (
     <div className="flex items-center gap-10 justify-center">
       <IoIosArrowBack
-        onClick={() => adjustDate(-1)} // Subtract one day
+        onClick={() => adjustDate(-1)}
         className="cursor-pointer"
       />
       <div className="relative flex justify-center">
@@ -81,7 +81,7 @@ function DatePicker({ dates, date, setDate }: DatePickerProps) {
         )} */}
       </div>
       <IoIosArrowForward
-        onClick={() => adjustDate(1)} // Add one day
+        onClick={() => adjustDate(1)}
         className="cursor-pointer"
       />
     </div>

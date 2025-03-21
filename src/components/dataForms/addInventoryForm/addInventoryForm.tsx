@@ -8,11 +8,11 @@ import { InventoryIngredient, InventoryRecipe } from "@/types";
 import { addToInventory } from "@/lib/data";
 
 type formProp = {
-  setShowAddForm?: React.Dispatch<React.SetStateAction<boolean>>; // Now optional
+  setShowAddForm?: React.Dispatch<React.SetStateAction<boolean>>;
   isForm: boolean;
 };
 
-type ItemsToAdd = Record<string, InventoryIngredient | InventoryRecipe>; // Keyed by ID
+type ItemsToAdd = Record<string, InventoryIngredient | InventoryRecipe>;
 
 function AddInventoryForm({ setShowAddForm, isForm }: formProp) {
   const [pageNumber, setPageNumber] = useState(1);

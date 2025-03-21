@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { IoIosClose } from "react-icons/io";
 
 type formProp = {
-  setShowAddForm?: React.Dispatch<React.SetStateAction<boolean>>; // Now optional
+  setShowAddForm?: React.Dispatch<React.SetStateAction<boolean>>;
   isForm: boolean;
 };
 
@@ -40,8 +40,8 @@ function toCamelCase(input: string): string {
   return input
     .trim()
     .toLowerCase()
-    .replace(/[^a-zA-Z0-9 ]/g, "") // Remove non-alphanumeric characters except spaces
-    .split(/\s+/) // Split by spaces
+    .replace(/[^a-zA-Z0-9 ]/g, "")
+    .split(/\s+/)
     .map((word, index) =>
       index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1)
     )
@@ -125,7 +125,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "number" ? Number(value) || 0 : value, // Convert numbers
+      [name]: type === "number" ? Number(value) || 0 : value,
     }));
   };
 
@@ -180,7 +180,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
     e.preventDefault();
     const submissionData = {
       ...formData,
-      extraNutrition: allExtraNutrition, // Store extra nutrition in the JSONB column
+      extraNutrition: allExtraNutrition,
     };
     const { data, error } = await supabase
       .from("ingredients")

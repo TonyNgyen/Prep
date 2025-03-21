@@ -65,9 +65,9 @@ function AddRecipeInfo({
         Object.keys(NUTRITIONAL_KEYS) as Array<keyof typeof NUTRITIONAL_KEYS>
       ).map((key) => {
         const value = nutritionFacts[key];
-        if (value === null || value === undefined) return null; // Skip null/undefined values
+        if (value === null || value === undefined) return null;
 
-        const unit = NUTRITIONAL_UNITS[key]; // Get the unit for the current key
+        const unit = NUTRITIONAL_UNITS[key];
         return (
           <div key={key} className="flex items-center justify-between text-lg">
             <span>{NUTRITIONAL_KEYS[key]}</span>

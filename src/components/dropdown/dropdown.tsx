@@ -6,9 +6,9 @@ interface DropdownProps {
   options: { value: string; label: string }[];
   defaultValue?: string;
   onChange: (selectedValue: string) => void;
-  className?: string; // Allow custom Tailwind classes
-  drop?: boolean; // External control for dropdown state
-  onDropChange?: (isDropping: boolean) => void; // Callback for drop state changes
+  className?: string;
+  drop?: boolean;
+  onDropChange?: (isDropping: boolean) => void;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -22,7 +22,6 @@ const Dropdown: React.FC<DropdownProps> = ({
   const [selectedValue, setSelectedValue] = useState(defaultValue || "");
   const [internalDropping, setInternalDropping] = useState(false);
 
-  // Use the external `drop` prop if provided, otherwise use internal state
   const isDropping = drop !== undefined ? drop : internalDropping;
 
   const handleOptionClick = (value: string, label: string) => {
@@ -30,27 +29,23 @@ const Dropdown: React.FC<DropdownProps> = ({
     if (onChange) {
       onChange(value);
     }
-    toggleDrop(false); // Close the dropdown after selecting an option
+    toggleDrop(false);
   };
 
   const toggleDrop = (newState: boolean) => {
     if (drop === undefined) {
-      // If `drop` is not provided, use internal state
       setInternalDropping(newState);
     }
     if (onDropChange) {
-      // Notify parent of drop state change
       onDropChange(newState);
     }
   };
 
-  // Default Tailwind classes for the dropdown
   const defaultClasses =
     "bg-mainGreen w-full flex-1 p-2 flex flex-col text-white font-semibold";
 
-  // Merge default classes with custom classes
   const dropdownClasses = clsx(defaultClasses, className, {
-    "rounded-b-none": isDropping, // Remove bottom rounding when dropdown is open
+    "rounded-b-none": isDropping,
   });
 
   return (

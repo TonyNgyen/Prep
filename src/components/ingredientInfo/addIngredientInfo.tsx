@@ -198,7 +198,7 @@ function AddIngredientInfo({
                 unit = "%";
               } else {
                 unit = ingredient.extraNutrition[key].unit;
-              } // Get the unit for the current key
+              }
 
               return (
                 <div
