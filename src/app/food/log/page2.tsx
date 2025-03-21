@@ -1,5 +1,4 @@
 import PageHeader from "@/components/pageHeader/pageHeader";
-import { addToMealHistory, addToNutritionalHistory } from "@/lib/data";
 import { InventoryIngredient, InventoryRecipe, NutritionFacts } from "@/types";
 import React from "react";
 
@@ -58,29 +57,6 @@ type PageProps = {
 function Page2({ nutrition, logFood, inventory }: PageProps) {
   return (
     <div className="">
-      {/* <div>
-        <div className="bg-blue-200 p-4" onClick={() => console.log(logFood)}>
-          Current Log
-        </div>
-        <div className="bg-red-200 p-4" onClick={() => console.log(inventory)}>
-          Current Inventory
-        </div>
-        <div
-          className="bg-green-200 p-4"
-          onClick={() => console.log(nutrition)}
-        >
-          Current Nutrition
-        </div>
-        <div
-          className="bg-yellow-200 p-4"
-          onClick={() => addToNutritionalHistory(nutrition)}
-        >
-          Add Nutrition
-        </div>
-        <div className="bg-purple-200 p-4" onClick={() => addToMealHistory("breakfast", {})}>
-          Test Function
-        </div>
-      </div> */}
 
       <div className="mb-10">
         <PageHeader>Food To Log</PageHeader>

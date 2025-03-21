@@ -1,5 +1,4 @@
 import PageHeader from "@/components/pageHeader/pageHeader";
-import { addToMealHistory, addToNutritionalHistory } from "@/lib/data";
 import { InventoryIngredient, InventoryRecipe, NutritionFacts } from "@/types";
 import React from "react";
 

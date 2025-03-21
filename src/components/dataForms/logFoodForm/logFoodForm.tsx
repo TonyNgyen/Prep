@@ -200,7 +200,7 @@ function LogFoodForm({
             type="button"
             className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
             onClick={async () => {
-              await addToNutritionalHistory(nutrition);
+              await addToNutritionalHistory(date, nutrition);
               await addToMealHistory(
                 meal,
                 {

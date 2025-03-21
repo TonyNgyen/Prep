@@ -285,10 +285,9 @@ const addToInventory = async (
   }
 };
 
-const addToNutritionalHistory = async (nutrition: NutritionFacts) => {
+const addToNutritionalHistory = async (date: string, nutrition: NutritionFacts) => {
   const supabase = createClient();
   const userId = await getUserId();
-  const today = new Date().toISOString().split("T")[0];
 
   const { data, error } = await supabase
     .from("users")
@@ -302,7 +301,7 @@ const addToNutritionalHistory = async (nutrition: NutritionFacts) => {
   }
 
   const nutritionalHistory = data?.nutritionalHistory || {};
-  const existingEntry: NutritionFacts | undefined = nutritionalHistory[today];
+  const existingEntry: NutritionFacts | undefined = nutritionalHistory[date];
   let updatedData: NutritionFacts;
 
   if (existingEntry) {
@@ -316,8 +315,8 @@ const addToNutritionalHistory = async (nutrition: NutritionFacts) => {
     .from("users")
     .update({
       nutritionalHistory: {
-        ...nutritionalHistory, // Keep all existing dates
-        [today]: updatedData, // Update today's data
+        ...nutritionalHistory,
+        [date]: updatedData,
       },
     })
     .eq("uid", userId);
