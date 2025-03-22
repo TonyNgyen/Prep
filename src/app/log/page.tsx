@@ -1,14 +1,14 @@
-import HistoryContainer from "@/components/history/historyContainer/historyContainer";
+import LogContainer from "@/components/history/historyContainer/historyContainer";
 import PageHeader from "@/components/pageHeader/pageHeader";
 import React from "react";
 
-function HistoryPage() {
+function LogPage() {
   return (
     <div className="p-6 pb-[6.5rem]">
       {/* <PageHeader>History Page</PageHeader> */}
-      <HistoryContainer />
+      <LogContainer />
     </div>
   );
 }
 
-export default HistoryPage;
+export default LogPage;

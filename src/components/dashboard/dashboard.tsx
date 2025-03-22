@@ -8,7 +8,6 @@ import WeightHistoryChart from "@/components/charts/weightHistoryChart/weightHis
 import { FaPlusSquare } from "react-icons/fa";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/client";
-import { User } from "@supabase/supabase-js";
 
 interface Nutrition {
   current: number;
@@ -70,10 +69,13 @@ function Dashboard() {
         </Link>
       </div>
       <div className="flex flex-col gap-2">
-        <div className="bg-mainGreen p-4 text-white rounded-lg shadow-md flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Log Meal</h1>
+        <Link
+          href="/log/add"
+          className="bg-mainGreen p-4 text-white rounded-lg shadow-md flex items-center justify-between"
+        >
+          <h1 className="text-2xl font-bold">Log Food</h1>
           <FaPlusSquare className="text-4xl" />
-        </div>
+        </Link>
         <div className="bg-white p-4 text-black rounded-lg shadow-md flex flex-col gap-4">
           <h1 className="text-2xl font-bold">Daily Nutrition Log</h1>
           {nutritionalData && (

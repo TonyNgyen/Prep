@@ -1,10 +1,12 @@
-import MoreList from '@/components/moreList/moreList'
-import React from 'react'
+import MoreList from "@/components/moreList/moreList";
+import React from "react";
 
 function MorePage() {
   return (
-    <div><MoreList /></div>
-  )
+    <div>
+      <MoreList />
+    </div>
+  );
 }
 
-export default MorePage
+export default MorePage;

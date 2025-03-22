@@ -8,7 +8,7 @@ import DatePicker from "@/components/datePicker/datePicker";
 import Dropdown from "@/components/dropdown/dropdown";
 import GoalDisplay from "@/components/goalDisplay/goalDisplay";
 
-function HistoryContainer() {
+function LogContainer() {
   const [nutritionalHistory, setNutritionalHistory] = useState<
     Record<string, any>
   >({});
@@ -67,4 +67,4 @@ function HistoryContainer() {
   );
 }
 
-export default HistoryContainer;
+export default LogContainer;

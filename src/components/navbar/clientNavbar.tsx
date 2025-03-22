@@ -2,11 +2,11 @@
 
 import React, { useState } from "react";
 import { IoHome } from "react-icons/io5";
-import { AiOutlineHistory } from "react-icons/ai";
 import { IoIosAddCircle } from "react-icons/io";
-import { MdInventory } from "react-icons/md";
 import { FiMoreHorizontal } from "react-icons/fi";
 import AddPopup from "../addPopup/addPop";
+import { IoMdBookmarks } from "react-icons/io";
+import { MdInsertChart } from "react-icons/md";
 import Link from "next/link";
 
 function ClientNavbar() {
@@ -19,10 +19,10 @@ function ClientNavbar() {
           <p className="font-semibold text-sm">Home</p>
         </button>
       </Link>
-      <Link href="/history">
+      <Link href="/log">
         <button className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1 ">
-          <AiOutlineHistory className="w-full h-full" />
-          <p className="font-semibold text-sm">History</p>
+          <IoMdBookmarks className="w-full h-full" />
+          <p className="font-semibold text-sm">Log</p>
         </button>
       </Link>
       <div className="relative">
@@ -31,17 +31,17 @@ function ClientNavbar() {
         </div>
 
         <button
-          className="w-[70px] h-[70px] flex flex-col items-center justify-center text-white rounded-full"
+          className="w-[65px] h-[65px] flex flex-col items-center justify-center text-white rounded-full"
           onClick={() => setAddPopup(!addPopup)}
         >
           <IoIosAddCircle className="w-full h-full" />
         </button>
       </div>
 
-      <Link href="/inventory">
+      <Link href="/statistics">
         <button className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1">
-          <MdInventory className="w-full h-full" />
-          <p className="font-semibold text-sm">Inventory</p>
+          <MdInsertChart  className="w-full h-full" />
+          <p className="font-semibold text-sm">Stats</p>
         </button>
       </Link>
       <Link href="/more">

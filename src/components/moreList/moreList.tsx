@@ -4,17 +4,17 @@ import React from "react";
 function MoreList() {
   return (
     <div>
-      <ul>
-        <li>
-          <Link href="/food">Food</Link>
+      <ul className="space-y-3 p-4">
+        <li className="text-2xl">
+          <Link href="/inventory">Inventory</Link>
         </li>
-        <li>
+        <li className="text-2xl">
           <Link href="/recipes">Recipes</Link>
         </li>
-        <li>
+        <li className="text-2xl">
           <Link href="/ingredients">Ingredients</Link>
         </li>
-        <li>
+        <li className="text-2xl">
           <Link href="/settings">Settings</Link>
         </li>
       </ul>
