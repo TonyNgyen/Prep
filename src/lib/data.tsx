@@ -285,7 +285,10 @@ const addToInventory = async (
   }
 };
 
-const addToNutritionalHistory = async (date: string, nutrition: NutritionFacts) => {
+const addToNutritionalHistory = async (
+  date: string,
+  nutrition: NutritionFacts
+) => {
   const supabase = createClient();
   const userId = await getUserId();
 
@@ -476,6 +479,38 @@ const fetchGoals = async () => {
   }
 };
 
+async function updateGoals(newGoal: Record<string, any>) {
+  const supabase = createClient();
+  const userId = await getUserId();
+
+  const { data: existingData, error: fetchError } = await supabase
+    .from("users")
+    .select("goals")
+    .eq("uid", userId)
+    .single();
+
+  if (fetchError) {
+    console.error("Error fetching existing goals:", fetchError);
+    return null;
+  }
+
+  const updatedGoals = { ...existingData.goals, ...newGoal };
+
+  const { data, error: updateError } = await supabase
+    .from("users")
+    .update({ goals: updatedGoals })
+    .eq("uid", userId)
+    .select();
+
+  if (updateError) {
+    console.error("Error updating JSONB column:", updateError);
+    return null;
+  }
+
+  console.log("Successfully updated goals");
+  return data;
+}
+
 const fetchNutritionalHistory = async () => {
   const supabase = createClient();
   try {
@@ -509,4 +544,5 @@ export {
   updateInventoryItems,
   fetchGoals,
   fetchNutritionalHistory,
+  updateGoals,
 };
