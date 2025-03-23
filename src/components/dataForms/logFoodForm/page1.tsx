@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { fetchInventory, searchIngredientByName, searchRecipeByName } from "@/lib/data";
+import { searchIngredientByName, searchRecipeByName } from "@/lib/data";
 import {
   Ingredient,
   InventoryIngredient,

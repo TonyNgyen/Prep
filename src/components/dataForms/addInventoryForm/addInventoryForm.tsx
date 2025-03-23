@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import Page1 from "./page1/page1";
 import Page2 from "./page2/page2";

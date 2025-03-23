@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Ingredient, NutritionFacts } from "@/types";
-import AddRecipeInfo from "@/components/recipeInfo/addRecipeInfo/addRecipeInfo";
 
 type formProp = {
   ingredientList: Record<

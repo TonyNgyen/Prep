@@ -11,11 +11,11 @@ const NutritionalChart: React.FC<NutritionalChartProps> = ({
   current,
   goal,
 }) => {
-  const percentage = (current / goal) * 100; // Calculate percentage correctly
+  const percentage = (current / goal) * 100;
   return (
     <CircularProgressbar
       value={percentage}
-      text={current.toString()} // Rounded percentage for better display
+      text={current.toString()}
       styles={buildStyles({
         textColor: "#0B6E4F",
         pathColor: "#0B6E4F",

@@ -9,7 +9,6 @@ type GoalDisplayProps = {
 function GoalDisplay({ nutritionalValue, goal, current }: GoalDisplayProps) {
   return (
     <div>
-      {/* <h1>{nutritionalValue} remaining</h1> */}
       <div className="flex items-center justify-between">
         <div className="flex flex-col items-center justify-center">
           <h2 className="text-xl font-bold">{goal}</h2>
