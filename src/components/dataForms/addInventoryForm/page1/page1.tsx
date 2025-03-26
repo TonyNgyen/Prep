@@ -139,6 +139,7 @@ function Page1({ addInventoryIngredient, addInventoryRecipe, inventory }: PagePr
                 key={ingredient.id}
                 ingredient={ingredient}
                 add={addIngredient}
+                inventory={inventory}
               />
             ))}
             {searchResult.recipes.map((recipe) => (

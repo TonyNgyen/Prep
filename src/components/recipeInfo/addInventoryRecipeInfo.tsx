@@ -106,6 +106,21 @@ function InventoryRecipeInfo({
       numberOfRecipes * recipe.numberOfServings * recipe.servingSize,
       recipe.servingUnit
     );
+    addRecipeToInventory(
+      inventory,
+      recipe,
+      {
+        id: recipe.id,
+        name: recipe.name,
+        servings: numberOfRecipes * recipe.numberOfServings,
+        servingSize: recipe.servingSize,
+        totalAmount: numberOfRecipes * recipe.numberOfServings * recipe.servingSize,
+        unit: recipe.servingUnit,
+        type: "recipe",
+      },
+      true,
+      true
+    )
   };
 
   const handleAddServings = () => {
@@ -120,6 +135,21 @@ function InventoryRecipeInfo({
       numberOfServings * recipe.servingSize,
       recipe.servingUnit
     );
+    addRecipeToInventory(
+      inventory,
+      recipe,
+      {
+        id: recipe.id,
+        name: recipe.name,
+        servings: numberOfServings,
+        servingSize: recipe.servingSize,
+        totalAmount: numberOfServings * recipe.servingSize,
+        unit: recipe.servingUnit,
+        type: "recipe",
+      },
+      true,
+      true
+    )
   };
 
   const handleAdd = () => {
@@ -314,11 +344,11 @@ function InventoryRecipeInfo({
             >
               Confirm
             </button>
-            <button
+            {/* <button
               type="button"
               className="w-1/2 bg-blue-700 p-1 text-lg font-bold text-white rounded-md"
               onClick={() =>
-                fetchIngredientsList(Object.keys(recipe.ingredientList))
+                console.log(inventory)
               }
             >
               Test 1
@@ -328,14 +358,14 @@ function InventoryRecipeInfo({
               className="w-1/2 bg-purple-700 p-1 text-lg font-bold text-white rounded-md"
               onClick={() =>
                 addRecipeToInventory(
-                  inventoryOfIngredients,
+                  inventory,
                   recipe,
                   {
                     id: recipe.id,
                     name: recipe.name,
-                    servings: numberOfServings,
+                    servings: numberOfServings ?? 1,
                     servingSize: recipe.servingSize,
-                    totalAmount: numberOfServings * recipe.servingSize,
+                    totalAmount: (numberOfServings ?? 1) * recipe.servingSize,
                     unit: recipe.servingUnit,
                     type: "recipe",
                   },
@@ -345,7 +375,7 @@ function InventoryRecipeInfo({
               }
             >
               Test 2
-            </button>
+            </button> */}
           </div>
         </div>
       )}

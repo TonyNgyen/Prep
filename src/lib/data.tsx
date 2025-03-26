@@ -299,7 +299,7 @@ const addToInventory = async (
 
 const fetchIngredientsList = async (ingredientIds: string[]) => {
   const supabase = createClient();
-  
+
   const { data, error } = await supabase
     .from("ingredients")
     .select("*")
@@ -319,44 +319,68 @@ const fetchIngredientsList = async (ingredientIds: string[]) => {
   return ingredientMap;
 };
 
-
 const addRecipeToInventory = (
-  existingInventory: Record<string, InventoryIngredient | InventoryRecipe>,
+  inventory: Record<string, InventoryIngredient | InventoryRecipe>,
   recipe: Recipe,
   inventoryRecipe: InventoryRecipe,
   updateIngredients: boolean,
-  zeroOutIngredients: boolean,
+  zeroOutIngredients: boolean
 ) => {
   if (updateIngredients) {
     Object.entries(recipe.ingredientList).map(([key, value]) => {
-      if (!(key in existingInventory)) {
-        console.log("key does not exist")
+      if (!(key in inventory)) {
+        console.log("key does not exist");
         if (!zeroOutIngredients) {
-          console.log("Returning false since no ingredient to update and no zeroing out")
-          return [false, "Ingredient is not in inventory"]
+          console.log(
+            "Returning false since no ingredient to update and no zeroing out"
+          );
+          return [false, "Ingredient is not in inventory"];
         }
       } else {
-        console.log("key does exist")
-        let newAmount = existingInventory[key].totalAmount - (value.servingSize * value.numberOfServings)
+        console.log("key does exist");
+        let newAmount =
+          inventory[key].totalAmount -
+          value.servingSize * value.numberOfServings;
         if (newAmount < 0) {
           if (!zeroOutIngredients) {
-            console.log("Returning false since insufficient ingredient amount and no zeroing out")
-            return [false, `Insufficient amount of ${existingInventory[key].name}`]
+            console.log(
+              "Returning false since insufficient ingredient amount and no zeroing out"
+            );
+            return [false, `Insufficient amount of ${inventory[key].name}`];
           } else {
-            newAmount = 0
+            newAmount = 0;
           }
         }
-        existingInventory[key].totalAmount = newAmount
+        inventory[key].totalAmount = newAmount;
       }
-    })
+    });
   }
-  if (inventoryRecipe.id in existingInventory) {
-    (existingInventory[inventoryRecipe.id] as InventoryRecipe).totalAmount +=
+  if (inventoryRecipe.id in inventory) {
+    (inventory[inventoryRecipe.id] as InventoryRecipe).totalAmount +=
       inventoryRecipe.totalAmount;
   } else {
-    existingInventory[inventoryRecipe.id] = inventoryRecipe;
+    inventory[inventoryRecipe.id] = inventoryRecipe;
   }
-  console.log(existingInventory)
+  console.log(inventory);
+};
+
+const addIngredientToInventory = (
+  inventory: Record<string, InventoryIngredient | InventoryRecipe>,
+  inventoryIngredient: InventoryIngredient
+) => {
+  try {
+    if (inventoryIngredient.id in inventory) {
+      inventory[inventoryIngredient.id].totalAmount =
+        inventory[inventoryIngredient.id].totalAmount +
+        inventoryIngredient.totalAmount;
+    } else {
+      inventory[inventoryIngredient.id] = inventoryIngredient;
+    }
+    console.log(inventory)
+    return inventory;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const addToNutritionalHistory = async (
@@ -622,4 +646,6 @@ export {
   addRecipe,
   fetchIngredientsList,
   addRecipeToInventory,
+  updateInventory,
+  addIngredientToInventory,
 };

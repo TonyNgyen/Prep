@@ -1,6 +1,7 @@
 "use client";
 
-import { Ingredient } from "@/types";
+import { addIngredientToInventory } from "@/lib/data";
+import { Ingredient, UserInventory } from "@/types";
 import React, { useState } from "react";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 
@@ -15,6 +16,7 @@ type AddInventoryIngredientInfoProps = {
     totalNumber: number,
     unit: string
   ) => void;
+  inventory: UserInventory;
 };
 
 const NUTRITIONAL_KEYS = {
@@ -64,6 +66,7 @@ const NUTRITIONAL_UNITS: Record<string, string> = {
 function AddInventoryIngredientInfo({
   ingredient,
   add,
+  inventory,
 }: AddInventoryIngredientInfoProps) {
   const [dropdown, setDropdown] = useState(false);
   const [adding, setAdding] = useState(false);
@@ -106,6 +109,19 @@ function AddInventoryIngredientInfo({
         containerNumber,
       ingredient.servingUnit
     );
+    addIngredientToInventory(inventory, {
+      id: ingredient.id,
+      name: ingredient.name,
+      containers: containerNumber,
+      servingSize: ingredient.servingSize,
+      numberOfServings: ingredient.servingsPerContainer,
+      totalAmount:
+        ingredient.servingSize *
+        ingredient.servingsPerContainer *
+        containerNumber,
+      unit: ingredient.servingUnit,
+      type: "ingredient",
+    });
   };
 
   const handleAddServings = () => {
@@ -121,6 +137,16 @@ function AddInventoryIngredientInfo({
       servingSize * numberOfServings,
       ingredient.servingUnit
     );
+    addIngredientToInventory(inventory, {
+      id: ingredient.id,
+      name: ingredient.name,
+      containers: 1,
+      servingSize: servingSize,
+      numberOfServings: numberOfServings, 
+      totalAmount: servingSize * numberOfServings,
+      unit: ingredient.servingUnit,
+      type: "ingredient",
+    });
   };
 
   const handleAdd = () => {

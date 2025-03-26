@@ -5,7 +5,7 @@ import { IoIosClose } from "react-icons/io";
 import Page1 from "./page1/page1";
 import Page2 from "./page2/page2";
 import { InventoryIngredient, InventoryRecipe, UserInventory } from "@/types";
-import { addToInventory, fetchInventory } from "@/lib/data";
+import { addToInventory, fetchInventory, updateInventory } from "@/lib/data";
 
 type formProp = {
   setShowAddForm?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -71,9 +71,9 @@ function AddInventoryForm({ setShowAddForm, isForm }: formProp) {
     const fetch = async () => {
       try {
         const fetchInven = await fetchInventory();
-        setInventory(fetchInven); 
+        setInventory(fetchInven);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     };
     fetch();
@@ -102,6 +102,12 @@ function AddInventoryForm({ setShowAddForm, isForm }: formProp) {
       </div>
 
       <div className="w-full flex justify-between absolute bottom-0 left-0 px-6 py-3 h-16">
+        {/* <button type="button" onClick={() => console.log(inventory)} className="bg-pink-300">
+          Inventory
+        </button>
+        <button type="button" onClick={() => updateInventory(inventory)} className="bg-orange-300">
+          Update Inventory
+        </button> */}
         {pageNumber != 1 ? (
           <button
             type="button"
@@ -129,7 +135,7 @@ function AddInventoryForm({ setShowAddForm, isForm }: formProp) {
           <button
             type="submit"
             className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
-            onClick={() => addToInventory(itemsToAdd)}
+            onClick={() => updateInventory(inventory)}
           >
             Add Inventory
           </button>
