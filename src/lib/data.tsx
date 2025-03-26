@@ -1,4 +1,10 @@
-import { InventoryIngredient, InventoryRecipe, NutritionFacts } from "@/types";
+import {
+  InventoryIngredient,
+  InventoryRecipe,
+  NutritionFacts,
+  Recipe,
+  UserInventory,
+} from "@/types";
 import { createClient } from "@/utils/supabase/client";
 import { addNutrition } from "./functions";
 
@@ -124,6 +130,50 @@ const fetchMealHistory = async () => {
   }
 };
 
+const addRecipe = async (
+  name: string,
+  recipeNutrition: NutritionFacts,
+  ingredientList: Object,
+  totalServingSize: number
+) => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("recipes")
+    .insert({
+      ...recipeNutrition,
+      ...{
+        name: name,
+        ingredientList: ingredientList,
+        servingSize: 1,
+        servingUnit: "g",
+        timesUsed: 0,
+        numberOfServings: totalServingSize,
+        pricePerServing: 1,
+      },
+    })
+    .select();
+
+  if (error) {
+    console.error("Error inserting data:", error.message);
+    return false;
+  }
+
+  try {
+    const recipeid = data?.[0]?.id;
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+
+    const userId = userData?.user?.id;
+
+    const { data: insertData } = await supabase.rpc("append_recipe_user", {
+      userid: userId,
+      recipeid: recipeid,
+    });
+  } catch (error) {
+    console.error("Error adding recipe to user:", error);
+  }
+  return true;
+};
+
 const searchIngredientByName = async (ingredientSearch: string) => {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -228,10 +278,16 @@ const addToInventory = async (
     return;
   }
   const existingJson = data?.inventory || {};
-  const updatedJson = { ...existingJson, ...inventoryItems };
+  Object.entries(inventoryItems).map(([key, value]) => {
+    if (key in existingJson) {
+      existingJson[key].totalAmount += value.totalAmount;
+    } else {
+      existingJson[key] = value;
+    }
+  });
   const { error: updateError } = await supabase
     .from("users")
-    .update({ inventory: updatedJson })
+    .update({ inventory: existingJson })
     .eq("uid", userId);
 
   if (updateError) {
@@ -239,6 +295,68 @@ const addToInventory = async (
   } else {
     console.log("JSONB column updated successfully!");
   }
+};
+
+const fetchIngredientsList = async (ingredientIds: string[]) => {
+  const supabase = createClient();
+  
+  const { data, error } = await supabase
+    .from("ingredients")
+    .select("*")
+    .in("id", ingredientIds);
+
+  if (error) {
+    console.error("Error fetching ingredients:", error);
+    return {};
+  }
+
+  const ingredientMap = data.reduce((acc, ingredient) => {
+    acc[ingredient.id] = ingredient;
+    return acc;
+  }, {} as Record<string, any>);
+
+  console.log(ingredientMap);
+  return ingredientMap;
+};
+
+
+const addRecipeToInventory = (
+  existingInventory: Record<string, InventoryIngredient | InventoryRecipe>,
+  recipe: Recipe,
+  inventoryRecipe: InventoryRecipe,
+  updateIngredients: boolean,
+  zeroOutIngredients: boolean,
+) => {
+  if (updateIngredients) {
+    Object.entries(recipe.ingredientList).map(([key, value]) => {
+      if (!(key in existingInventory)) {
+        console.log("key does not exist")
+        if (!zeroOutIngredients) {
+          console.log("Returning false since no ingredient to update and no zeroing out")
+          return [false, "Ingredient is not in inventory"]
+        }
+      } else {
+        console.log("key does exist")
+        let newAmount = existingInventory[key].totalAmount - (value.servingSize * value.numberOfServings)
+        if (newAmount < 0) {
+          if (!zeroOutIngredients) {
+            console.log("Returning false since insufficient ingredient amount and no zeroing out")
+            return [false, `Insufficient amount of ${existingInventory[key].name}`]
+          } else {
+            newAmount = 0
+          }
+        }
+        existingInventory[key].totalAmount = newAmount
+      }
+    })
+  }
+  if (inventoryRecipe.id in existingInventory) {
+    (existingInventory[inventoryRecipe.id] as InventoryRecipe).totalAmount +=
+      inventoryRecipe.totalAmount;
+  } else {
+    existingInventory[inventoryRecipe.id] = inventoryRecipe;
+  }
+  console.log(existingInventory)
 };
 
 const addToNutritionalHistory = async (
@@ -501,4 +619,7 @@ export {
   fetchGoals,
   fetchNutritionalHistory,
   updateGoals,
+  addRecipe,
+  fetchIngredientsList,
+  addRecipeToInventory,
 };

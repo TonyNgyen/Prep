@@ -1,7 +1,7 @@
 import InventoryIngredientInfo from "@/components/ingredientInfo/addInventoryIngredientInfo";
 import InventoryRecipeInfo from "@/components/recipeInfo/addInventoryRecipeInfo";
 import { searchIngredientByName, searchRecipeByName } from "@/lib/data";
-import { Ingredient, Recipe } from "@/types";
+import { Ingredient, Recipe, UserInventory } from "@/types";
 import React, { useState } from "react";
 
 type PageProps = {
@@ -24,6 +24,7 @@ type PageProps = {
     unit: string,
     type: string
   ) => void;
+  inventory: UserInventory
 };
 
 type SearchResultType = {
@@ -31,7 +32,7 @@ type SearchResultType = {
   ingredients: Ingredient[];
 };
 
-function Page1({ addInventoryIngredient, addInventoryRecipe }: PageProps) {
+function Page1({ addInventoryIngredient, addInventoryRecipe, inventory }: PageProps) {
   const [search, setSearch] = useState<string>("");
   const [searchResult, setSearchResult] = useState<SearchResultType>({
     recipes: [],
@@ -145,6 +146,7 @@ function Page1({ addInventoryIngredient, addInventoryRecipe }: PageProps) {
                 add={addRecipe}
                 key={recipe.id}
                 recipe={recipe}
+                inventory={inventory}
               />
             ))}
           </div>

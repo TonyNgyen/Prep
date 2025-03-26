@@ -1,7 +1,10 @@
 export type Recipe = {
   id: string;
   name: string;
-  ingredientsIdList: string[];
+  ingredientList: Record<
+    string,
+    { servingSize: number; numberOfServings: number }
+  >;
   pricePerServing: number | null;
   numberOfServings: number;
   servingSize: number;

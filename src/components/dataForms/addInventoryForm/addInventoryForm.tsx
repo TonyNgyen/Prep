@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import Page1 from "./page1/page1";
 import Page2 from "./page2/page2";
-import { InventoryIngredient, InventoryRecipe } from "@/types";
-import { addToInventory } from "@/lib/data";
+import { InventoryIngredient, InventoryRecipe, UserInventory } from "@/types";
+import { addToInventory, fetchInventory } from "@/lib/data";
 
 type formProp = {
   setShowAddForm?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -17,6 +17,7 @@ type ItemsToAdd = Record<string, InventoryIngredient | InventoryRecipe>;
 function AddInventoryForm({ setShowAddForm, isForm }: formProp) {
   const [pageNumber, setPageNumber] = useState(1);
   const [itemsToAdd, setItemsToAdd] = useState<ItemsToAdd>({});
+  const [inventory, setInventory] = useState<UserInventory>({});
 
   const addInventoryIngredient = (
     id: string,
@@ -66,6 +67,18 @@ function AddInventoryForm({ setShowAddForm, isForm }: formProp) {
     }));
   };
 
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const fetchInven = await fetchInventory();
+        setInventory(fetchInven); 
+      } catch (error) {
+        console.log(error)
+      }
+    };
+    fetch();
+  }, []);
+
   return (
     <div className="p-6 pb-[4rem] flex flex-col relative h-[calc(100vh-5rem)] gap-3">
       <div className="flex justify-between mb-3 items-center">
@@ -82,6 +95,7 @@ function AddInventoryForm({ setShowAddForm, isForm }: formProp) {
           <Page1
             addInventoryIngredient={addInventoryIngredient}
             addInventoryRecipe={addInventoryRecipe}
+            inventory={inventory}
           />
         )}
         {pageNumber == 2 && <Page2 ItemsToAdd={itemsToAdd} />}

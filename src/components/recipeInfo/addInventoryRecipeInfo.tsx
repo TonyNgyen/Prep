@@ -1,4 +1,9 @@
-import { Recipe } from "@/types";
+import {
+  addRecipe,
+  addRecipeToInventory,
+  fetchIngredientsList,
+} from "@/lib/data";
+import { Recipe, UserInventory } from "@/types";
 import React, { useState } from "react";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 
@@ -12,6 +17,7 @@ type InventoryRecipeInfoProps = {
     totalAmount: number,
     unit: string
   ) => void;
+  inventory: UserInventory;
 };
 
 const NUTRITIONAL_KEYS = {
@@ -58,12 +64,25 @@ const NUTRITIONAL_UNITS: Record<string, string> = {
   iron: "%",
 };
 
-function InventoryRecipeInfo({ recipe, add }: InventoryRecipeInfoProps) {
+function InventoryRecipeInfo({
+  recipe,
+  add,
+  inventory,
+}: InventoryRecipeInfoProps) {
   const [dropdown, setDropdown] = useState(false);
   const [adding, setAdding] = useState(false);
   const [addType, setAddType] = useState<string>("numberOfRecipes");
   const [numberOfRecipes, setAmount] = useState<number | null>(1);
   const [numberOfServings, setNumberOfServings] = useState<number | null>(1);
+  const filterInventory = (inventory: Record<string, any>, ids: string[]) => {
+    return Object.fromEntries(
+      Object.entries(inventory).filter(([key]) => ids.includes(key))
+    );
+  };
+  const inventoryOfIngredients = filterInventory(
+    inventory,
+    Object.keys(recipe.ingredientList)
+  );
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -163,7 +182,6 @@ function InventoryRecipeInfo({ recipe, add }: InventoryRecipeInfoProps) {
             </div>
           </div>
 
-          {/* Display Nutritional Facts */}
           <div className="space-y-2">
             {(
               Object.keys(NUTRITIONAL_KEYS) as Array<
@@ -295,6 +313,38 @@ function InventoryRecipeInfo({ recipe, add }: InventoryRecipeInfoProps) {
               onClick={() => handleAdd()}
             >
               Confirm
+            </button>
+            <button
+              type="button"
+              className="w-1/2 bg-blue-700 p-1 text-lg font-bold text-white rounded-md"
+              onClick={() =>
+                fetchIngredientsList(Object.keys(recipe.ingredientList))
+              }
+            >
+              Test 1
+            </button>
+            <button
+              type="button"
+              className="w-1/2 bg-purple-700 p-1 text-lg font-bold text-white rounded-md"
+              onClick={() =>
+                addRecipeToInventory(
+                  inventoryOfIngredients,
+                  recipe,
+                  {
+                    id: recipe.id,
+                    name: recipe.name,
+                    servings: numberOfServings,
+                    servingSize: recipe.servingSize,
+                    totalAmount: numberOfServings * recipe.servingSize,
+                    unit: recipe.servingUnit,
+                    type: "recipe",
+                  },
+                  true,
+                  true
+                )
+              }
+            >
+              Test 2
             </button>
           </div>
         </div>

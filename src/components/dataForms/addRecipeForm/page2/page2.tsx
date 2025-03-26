@@ -68,7 +68,10 @@ function Page2({
 
     setIngredientIdList({
       ...ingredientIdList,
-      [ingredientOptions[index].id]: [numberOfServings, servingSize],
+      [ingredientOptions[index].id]: {
+        numberOfServings: numberOfServings,
+        servingSize: servingSize,
+      },
     });
     console.log(index);
   };

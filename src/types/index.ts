@@ -6,3 +6,4 @@ export * from "./inventoryRecipe";
 export * from "./ingredientMeal";
 export * from "./recipeMeal";
 export * from "./specificMealEntry";
+export * from "./userInventory"

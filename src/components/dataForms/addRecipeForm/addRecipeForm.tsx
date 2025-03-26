@@ -8,6 +8,7 @@ import Page2 from "./page2/page2";
 import Page1 from "./page1/page1";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
+import { addRecipe } from "@/lib/data";
 
 type formProp = {
   setShowAddForm: React.Dispatch<React.SetStateAction<boolean>>;
@@ -132,41 +133,8 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
   }, [ingredientList]);
 
   const handleSubmit = async () => {
-    const { data, error } = await supabase
-      .from("recipes")
-      .insert({
-        ...recipeNutrition,
-        ...{
-          name: name,
-          ingredientList: ingredientIdList,
-          servingSize: 1,
-          servingUnit: "g",
-          timesUsed: 0,
-          numberOfServings: totalServingSize,
-          pricePerServing: 1,
-        },
-      })
-      .select();
-
-    if (error) {
-      console.error("Error inserting data:", error.message);
-      return;
-    }
-
-    try {
-      const recipeid = data?.[0]?.id;
-      const { data: userData, error: userError } =
-        await supabase.auth.getUser();
-
-      const userId = userData?.user?.id;
-
-      const { data: insertData } = await supabase.rpc("append_recipe_user", {
-        userid: userId,
-        recipeid: recipeid,
-      });
+    if (await addRecipe(name, recipeNutrition, ingredientIdList, totalServingSize)) {
       router.push("/");
-    } catch (error) {
-      console.error("Error adding recipe to user:", error);
     }
   };
 
