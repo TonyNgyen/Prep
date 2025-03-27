@@ -2,7 +2,7 @@
 
 import GoalBar from "@/components/goalBar/goalBar";
 import PageHeader from "@/components/pageHeader/pageHeader";
-import { fetchNutritionalGoals, updateGoals } from "@/lib/data";
+import { fetchNutritionalGoals } from "@/lib/data";
 import React, { useEffect, useState } from "react";
 
 function GoalsPage() {
@@ -20,7 +20,7 @@ function GoalsPage() {
   return (
     <div className="p-6 pb-[6.5rem]">
       <PageHeader>Goals</PageHeader>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 mt-4">
         {Object.entries(nutritionalGoals).map(([key, value]) => {
           return <GoalBar nutrition={key} goal={value} />;
         })}
