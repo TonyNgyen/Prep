@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import MealHistory from "../mealHistory/mealHistory";
 import NutritionalHistory from "../nutritionalHistory/nutritionalHistory";
-import { fetchGoals, fetchNutritionalHistory } from "@/lib/data";
+import { fetchNutritionalGoals, fetchAllNutritionalHistory } from "@/lib/data";
 import DatePicker from "@/components/datePicker/datePicker";
 import Dropdown from "@/components/dropdown/dropdown";
 import GoalDisplay from "@/components/goalDisplay/goalDisplay";
@@ -26,9 +26,9 @@ function LogContainer() {
 
   useEffect(() => {
     const fetchAll = async () => {
-      const fetchNutritional = await fetchNutritionalHistory();
+      const fetchNutritional = await fetchAllNutritionalHistory();
       setNutritionalHistory(fetchNutritional);
-      const fetchGoal = await fetchGoals();
+      const fetchGoal = await fetchNutritionalGoals();
       setGoals(fetchGoal);
     };
     fetchAll();

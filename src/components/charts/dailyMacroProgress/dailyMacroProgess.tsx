@@ -1,7 +1,7 @@
 import { NutritionFacts } from "@/types";
 import React, { useEffect, useState } from "react";
 import NutritionalChart from "../nutritionalChart/nutritionalChart";
-import { fetchDayNutritionalHistory, fetchGoals } from "@/lib/data";
+import { fetchDayNutritionalHistory, fetchNutritionalGoals } from "@/lib/data";
 import { flattenNutritionFacts } from "@/lib/functions";
 
 function DailyMacroProgress() {
@@ -17,8 +17,8 @@ function DailyMacroProgress() {
       fetchNutrition = flattenNutritionFacts(fetchNutrition);
       setNutritionalData(fetchNutrition);
 
-      const fetchGoal = await fetchGoals();
-      setGoals(fetchGoal);
+      const fetchNutritionalGoal = await fetchNutritionalGoals();
+      setGoals(fetchNutritionalGoal);
     };
     fetch();
   }, []);

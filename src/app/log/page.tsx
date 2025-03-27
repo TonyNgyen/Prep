@@ -5,7 +5,6 @@ import React from "react";
 function LogPage() {
   return (
     <div className="p-6 pb-[6.5rem]">
-      {/* <PageHeader>History Page</PageHeader> */}
       <LogContainer />
     </div>
   );

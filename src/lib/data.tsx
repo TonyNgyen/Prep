@@ -557,7 +557,7 @@ const addToMealHistory = async (
   }
 };
 
-const fetchGoals = async () => {
+const fetchNutritionalGoals = async () => {
   const supabase = createClient();
   try {
     const userId = await getUserId();
@@ -572,6 +572,26 @@ const fetchGoals = async () => {
     if (error) console.log(error);
     console.log(data["nutritionalGoals"]);
     return data["nutritionalGoals"];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const fetchWeightGoals = async () => {
+  const supabase = createClient();
+  try {
+    const userId = await getUserId();
+    const { data, error } = await supabase
+      .from("users")
+      .select("weightGoals")
+      .eq("uid", userId)
+      .single();
+    if (!data) {
+      return {};
+    }
+    if (error) console.log(error);
+    console.log(data["weightGoals"]);
+    return data["weightGoals"];
   } catch (error) {
     console.log(error);
   }
@@ -623,6 +643,44 @@ const fetchAllNutritionalHistory = async () => {
     }
     if (error) console.log(error);
     return data["nutritionalHistory"];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const fetchAllWeightHistory = async () => {
+  const supabase = createClient();
+  try {
+    const userId = await getUserId();
+    const { data, error } = await supabase
+      .from("users")
+      .select("weightHistory")
+      .eq("uid", userId)
+      .single();
+    if (!data) {
+      return {};
+    }
+    if (error) console.log(error);
+    return data["weightHistory"];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const fetchDayWeightHistory = async (date: string) => {
+  const supabase = createClient();
+  try {
+    const userId = await getUserId();
+    const { data, error } = await supabase
+      .from("users")
+      .select("weightHistory")
+      .eq("uid", userId)
+      .single();
+    if (!data) {
+      return {};
+    }
+    if (error) console.log(error);
+    return data["weightHistory"][date] ? data["weightHistory"][date] : 0;
   } catch (error) {
     console.log(error);
   }
@@ -682,7 +740,7 @@ export {
   addToMealHistory,
   updateInventoryItem,
   updateInventoryItems,
-  fetchGoals,
+  fetchNutritionalGoals,
   fetchAllNutritionalHistory,
   updateGoals,
   addRecipe,
@@ -691,4 +749,7 @@ export {
   updateInventory,
   addIngredientToInventory,
   fetchDayNutritionalHistory,
+  fetchAllWeightHistory,
+  fetchDayWeightHistory,
+  fetchWeightGoals,
 };
