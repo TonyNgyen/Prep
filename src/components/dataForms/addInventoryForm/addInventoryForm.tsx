@@ -121,7 +121,7 @@ function AddInventoryForm({ setShowAddForm, isForm }: formProp) {
         ) : (
           <div></div>
         )}
-        {pageNumber != 2 ? (
+        {pageNumber !== 2 ? (
           <button
             type="button"
             className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
@@ -134,8 +134,11 @@ function AddInventoryForm({ setShowAddForm, isForm }: formProp) {
         ) : (
           <button
             type="submit"
-            className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
+            className={`bg-mainGreen text-white font-semibold rounded-md px-4 py-2 ${
+              Object.keys(itemsToAdd).length > 0 ? "" : "opacity-50"
+            }`}
             onClick={() => updateInventory(inventory)}
+            disabled={Object.keys(itemsToAdd).length === 0}
           >
             Add Inventory
           </button>

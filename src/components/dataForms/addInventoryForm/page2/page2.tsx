@@ -7,9 +7,8 @@ type PageProps = {
 
 function Page2({ ItemsToAdd }: PageProps) {
   return (
-    <div>
-      <h1>Page 2</h1>
-      <div onClick={() => console.log(ItemsToAdd)}>Debug</div>
+    <div className="">
+      {!(Object.keys(ItemsToAdd).length) && <h1 className="text-center font-bold text-2xl mt-10">No items to add to inventory</h1>}
       {Object.values(ItemsToAdd).map((item) => (
         <div>{item.name}</div>
       ))}

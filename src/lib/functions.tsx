@@ -46,4 +46,18 @@ const addNutrition = (
   return nutrition1;
 };
 
-export { addNutrition };
+const flattenNutritionFacts = (nutritionFacts: NutritionFacts): Record<string, number> => {
+  const { extraNutrition, ...baseFacts } = nutritionFacts;
+
+  const extraFacts = Object.fromEntries(
+    Object.entries(extraNutrition).map(([key, value]) => [key, value.value])
+  );
+
+  return {
+    ...baseFacts,
+    ...extraFacts,
+  };
+}
+
+
+export { addNutrition, flattenNutritionFacts };

@@ -376,7 +376,7 @@ const addIngredientToInventory = (
     } else {
       inventory[inventoryIngredient.id] = inventoryIngredient;
     }
-    console.log(inventory)
+    console.log(inventory);
     return inventory;
   } catch (error) {
     console.log(error);
@@ -563,15 +563,15 @@ const fetchGoals = async () => {
     const userId = await getUserId();
     const { data, error } = await supabase
       .from("users")
-      .select("goals")
+      .select("nutritionalGoals")
       .eq("uid", userId)
       .single();
     if (!data) {
       return {};
     }
     if (error) console.log(error);
-    console.log(data["goals"]);
-    return data["goals"];
+    console.log(data["nutritionalGoals"]);
+    return data["nutritionalGoals"];
   } catch (error) {
     console.log(error);
   }
@@ -583,7 +583,7 @@ async function updateGoals(newGoal: Record<string, any>) {
 
   const { data: existingData, error: fetchError } = await supabase
     .from("users")
-    .select("goals")
+    .select("nutritionalGoals")
     .eq("uid", userId)
     .single();
 
@@ -592,11 +592,11 @@ async function updateGoals(newGoal: Record<string, any>) {
     return null;
   }
 
-  const updatedGoals = { ...existingData.goals, ...newGoal };
+  const updatedGoals = { ...existingData.nutritionalGoals, ...newGoal };
 
   const { data, error: updateError } = await supabase
     .from("users")
-    .update({ goals: updatedGoals })
+    .update({ nutritionalGoals: updatedGoals })
     .eq("uid", userId)
     .select();
 
@@ -609,7 +609,7 @@ async function updateGoals(newGoal: Record<string, any>) {
   return data;
 }
 
-const fetchNutritionalHistory = async () => {
+const fetchAllNutritionalHistory = async () => {
   const supabase = createClient();
   try {
     const userId = await getUserId();
@@ -628,6 +628,48 @@ const fetchNutritionalHistory = async () => {
   }
 };
 
+const fetchDayNutritionalHistory = async (date: string) => {
+  const supabase = createClient();
+  try {
+    const userId = await getUserId();
+    const { data, error } = await supabase
+      .from("users")
+      .select("nutritionalHistory")
+      .eq("uid", userId)
+      .single();
+    if (!data) {
+      return {};
+    }
+    if (error) console.log(error);
+    return data["nutritionalHistory"][date]
+      ? data["nutritionalHistory"][date]
+      : {
+          calories: 0,
+          protein: 0,
+          totalFat: 0,
+          saturatedFat: 0,
+          polyunsaturatedFat: 0,
+          monounsaturatedFat: 0,
+          transFat: 0,
+          cholesterol: 0,
+          sodium: 0,
+          potassium: 0,
+          totalCarbohydrates: 0,
+          sugars: 0,
+          addedSugars: 0,
+          sugarAlcohols: 0,
+          vitaminA: 0,
+          vitaminC: 0,
+          vitaminD: 0,
+          calcium: 0,
+          iron: 0,
+          extraNutrition: {},
+        };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
   fetchIngredients,
   fetchRecipes,
@@ -641,11 +683,12 @@ export {
   updateInventoryItem,
   updateInventoryItems,
   fetchGoals,
-  fetchNutritionalHistory,
+  fetchAllNutritionalHistory,
   updateGoals,
   addRecipe,
   fetchIngredientsList,
   addRecipeToInventory,
   updateInventory,
   addIngredientToInventory,
+  fetchDayNutritionalHistory,
 };

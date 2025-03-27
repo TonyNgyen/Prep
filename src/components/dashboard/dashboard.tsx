@@ -8,6 +8,7 @@ import WeightHistoryChart from "@/components/charts/weightHistoryChart/weightHis
 import { FaPlusSquare } from "react-icons/fa";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/client";
+import DailyMacroProgress from "../charts/dailyMacroProgress/dailyMacroProgess";
 
 interface Nutrition {
   current: number;
@@ -76,28 +77,7 @@ function Dashboard() {
           <h1 className="text-2xl font-bold">Log Food</h1>
           <FaPlusSquare className="text-4xl" />
         </Link>
-        <div className="bg-white p-4 text-black rounded-lg shadow-md flex flex-col gap-4">
-          <h1 className="text-2xl font-bold">Daily Nutrition Log</h1>
-          {nutritionalData && (
-            <div className="grid grid-cols-3 gap-4">
-              {Object.keys(nutritionalData).map((nutrition, index) => (
-                <div
-                  className="flex flex-col items-center justify-center gap-2"
-                  key={index}
-                >
-                  <NutritionalChart
-                    current={nutritionalData[nutrition].current}
-                    goal={nutritionalData[nutrition].goal}
-                  />
-                  <h2 className="text-xl font-semibold">
-                    {nutrition[0].toUpperCase()}
-                    {nutrition.slice(1)}
-                  </h2>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        <DailyMacroProgress />
         <div className="bg-white p-4 text-black rounded-lg shadow-md flex flex-col gap-4">
           <h1 className="text-2xl font-bold">Weight History</h1>
           {weightHistoryData && (
