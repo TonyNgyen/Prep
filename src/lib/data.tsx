@@ -179,7 +179,8 @@ const searchIngredientByName = async (ingredientSearch: string) => {
   const { data, error } = await supabase
     .from("ingredients")
     .select()
-    .eq("name", ingredientSearch);
+    .ilike("name", `%${ingredientSearch}%`);
+
   if (error) console.log(error);
   return data;
 };

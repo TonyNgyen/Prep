@@ -1,9 +1,8 @@
-import React from 'react'
+import UnderConstruction from "@/components/underConstruction/underConstruction";
+import React from "react";
 
 function StatisticsPage() {
-  return (
-    <div>StatisticsPage</div>
-  )
+  return <UnderConstruction />;
 }
 
-export default StatisticsPage
+export default StatisticsPage;

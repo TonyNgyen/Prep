@@ -38,7 +38,7 @@ const WeightHistoryChart: React.FC<weightHistoryChartProps> = ({
         height={300}
         data={data}
         margin={{
-          left: -10,
+          left: -15,
           right: 0,
         }}
       >
@@ -48,15 +48,24 @@ const WeightHistoryChart: React.FC<weightHistoryChartProps> = ({
           tickLine={false}
           tickFormatter={(tick) => tick.substring(1, 5)}
           interval={"preserveStartEnd"}
+          tick={{ fontSize: 14 }}
         />
         <YAxis
           axisLine={false}
           tickLine={false}
-          domain={["dataMin - 3", "dataMax + 3"]}
+          tickCount={6}
+          domain={["dataMin - 4", "dataMax + 4"]}
           interval={"preserveEnd"}
           padding={{ top: 12, bottom: 12 }}
+          tick={{ fontSize: 14 }}
+          tickMargin={15}
         />
-        <ReferenceLine y={138} stroke="#3182BD" strokeDasharray="10 8" strokeWidth={2.5} />
+        <ReferenceLine
+          y={138}
+          stroke="#3182BD"
+          strokeDasharray="10 8"
+          strokeWidth={2.5}
+        />
         <CartesianGrid strokeDasharray="0" vertical={false} />
         <Line
           type="monotone"

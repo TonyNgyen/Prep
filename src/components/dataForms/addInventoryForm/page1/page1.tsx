@@ -120,12 +120,12 @@ function Page1({ addInventoryIngredient, addInventoryRecipe, inventory }: PagePr
               searchItem();
             }
           }}
-          className="border rounded-md w-full p-2 border-gray-300"
+          className="border rounded-l-md w-full p-2 border-gray-300"
           required
         />
         <button
           type="button"
-          className="bg-mainGreen px-3 text-white font-semibold"
+          className="bg-mainGreen px-3 text-white font-semibold rounded-r-md"
           onClick={searchItem}
         >
           Search

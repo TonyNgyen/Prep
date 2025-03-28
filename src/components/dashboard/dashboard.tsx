@@ -3,20 +3,14 @@
 import React from "react";
 import { MdAccountCircle } from "react-icons/md";
 import { useEffect, useState } from "react";
-import NutritionalChart from "@/components/charts/nutritionalChart/nutritionalChart";
 import WeightHistoryChart from "@/components/charts/weightHistoryChart/weightHistoryChart";
 import { FaPlusSquare } from "react-icons/fa";
 import Link from "next/link";
-import { createClient } from "@/utils/supabase/client";
 import DailyMacroProgress from "../charts/dailyMacroProgress/dailyMacroProgess";
 
 interface Nutrition {
   current: number;
   goal: number;
-}
-
-interface NutritionalData {
-  [key: string]: Nutrition;
 }
 
 interface WeightHistory {
@@ -30,19 +24,11 @@ interface WeightHistoryData {
 }
 
 function Dashboard() {
-  const [nutritionalData, setNutritionalData] =
-    useState<NutritionalData | null>(null);
   const [weightHistoryData, setWeightHistoryData] =
     useState<WeightHistoryData | null>(null);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
 
   useEffect(() => {
-    setNutritionalData({
-      calories: { current: 2100, goal: 2000 },
-      protein: { current: 40, goal: 100 },
-      carbs: { current: 200, goal: 300 },
-    });
     setWeightHistoryData({
       weightHistory: [
         { date: "01/01/2024", weight: 140 },
@@ -75,13 +61,12 @@ function Dashboard() {
           className="bg-mainGreen p-4 text-white rounded-lg shadow-md flex items-center justify-between"
         >
           <h1 className="text-2xl font-bold">Log Food</h1>
-          <FaPlusSquare className="text-4xl" />
         </Link>
         <DailyMacroProgress />
         <div className="bg-white p-4 text-black rounded-lg shadow-md flex flex-col gap-4">
           <h1 className="text-2xl font-bold">Weight History</h1>
           {weightHistoryData && (
-            <div className="h-60">
+            <div className="h-[225px]">
               <WeightHistoryChart
                 weightGoal={weightHistoryData.weightGoal}
                 weightHistory={weightHistoryData.weightHistory}
