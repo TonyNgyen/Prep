@@ -1,9 +1,12 @@
-import React from 'react'
+import AddWeightForm from "@/components/dataForms/addWeightForm/addWeightForm";
+import React from "react";
 
 function AccountPage() {
   return (
-    <div>AccountPage</div>
-  )
+    <div>
+      Account Page
+    </div>
+  );
 }
 
-export default AccountPage
+export default AccountPage;
