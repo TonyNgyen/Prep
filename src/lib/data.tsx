@@ -571,8 +571,27 @@ const fetchNutritionalGoals = async () => {
       return {};
     }
     if (error) console.log(error);
-    console.log(data["nutritionalGoals"]);
     return data["nutritionalGoals"];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const fetchCurrentWeightGoal = async () => {
+  const supabase = createClient();
+  try {
+    const userId = await getUserId();
+    const { data, error } = await supabase
+      .from("users")
+      .select("currentWeightGoal")
+      .eq("uid", userId)
+      .single();
+
+    if (!data) {
+      return {};
+    }
+    if (error) console.log(error);
+    return data["currentWeightGoal"];
   } catch (error) {
     console.log(error);
   }
@@ -790,5 +809,6 @@ export {
   fetchAllWeightHistory,
   fetchDayWeightHistory,
   fetchWeightGoals,
-  setWeightHistory
+  setWeightHistory,
+  fetchCurrentWeightGoal,
 };
