@@ -32,6 +32,7 @@ function MealHistory({ date }: MealHistoryProps) {
         <div className="flex flex-col gap-y-3">
           {meals.map((meal) => (
             <SpecificMeal
+              key={meal}
               meal={meal}
               mealInformation={currentDay[meal]}
               date={date}
@@ -41,7 +42,12 @@ function MealHistory({ date }: MealHistoryProps) {
       ) : (
         <div className="space-y-3">
           {meals.map((meal) => (
-            <SpecificMeal meal={meal} mealInformation={null} date={date} />
+            <SpecificMeal
+              key={meal}
+              meal={meal}
+              mealInformation={null}
+              date={date}
+            />
           ))}
         </div>
       )}

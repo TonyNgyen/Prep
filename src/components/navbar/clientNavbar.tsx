@@ -14,13 +14,19 @@ function ClientNavbar() {
   return (
     <div className="w-full py-5 lg:px-20 px-2 flex justify-between items-center fixed bottom-0 left-0 bg-mainGreen h-20 z-50">
       <Link href="/">
-        <button className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1">
+        <button
+          className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1"
+          onClick={() => setAddPopup(false)}
+        >
           <IoHome className="w-full h-full" />
           <p className="font-semibold text-sm">Home</p>
         </button>
       </Link>
       <Link href="/log">
-        <button className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1 ">
+        <button
+          className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1"
+          onClick={() => setAddPopup(false)}
+        >
           <IoMdBookmarks className="w-full h-full" />
           <p className="font-semibold text-sm">Log</p>
         </button>
@@ -39,13 +45,19 @@ function ClientNavbar() {
       </div>
 
       <Link href="/statistics">
-        <button className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1">
-          <MdInsertChart  className="w-full h-full" />
+        <button
+          className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1"
+          onClick={() => setAddPopup(false)}
+        >
+          <MdInsertChart className="w-full h-full" />
           <p className="font-semibold text-sm">Stats</p>
         </button>
       </Link>
       <Link href="/more">
-        <button className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1 ">
+        <button
+          className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1 "
+          onClick={() => setAddPopup(false)}
+        >
           <FiMoreHorizontal className="w-full h-full" />
           <p className="font-semibold text-sm">More</p>
         </button>

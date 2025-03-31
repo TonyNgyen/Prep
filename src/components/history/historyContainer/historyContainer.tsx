@@ -62,7 +62,7 @@ function LogContainer() {
       </div>
 
       <MealHistory date={date} />
-      <NutritionalHistory date={date} />
+      {/* <NutritionalHistory date={date} /> */}
     </div>
   );
 }
