@@ -15,6 +15,7 @@ function DailyMacroProgress() {
     const fetch = async () => {
       let fetchNutrition = await fetchDayNutritionalHistory(today);
       fetchNutrition = flattenNutritionFacts(fetchNutrition);
+      console.log(fetchNutrition);
       setNutritionalData(fetchNutrition);
 
       const fetchNutritionalGoal = await fetchNutritionalGoals();
@@ -48,7 +49,7 @@ function DailyMacroProgress() {
                   key={nutrition}
                 >
                   <NutritionalChart
-                    current={nutritionalData[nutrition] as number}
+                    current={(nutritionalData[nutrition] as number) ?? 0}
                     goal={goals[nutrition] ?? 0}
                   />
                   <h3 className="text-lg font-semibold">
