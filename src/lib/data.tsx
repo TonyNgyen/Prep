@@ -617,6 +617,45 @@ const fetchWeightGoals = async () => {
   }
 };
 
+const updateNutritionalGoals = async (newGoal: Record<string, number>) => {
+  const supabase = createClient();
+  try {
+    const userId = await getUserId();
+
+    const { data: existingData, error: fetchError } = await supabase
+      .from("users")
+      .select("nutritionalGoals")
+      .eq("uid", userId)
+      .single();
+
+    if (fetchError) {
+      console.log("Error fetching existing goals:", fetchError);
+      return false;
+    }
+
+    const updatedGoals = {
+      ...(existingData?.nutritionalGoals || {}),
+      ...newGoal,
+    };
+
+    const { error: updateError } = await supabase
+      .from("users")
+      .update({ nutritionalGoals: updatedGoals })
+      .eq("uid", userId);
+
+    if (updateError) {
+      console.log("Error updating nutritional goals:", updateError);
+      return false;
+    }
+
+    console.log("Nutritional goals updated successfully:", updatedGoals);
+    return true;
+  } catch (error) {
+    console.log("Error:", error);
+    return false;
+  }
+};
+
 async function updateGoals(newGoal: Record<string, any>) {
   const supabase = createClient();
   const userId = await getUserId();
@@ -811,4 +850,5 @@ export {
   fetchWeightGoals,
   setWeightHistory,
   fetchCurrentWeightGoal,
+  updateNutritionalGoals,
 };
