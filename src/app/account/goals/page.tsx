@@ -163,9 +163,9 @@ function GoalsPage() {
             Edit
           </button>
         )}
-        <button type="button" onClick={() => console.log(nutritionalGoals)}>
+        {/* <button type="button" onClick={() => console.log(nutritionalGoals)}>
           Test
-        </button>
+        </button> */}
       </div>
 
       <div className="flex flex-col gap-3 mt-4">

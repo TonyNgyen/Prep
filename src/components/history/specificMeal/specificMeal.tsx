@@ -23,7 +23,7 @@ function SpecificMeal({ meal, mealInformation, date }: SpecificMealProps) {
     );
   } else {
     return (
-      <div>
+      <div className="shadow-sm">
         <h1 className="bg-gray-300 p-2 font-semibold text-xl">
           {meal.charAt(0).toUpperCase() + meal.slice(1)}
         </h1>
@@ -44,7 +44,7 @@ function SpecificMeal({ meal, mealInformation, date }: SpecificMealProps) {
             </div>
           )}
           <div
-            className="p-2 font-semibold text-lg"
+            className="p-2 font-semibold text-md"
             onClick={() => setShowAddForm(true)}
           >
             Add Food

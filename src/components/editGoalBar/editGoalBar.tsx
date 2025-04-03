@@ -14,14 +14,15 @@ function EditGoalBar({
   onGoalChange,
 }: EditGoalBarProp) {
   const [currentValue, setCurrentValue] = useState<number>(goal);
-
+  const nutritionLabel =
+    nutrition === "totalCarbohydrates" ? "Carbs" : nutrition;
   return (
     <div className="flex justify-between bg-white px-3 py-2 rounded-md shadow-md items-center">
       <div>
         <h1 className="text-2xl">
-          {nutrition.charAt(0).toUpperCase() + nutrition.slice(1)}
+          {nutritionLabel.charAt(0).toUpperCase() + nutritionLabel.slice(1)}
         </h1>
-        <h2 className="text-sm text-gray-500">Today: {current}</h2>
+        <h2 className="text-sm text-gray-500">Today: {current ?? 0}</h2>
       </div>
 
       <input

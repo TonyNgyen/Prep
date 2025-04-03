@@ -3,6 +3,7 @@ import DropdownInverse from "@/components/dropdown/dropdownInverse";
 import { createClient } from "@/utils/supabase/client";
 import React, { useState } from "react";
 import { IoIosClose } from "react-icons/io";
+import { useRouter } from "next/navigation";
 
 type formProp = {
   setShowAddForm?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -50,6 +51,7 @@ function toCamelCase(input: string): string {
 
 function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
   const supabase = createClient();
+  const router = useRouter();
   const options = [
     { value: "g", label: "Grams (g)" },
     { value: "oz", label: "Ounces (oz)" },
@@ -199,13 +201,18 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
 
       const userId = userData?.user?.id;
 
-      const { data: insertData } = await supabase.rpc(
+      const { data: insertData, error: insertError } = await supabase.rpc(
         "append_ingredient_user",
         {
           userid: userId,
           ingredientid: ingredientId,
         }
       );
+      if (insertError) {
+        console.error("Error inserting data 2:", insertError.message);
+      } else {
+        router.push("/");
+      }
     } catch (error) {
       console.error("Error adding ingredient to user:", error);
     }
@@ -303,7 +310,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
                 name={key}
                 step="0.01"
                 min="0"
-                value={formData[key as keyof FormDataType] || ""}
+                value={formData[key as keyof FormDataType] ?? ""}
                 onChange={handleChange}
                 placeholder="Optional"
                 className="border rounded-md w-1/3 p-2 border-gray-300"

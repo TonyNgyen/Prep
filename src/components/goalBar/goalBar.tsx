@@ -15,7 +15,7 @@ function GoalBar({ nutrition, goal, current }: GoalBarProp) {
         <h1 className="text-2xl">
           {nutritionLabel.charAt(0).toUpperCase() + nutritionLabel.slice(1)}
         </h1>
-        <h2 className="text-sm text-gray-500">Today: {current}</h2>
+        <h2 className="text-sm text-gray-500">Today: {current ?? 0}</h2>
       </div>
 
       <h1 className="text-2xl">{goal}</h1>

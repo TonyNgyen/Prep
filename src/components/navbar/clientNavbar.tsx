@@ -8,23 +8,27 @@ import AddPopup from "../addPopup/addPop";
 import { IoMdBookmarks } from "react-icons/io";
 import { MdInsertChart } from "react-icons/md";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 function ClientNavbar() {
   const [addPopup, setAddPopup] = useState(false);
+  const pathname = usePathname();
   return (
-    <div className="w-full py-5 lg:px-20 px-2 flex justify-between items-center fixed bottom-0 left-0 bg-mainGreen h-20 z-50">
-      <Link href="/">
-        <button
-          className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1"
-          onClick={() => setAddPopup(false)}
-        >
-          <IoHome className="w-full h-full" />
-          <p className="font-semibold text-sm">Home</p>
-        </button>
+    <div className="w-full py-5 lg:px-20 px-2 flex justify-between items-center fixed bottom-0 left-0 bg-white h-20 z-50">
+      <Link
+        href="/"
+        className={`w-[55px] h-[55px] flex flex-col items-center justify-center gap-1 rounded-lg transition-colors ${
+          usePathname() === "/" ? "text-black" : "text-gray-400"
+        }`}
+      >
+        <IoHome className="w-full h-full" />
+        <p className="font-semibold text-sm">Home</p>
       </Link>
       <Link href="/log">
         <button
-          className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1"
+          className={`w-[55px] h-[55px] flex flex-col items-center justify-center gap-1 rounded-lg transition-colors ${
+            usePathname() === "/log" ? "text-black" : "text-gray-400"
+          }`}
           onClick={() => setAddPopup(false)}
         >
           <IoMdBookmarks className="w-full h-full" />
@@ -32,12 +36,12 @@ function ClientNavbar() {
         </button>
       </Link>
       <div className="relative">
-        <div className={`absolute left-1/2 -translate-x-1/2 -top-[7.75rem]`}>
+        <div className={`absolute left-1/2 -translate-x-1/2 -top-[8rem]`}>
           {addPopup && <AddPopup setAddPopup={setAddPopup} />}
         </div>
 
         <button
-          className="w-[65px] h-[65px] flex flex-col items-center justify-center text-white rounded-full"
+          className="w-[60px] h-[60px] flex flex-col items-center justify-center text-mainGreen rounded-full"
           onClick={() => setAddPopup(!addPopup)}
         >
           <IoIosAddCircle className="w-full h-full" />
@@ -46,7 +50,9 @@ function ClientNavbar() {
 
       <Link href="/statistics">
         <button
-          className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1"
+          className={`w-[55px] h-[55px] flex flex-col items-center justify-center gap-1 rounded-lg transition-colors ${
+            usePathname() === "/statistics" ? "text-black" : "text-gray-400"
+          }`}
           onClick={() => setAddPopup(false)}
         >
           <MdInsertChart className="w-full h-full" />
@@ -55,7 +61,9 @@ function ClientNavbar() {
       </Link>
       <Link href="/more">
         <button
-          className="w-[55px] h-[55px] flex flex-col items-center justify-center text-white gap-1 "
+          className={`w-[55px] h-[55px] flex flex-col items-center justify-center gap-1 rounded-lg transition-colors ${
+            usePathname() === "/more" ? "text-black" : "text-gray-400"
+          }`}
           onClick={() => setAddPopup(false)}
         >
           <FiMoreHorizontal className="w-full h-full" />
