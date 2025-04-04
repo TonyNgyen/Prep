@@ -90,10 +90,12 @@ export async function updateSession(request: NextRequest) {
 
   // Required to ensure session consistency
   const { data: { user } } = await supabase.auth.getUser();
-  
-  // Allow unauthorized users to access the home page ("/") but redirect elsewhere
+
+  // Allow unauthorized users to access the home page ("/") and signup page ("/signup")
   const isHomePage = request.nextUrl.pathname === "/";
-  if (!user && !isHomePage && !request.nextUrl.pathname.startsWith("/login") && !request.nextUrl.pathname.startsWith("/auth")) {
+  const isSignupPage = request.nextUrl.pathname === "/signup";
+  
+  if (!user && !isHomePage && !isSignupPage && !request.nextUrl.pathname.startsWith("/login") && !request.nextUrl.pathname.startsWith("/auth")) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
@@ -101,3 +103,4 @@ export async function updateSession(request: NextRequest) {
 
   return supabaseResponse;
 }
+
