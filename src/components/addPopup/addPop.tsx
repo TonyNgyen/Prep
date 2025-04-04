@@ -22,14 +22,14 @@ function AddPopup({ setAddPopup }: AddPopupProps) {
         className="flex items-center"
         onClick={() => setAddPopup(false)}
       >
-        <button className=" font-semibold text-lg">Add Recipes</button>
+        <button className=" font-semibold text-lg">Add Recipe</button>
       </Link>
       <Link
         href="/ingredients/add"
         className="flex items-center"
         onClick={() => setAddPopup(false)}
       >
-        <button className=" font-semibold text-lg">Add Ingredients</button>
+        <button className=" font-semibold text-lg">Add Ingredient</button>
       </Link>
       <Link
         href="/inventory/add"
