@@ -10,7 +10,7 @@ import { MdInsertChart } from "react-icons/md";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-function ClientNavbar() {
+function AuthorizedNavbar() {
   const [addPopup, setAddPopup] = useState(false);
   const pathname = usePathname();
   return (
@@ -18,7 +18,7 @@ function ClientNavbar() {
       <Link
         href="/"
         className={`w-[55px] h-[55px] flex flex-col items-center justify-center gap-1 rounded-lg transition-colors ${
-          usePathname() === "/" ? "text-black" : "text-gray-400"
+          pathname === "/" ? "text-black" : "text-gray-400"
         }`}
       >
         <IoHome className="w-full h-full" />
@@ -27,7 +27,7 @@ function ClientNavbar() {
       <Link href="/log">
         <button
           className={`w-[55px] h-[55px] flex flex-col items-center justify-center gap-1 rounded-lg transition-colors ${
-            usePathname() === "/log" ? "text-black" : "text-gray-400"
+            pathname === "/log" ? "text-black" : "text-gray-400"
           }`}
           onClick={() => setAddPopup(false)}
         >
@@ -51,7 +51,7 @@ function ClientNavbar() {
       <Link href="/statistics">
         <button
           className={`w-[55px] h-[55px] flex flex-col items-center justify-center gap-1 rounded-lg transition-colors ${
-            usePathname() === "/statistics" ? "text-black" : "text-gray-400"
+            pathname === "/statistics" ? "text-black" : "text-gray-400"
           }`}
           onClick={() => setAddPopup(false)}
         >
@@ -62,7 +62,7 @@ function ClientNavbar() {
       <Link href="/more">
         <button
           className={`w-[55px] h-[55px] flex flex-col items-center justify-center gap-1 rounded-lg transition-colors ${
-            usePathname() === "/more" ? "text-black" : "text-gray-400"
+            pathname === "/more" ? "text-black" : "text-gray-400"
           }`}
           onClick={() => setAddPopup(false)}
         >
@@ -74,4 +74,4 @@ function ClientNavbar() {
   );
 }
 
-export default ClientNavbar;
+export default AuthorizedNavbar;
