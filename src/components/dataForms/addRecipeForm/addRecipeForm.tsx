@@ -16,7 +16,6 @@ type formProp = {
 };
 
 function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
-  const supabase = createClient();
   const router = useRouter();
   const [pageNumber, setPageNumber] = useState(1);
 
@@ -33,7 +32,9 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
 
   const [ingredientIdList, setIngredientIdList] = useState<Object>({});
   const [name, setName] = useState<string>("");
-  const [totalServingSize, setTotalServingSize] = useState<number>(0);
+  const [numberOfServings, setNumberOfServings] = useState<number>(0);
+  const [servingSize, setServingSize] = useState<number>(0);
+  const [servingUnit, setServingUnit] = useState<string>("g");
   const [recipeNutrition, setRecipeNutrition] = useState<NutritionFacts>({
     calories: 0,
     protein: 0,
@@ -133,7 +134,16 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
   }, [ingredientList]);
 
   const handleSubmit = async () => {
-    if (await addRecipe(name, recipeNutrition, ingredientIdList, totalServingSize)) {
+    if (
+      await addRecipe(
+        name,
+        recipeNutrition,
+        ingredientIdList,
+        numberOfServings,
+        servingSize,
+        servingUnit
+      )
+    ) {
       router.push("/");
     }
   };
@@ -148,13 +158,17 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
           </button>
         )}
       </div>
-      <div className="overflow-scroll pb-6">
+      <div className="overflow-scroll pb-6 h-[calc(100vh-5rem)]">
         {pageNumber == 1 && (
           <Page1
             setName={setName}
-            setTotalServingSize={setTotalServingSize}
+            setNumberOfServings={setNumberOfServings}
+            setServingSize={setServingSize}
+            setServingUnit={setServingUnit}
             name={name}
-            totalServingSize={totalServingSize}
+            numberOfServings={numberOfServings}
+            servingSize={servingSize}
+            servingUnit={servingUnit}
           />
         )}
         {pageNumber == 2 && (
@@ -173,7 +187,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
             setIngredientIdList={setIngredientIdList}
             recipeNutrition={recipeNutrition}
             name={name}
-            totalServingSize={totalServingSize}
+            numberOfServings={numberOfServings}
           />
         )}
       </div>

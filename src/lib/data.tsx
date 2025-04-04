@@ -134,7 +134,9 @@ const addRecipe = async (
   name: string,
   recipeNutrition: NutritionFacts,
   ingredientList: Object,
-  totalServingSize: number
+  numberOfServings: number,
+  servingSize: number,
+  servingUnit: string
 ) => {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -144,10 +146,10 @@ const addRecipe = async (
       ...{
         name: name,
         ingredientList: ingredientList,
-        servingSize: 1,
+        servingSize: servingSize,
         servingUnit: "g",
         timesUsed: 0,
-        numberOfServings: totalServingSize,
+        numberOfServings: numberOfServings,
         pricePerServing: 1,
       },
     })

@@ -26,7 +26,7 @@ type formProp = {
   setIngredientIdList: React.Dispatch<Object>;
   recipeNutrition: NutritionFacts;
   name: string;
-  totalServingSize: number;
+  numberOfServings: number;
 };
 
 const NUTRITIONAL_KEYS = {
@@ -80,7 +80,7 @@ function Page3({
   setIngredientIdList,
   recipeNutrition,
   name,
-  totalServingSize,
+  numberOfServings,
 }: formProp) {
   const [displayTotal, setDisplayTotal] = useState<boolean>(true);
   return (
@@ -117,7 +117,7 @@ function Page3({
               value = Number(recipeNutrition[key].toFixed(2));
             } else {
               value = Number(
-                (recipeNutrition[key] / totalServingSize).toFixed(2)
+                (recipeNutrition[key] / numberOfServings).toFixed(2)
               );
             }
 
@@ -146,7 +146,7 @@ function Page3({
             } else {
               value = Number(
                 (
-                  recipeNutrition.extraNutrition[key].value / totalServingSize
+                  recipeNutrition.extraNutrition[key].value / numberOfServings
                 ).toFixed(2)
               );
             }
