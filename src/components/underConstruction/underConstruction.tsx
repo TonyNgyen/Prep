@@ -2,7 +2,7 @@ import React from "react";
 
 function UnderConstruction() {
   return (
-    <h1 className="text-3xl font-bold text-center mt-40">
+    <h1 className="text-3xl font-bold text-center mt-40 p-4">
       This is under construction!
     </h1>
   );
