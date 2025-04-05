@@ -246,7 +246,7 @@ function LogRecipeInfo({
       multiplier = (numberOfRecipes ?? 0) * recipe.numberOfServings;
     } else {
       multiplier =
-        ((servingSize ?? 0) * (numberOfServings ?? 0)) / recipe.servingSize;
+        ((servingSize ?? 0) * (numberOfServings ?? 0)) / (recipe.servingSize * recipe.numberOfServings);
     }
     const newNutrition = { ...nutrition };
 
