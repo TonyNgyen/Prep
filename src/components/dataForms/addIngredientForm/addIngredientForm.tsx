@@ -238,7 +238,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
             placeholder="Lettuce"
             value={formData.name}
             onChange={handleChange}
-            className="border rounded-md w-full p-2 border-gray-300"
+            className="border rounded-md w-full p-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-mainGreen focus:border-transparent"
             required
           />
         </div>
@@ -251,7 +251,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
               value={formData.servingSize || ""}
               onChange={handleChange}
               placeholder="50"
-              className="border border-r-0 rounded-l-md w-full p-2 border-gray-300"
+              className="border border-r-0 rounded-l-md w-full p-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-mainGreen focus:border-transparent"
               required
             />
           </div>
@@ -301,7 +301,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
                 value={formData[key as keyof FormDataType] || ""}
                 onChange={handleChange}
                 placeholder="Required"
-                className="border rounded-md w-1/3 p-2 border-mainGreen"
+                className="border rounded-md w-1/3 p-2 border-mainGreen focus:outline-none focus:ring-2 focus:ring-mainGreen focus:border-transparent"
                 required
               />
             ) : (
@@ -313,7 +313,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
                 value={formData[key as keyof FormDataType] ?? ""}
                 onChange={handleChange}
                 placeholder="Optional"
-                className="border rounded-md w-1/3 p-2 border-gray-300"
+                className="border rounded-md w-1/3 p-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-mainGreen focus:border-transparent"
               />
             )}
           </div>
@@ -329,7 +329,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
               value={allExtraNutrition[key].value || ""}
               onChange={handleChange}
               placeholder="Optional"
-              className="border rounded-md w-1/3 p-2 border-gray-300"
+              className="border rounded-md w-1/3 p-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-mainGreen focus:border-transparent"
             />
           </div>
         ))}
@@ -345,7 +345,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
                 value={extraNutritionValues["label"] || ""}
                 onChange={handleExtraNutrition}
                 placeholder="Nutritional Label"
-                className="border p-2 w-11/12 border-mainGreen border-r-0 rounded-l-md"
+                className="border p-2 w-11/12 border-mainGreen border-r-0 rounded-l-md focus:outline-none focus:ring-2 focus:ring-mainGreen focus:border-transparent"
                 required
               />
               <DropdownInverse
@@ -368,7 +368,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
               value={extraNutritionValues["value"] || ""}
               onChange={handleExtraNutrition}
               placeholder="Value"
-              className="border rounded-md w-1/3 p-2 border-mainGreen"
+              className="border rounded-md w-1/3 p-2 border-mainGreen focus:outline-none focus:ring-2 focus:ring-mainGreen focus:border-transparent"
               required
             />
           </div>

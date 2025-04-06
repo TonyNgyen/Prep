@@ -2,7 +2,7 @@
 
 import { fetchMealHistory } from "@/lib/data";
 import React, { useEffect, useState } from "react";
-import SpecificMeal from "../specificMeal/specificMeal";
+import SpecificMeal from "./specificMeal/specificMeal";
 
 type MealHistoryProps = {
   date: string;

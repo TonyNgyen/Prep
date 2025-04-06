@@ -7,6 +7,7 @@ import { fetchNutritionalGoals, fetchAllNutritionalHistory } from "@/lib/data";
 import DatePicker from "@/components/datePicker/datePicker";
 import Dropdown from "@/components/dropdown/dropdown";
 import GoalDisplay from "@/components/goalDisplay/goalDisplay";
+import { IoTodayOutline } from "react-icons/io5";
 
 function LogContainer() {
   const [nutritionalHistory, setNutritionalHistory] = useState<
@@ -38,7 +39,7 @@ function LogContainer() {
     if (nutritionalHistory) {
       setDates(Object.keys(nutritionalHistory));
     }
-    const today = new Date().toISOString().split("T")[0];
+    const today = new Date().toLocaleDateString("en-CA");
     if (!(today in nutritionalHistory)) {
       dates.push(today);
       setDate(today);
@@ -48,6 +49,9 @@ function LogContainer() {
   return (
     <div className="space-y-4">
       <DatePicker dates={dates} date={date} setDate={setDate} />
+      {/* <button type="button" onClick={() => console.log(date)}>
+        Test
+      </button> */}
       <div className="space-y-2">
         <Dropdown
           options={options}
