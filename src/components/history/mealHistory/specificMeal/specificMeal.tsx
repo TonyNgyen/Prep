@@ -51,7 +51,9 @@ function SpecificMeal({ meal, mealInformation, date }: SpecificMealProps) {
           )}
           {!editing ? (
             <div
-              className="p-2 font-semibold text-md"
+              className={`p-2 font-semibold text-md cursor-pointer ${
+                mealInformation ? "border-t-2 border-gray-300" : ""
+              }`}
               onClick={() => setShowAddForm(true)}
             >
               Add Food

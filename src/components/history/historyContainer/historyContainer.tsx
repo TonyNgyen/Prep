@@ -57,6 +57,7 @@ function LogContainer() {
           options={options}
           onChange={setNutritionalValue}
           defaultValue="Calories"
+          className="rounded-md"
         />
         <GoalDisplay
           nutritionalValue={nutritionalValue}

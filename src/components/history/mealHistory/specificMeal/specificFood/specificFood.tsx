@@ -6,12 +6,19 @@ type SpecificFoodProps = {
 };
 
 function SpecificFood({ food }: SpecificFoodProps) {
+  const isCustomServing = food.unit === "x";
+  const unitLabel = isCustomServing
+    ? food.totalAmount > 1
+      ? " Servings"
+      : " Serving"
+    : food.unit;
+
   return (
-    <div className="flex justify-between">
-      <h2 className="text-md">{food.name}</h2>
-      <h3 className="text-sm">
+    <div className="flex flex-col">
+      <h2 className="text-md font-medium">{food.name}</h2>
+      <h3 className="text-sm text-gray-600">
         {food.totalAmount}
-        {food.unit}
+        {unitLabel && `${unitLabel}`}
       </h3>
     </div>
   );
