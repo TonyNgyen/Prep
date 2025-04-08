@@ -27,7 +27,8 @@ type FormDataType = {
   sodium: number | null;
   potassium: number | null;
   totalCarbohydrates: number | null;
-  sugars: number | null;
+  dietaryFiber: number | null;
+  totalSugars: number | null;
   addedSugars: number | null;
   sugarAlcohols: number | null;
   vitaminA: number | null;
@@ -113,7 +114,8 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
     sodium: null,
     potassium: null,
     totalCarbohydrates: null,
-    sugars: null,
+    dietaryFiber: null,
+    totalSugars: null,
     addedSugars: null,
     sugarAlcohols: null,
     vitaminA: null,
