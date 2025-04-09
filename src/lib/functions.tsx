@@ -1,26 +1,5 @@
+import { NUTRITIONAL_KEYS } from "@/constants/NUTRITIONAL_KEYS";
 import { NutritionFacts } from "@/types";
-
-const NUTRITIONAL_KEYS = {
-  calories: "Calories",
-  protein: "Protein",
-  totalFat: "Total Fat",
-  saturatedFat: "Saturated Fat",
-  polyunsaturatedFat: "Polyunsaturated Fat",
-  monounsaturatedFat: "Monounsaturated Fat",
-  transFat: "Trans Fat",
-  cholesterol: "Cholesterol",
-  sodium: "Sodium",
-  potassium: "Potassium",
-  totalCarbohydrates: "Total Carbohydrates",
-  sugars: "Sugars",
-  addedSugars: "Added Sugars",
-  sugarAlcohols: "Sugar Alcohols",
-  vitaminA: "Vitamin A",
-  vitaminC: "Vitamin C",
-  vitaminD: "Vitamin D",
-  calcium: "Calcium",
-  iron: "Iron",
-} as const;
 
 const addNutrition = (
   nutrition1: NutritionFacts,
@@ -46,7 +25,9 @@ const addNutrition = (
   return nutrition1;
 };
 
-const flattenNutritionFacts = (nutritionFacts: NutritionFacts): Record<string, number> => {
+const flattenNutritionFacts = (
+  nutritionFacts: NutritionFacts
+): Record<string, number> => {
   const { extraNutrition, ...baseFacts } = nutritionFacts;
 
   const extraFacts = Object.fromEntries(
@@ -57,7 +38,6 @@ const flattenNutritionFacts = (nutritionFacts: NutritionFacts): Record<string, n
     ...baseFacts,
     ...extraFacts,
   };
-}
-
+};
 
 export { addNutrition, flattenNutritionFacts };

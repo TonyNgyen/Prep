@@ -1,3 +1,5 @@
+import { NUTRITIONAL_KEYS } from "@/constants/NUTRITIONAL_KEYS";
+import { NUTRITIONAL_UNITS } from "@/constants/NUTRITIONAL_UNITS";
 import {
   InventoryIngredient,
   InventoryRecipe,
@@ -24,50 +26,6 @@ type InventoryRecipeInfoProps = {
   setInventory: React.Dispatch<React.SetStateAction<ItemsToAdd>>;
   setNutrition: React.Dispatch<React.SetStateAction<NutritionFacts>>;
   nutrition: NutritionFacts;
-};
-
-const NUTRITIONAL_KEYS = {
-  calories: "Calories",
-  protein: "Protein",
-  totalFat: "Total Fat",
-  saturatedFat: "Saturated Fat",
-  polyunsaturatedFat: "Polyunsaturated Fat",
-  monounsaturatedFat: "Monounsaturated Fat",
-  transFat: "Trans Fat",
-  cholesterol: "Cholesterol",
-  sodium: "Sodium",
-  potassium: "Potassium",
-  totalCarbohydrates: "Total Carbohydrates",
-  sugars: "Sugars",
-  addedSugars: "Added Sugars",
-  sugarAlcohols: "Sugar Alcohols",
-  vitaminA: "Vitamin A",
-  vitaminC: "Vitamin C",
-  vitaminD: "Vitamin D",
-  calcium: "Calcium",
-  iron: "Iron",
-} as const;
-
-const NUTRITIONAL_UNITS: Record<string, string> = {
-  calories: "kcal",
-  protein: "g",
-  totalFat: "g",
-  saturatedFat: "g",
-  polyunsaturatedFat: "g",
-  monounsaturatedFat: "g",
-  transFat: "g",
-  cholesterol: "mg",
-  sodium: "mg",
-  potassium: "mg",
-  totalCarbohydrates: "g",
-  sugars: "g",
-  addedSugars: "g",
-  sugarAlcohols: "g",
-  vitaminA: "%",
-  vitaminC: "%",
-  vitaminD: "%",
-  calcium: "%",
-  iron: "%",
 };
 
 function LogRecipeInfo({

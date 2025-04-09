@@ -1,52 +1,10 @@
 import PageHeader from "@/components/pageHeader/pageHeader";
+import { NUTRITIONAL_KEYS } from "@/constants/NUTRITIONAL_KEYS";
+import { NUTRITIONAL_UNITS } from "@/constants/NUTRITIONAL_UNITS";
 import { InventoryIngredient, InventoryRecipe, NutritionFacts } from "@/types";
 import React from "react";
 
 type ItemsToAdd = Record<string, InventoryIngredient | InventoryRecipe>;
-
-const NUTRITIONAL_KEYS = {
-  calories: "Calories",
-  protein: "Protein",
-  totalFat: "Total Fat",
-  saturatedFat: "Saturated Fat",
-  polyunsaturatedFat: "Polyunsaturated Fat",
-  monounsaturatedFat: "Monounsaturated Fat",
-  transFat: "Trans Fat",
-  cholesterol: "Cholesterol",
-  sodium: "Sodium",
-  potassium: "Potassium",
-  totalCarbohydrates: "Total Carbohydrates",
-  sugars: "Sugars",
-  addedSugars: "Added Sugars",
-  sugarAlcohols: "Sugar Alcohols",
-  vitaminA: "Vitamin A",
-  vitaminC: "Vitamin C",
-  vitaminD: "Vitamin D",
-  calcium: "Calcium",
-  iron: "Iron",
-};
-
-const NUTRITIONAL_UNITS: Record<string, string> = {
-  calories: "kcal",
-  protein: "g",
-  totalFat: "g",
-  saturatedFat: "g",
-  polyunsaturatedFat: "g",
-  monounsaturatedFat: "g",
-  transFat: "g",
-  cholesterol: "mg",
-  sodium: "mg",
-  potassium: "mg",
-  totalCarbohydrates: "g",
-  sugars: "g",
-  addedSugars: "g",
-  sugarAlcohols: "g",
-  vitaminA: "%",
-  vitaminC: "%",
-  vitaminD: "%",
-  calcium: "%",
-  iron: "%",
-};
 
 type PageProps = {
   nutrition: NutritionFacts;
