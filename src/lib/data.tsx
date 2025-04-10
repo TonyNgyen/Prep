@@ -1,12 +1,18 @@
 import {
+  IngredientMeal,
   InventoryIngredient,
   InventoryRecipe,
   NutritionFacts,
   Recipe,
+  RecipeMeal,
   UserInventory,
 } from "@/types";
 import { createClient } from "@/utils/supabase/client";
-import { addNutrition } from "./functions";
+import {
+  addNutrition,
+  extractNutritionFacts,
+  subtractNutrition,
+} from "./functions";
 
 type ItemsToAdd = Record<string, InventoryIngredient | InventoryRecipe>;
 
@@ -192,7 +198,8 @@ const searchIngredientById = async (idSearch: string) => {
   const { data, error } = await supabase
     .from("ingredients")
     .select()
-    .eq("id", idSearch);
+    .eq("id", idSearch)
+    .single();
   if (error) console.log(error);
   return data;
 };
@@ -826,6 +833,101 @@ const fetchDayNutritionalHistory = async (date: string) => {
   }
 };
 
+const deleteMealFromMealHistory = async (
+  date: string,
+  meal: string,
+  foodId: string
+) => {
+  try {
+    const supabase = createClient();
+    const userId = await getUserId();
+
+    const { data, error } = await supabase
+      .from("users")
+      .select("mealHistory")
+      .eq("uid", userId)
+      .single();
+
+    if (error) {
+      console.error("Error fetching meal history:", error);
+      return;
+    }
+
+    const mealHistory = data?.mealHistory || {};
+    const dailyEntry = mealHistory[date]?.[meal] as DailyMealEntry | undefined;
+
+    if (!dailyEntry || !dailyEntry.food?.[foodId]) {
+      console.warn("Food entry not found for given date/meal/foodId.");
+      return;
+    }
+
+    const updatedFood = { ...dailyEntry.food };
+    delete updatedFood[foodId];
+
+    const updatedMealEntry: DailyMealEntry = {
+      ...dailyEntry,
+      food: updatedFood,
+    };
+
+    await updateMealHistory(date, meal, updatedMealEntry);
+  } catch (err) {
+    console.error("Failed to remove food:", err);
+  }
+};
+
+const deleteMealFromNutritionalHistory = async (
+  date: string,
+  meal: string,
+  food: IngredientMeal | RecipeMeal
+) => {
+  try {
+    const supabase = createClient();
+    const userId = await getUserId();
+    let foodInformation;
+
+    if (food.type == "ingredient") {
+      foodInformation = await searchIngredientById(food.id);
+    }
+
+    const foodNutrition = extractNutritionFacts(foodInformation);
+
+    const { data, error } = await supabase
+      .from("users")
+      .select("nutritionalHistory")
+      .eq("uid", userId)
+      .single();
+
+    if (error) {
+      console.error("Error fetching nutritional history:", error);
+      return;
+    }
+
+    const nutritionalHistory = data?.nutritionalHistory || {};
+    const dailyNutrition = nutritionalHistory[date];
+    console.log("daily", dailyNutrition);
+    console.log("food", foodNutrition);
+
+    if (!dailyNutrition) {
+      console.warn("Food entry not found for given date/meal/foodId.");
+      return;
+    }
+
+    const updatedNutrition = subtractNutrition(dailyNutrition, foodNutrition);
+
+    // const updatedFood = { ...dailyEntry.food };
+    // delete updatedFood[foodId];
+
+    // const updatedMealEntry: DailyMealEntry = {
+    //   ...dailyEntry,
+    //   food: updatedFood,
+    // };
+
+    // await updateMealHistory(date, meal, updatedMealEntry);
+  } catch (err) {
+    console.error("Failed to remove food:", err);
+  }
+};
+
 export {
   fetchIngredients,
   fetchRecipes,
@@ -853,4 +955,7 @@ export {
   setWeightHistory,
   fetchCurrentWeightGoal,
   updateNutritionalGoals,
+  deleteMealFromMealHistory,
+  searchIngredientById,
+  deleteMealFromNutritionalHistory,
 };

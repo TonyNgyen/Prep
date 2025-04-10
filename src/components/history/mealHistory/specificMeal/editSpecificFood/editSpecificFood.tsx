@@ -1,14 +1,21 @@
 "use client";
 
+import {
+  deleteMealFromMealHistory,
+  deleteMealFromNutritionalHistory,
+  searchIngredientById,
+} from "@/lib/data";
 import { IngredientMeal, RecipeMeal } from "@/types";
 import React, { useState, useRef, useEffect } from "react";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 
 type EditSpecificFoodProps = {
   food: IngredientMeal | RecipeMeal;
+  meal: string;
+  date: string;
 };
 
-function EditSpecificFood({ food }: EditSpecificFoodProps) {
+function EditSpecificFood({ food, meal, date }: EditSpecificFoodProps) {
   const [dropdown, setDropdown] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [amount, setAmount] = useState(food.totalAmount);
@@ -39,6 +46,15 @@ function EditSpecificFood({ food }: EditSpecificFoodProps) {
 
   return (
     <div className="flex justify-between items-center relative">
+      <div className="bg-blue-300 p-4" onClick={() => console.log(food)}>
+        Print food
+      </div>
+      <div
+        className="bg-blue-300 p-4"
+        onClick={() => deleteMealFromNutritionalHistory(date, meal, food)}
+      >
+        Test
+      </div>
       <div className="flex flex-col">
         <h2 className="text-md font-medium">{food.name}</h2>
         {isEditing ? (
@@ -88,7 +104,7 @@ function EditSpecificFood({ food }: EditSpecificFoodProps) {
               <button
                 onClick={() => {
                   setDropdown(false);
-                  console.log("Delete clicked", food);
+                  deleteMealFromMealHistory(date, meal, food.id);
                 }}
                 className="w-full px-4 py-2 hover:bg-gray-100 text-left text-red-500"
               >

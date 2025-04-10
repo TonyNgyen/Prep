@@ -45,7 +45,7 @@ function SpecificMeal({ meal, mealInformation, date }: SpecificMealProps) {
                     <SpecificFood food={food} />
                   ))
                 : Object.values(mealInformation.food).map((food) => (
-                    <EditSpecificFood food={food} />
+                    <EditSpecificFood food={food} meal={meal} date={date} />
                   ))}
             </div>
           )}
