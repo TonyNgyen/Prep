@@ -20,7 +20,8 @@ export type Recipe = {
   sodium: number | null;
   potassium: number | null;
   totalCarbohydrates: number | null;
-  sugars: number | null;
+  dietaryFiber: number | null;
+  totalSugars: number | null;
   addedSugars: number | null;
   sugarAlcohols: number | null;
   vitaminA: number | null;

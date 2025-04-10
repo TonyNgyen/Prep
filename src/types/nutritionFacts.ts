@@ -10,7 +10,8 @@ export type NutritionFacts = {
   sodium: number;
   potassium: number;
   totalCarbohydrates: number;
-  sugars: number;
+  dietaryFiber: number;
+  totalSugars: number;
   addedSugars: number;
   sugarAlcohols: number;
   vitaminA: number;

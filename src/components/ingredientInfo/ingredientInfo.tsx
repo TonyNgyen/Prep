@@ -58,7 +58,7 @@ function IngredientInfo({ ingredient }: IngredientInfoProps) {
               >
             ).map((key) => {
               const value = ingredient[key];
-              if (value === null || value === undefined) return null;
+              if (value === null || value === undefined || value == 0) return null;
 
               const unit = NUTRITIONAL_UNITS[key];
               return (
