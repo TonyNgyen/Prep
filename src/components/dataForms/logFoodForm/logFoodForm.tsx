@@ -43,7 +43,8 @@ function LogFoodForm({
     sodium: 0,
     potassium: 0,
     totalCarbohydrates: 0,
-    sugars: 0,
+    dietaryFiber: 0,
+    totalSugars: 0,
     addedSugars: 0,
     sugarAlcohols: 0,
     vitaminA: 0,
@@ -200,7 +201,7 @@ function LogFoodForm({
             type="button"
             className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
             onClick={async () => {
-              await addToNutritionalHistory(date, nutrition);
+              await addToNutritionalHistory(date, nutrition, meal);
               await addToMealHistory(
                 meal,
                 {

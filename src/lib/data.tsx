@@ -395,7 +395,8 @@ const addIngredientToInventory = (
 
 const addToNutritionalHistory = async (
   date: string,
-  nutrition: NutritionFacts
+  nutrition: NutritionFacts,
+  meal: string
 ) => {
   const supabase = createClient();
   const userId = await getUserId();
@@ -412,24 +413,27 @@ const addToNutritionalHistory = async (
   }
 
   const nutritionalHistory = data?.nutritionalHistory || {};
-  const existingEntry: NutritionFacts | undefined = nutritionalHistory[date];
-  let updatedData: NutritionFacts;
+  const mealsForDay: Record<string, NutritionFacts> = nutritionalHistory[date] || {};
 
-  if (existingEntry) {
-    updatedData = { ...existingEntry };
-    updatedData = addNutrition(updatedData, nutrition);
+  let updatedMealNutrition: NutritionFacts;
+
+  if (mealsForDay[meal]) {
+    updatedMealNutrition = addNutrition({ ...mealsForDay[meal] }, nutrition);
   } else {
-    updatedData = nutrition;
+    updatedMealNutrition = nutrition;
   }
+
+  const updatedHistory = {
+    ...nutritionalHistory,
+    [date]: {
+      ...mealsForDay,
+      [meal]: updatedMealNutrition,
+    },
+  };
 
   const { error: updateError } = await supabase
     .from("users")
-    .update({
-      nutritionalHistory: {
-        ...nutritionalHistory,
-        [date]: updatedData,
-      },
-    })
+    .update({ nutritionalHistory: updatedHistory })
     .eq("uid", userId);
 
   if (updateError) {
