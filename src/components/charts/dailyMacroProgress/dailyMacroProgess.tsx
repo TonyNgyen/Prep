@@ -2,7 +2,7 @@ import { NutritionFacts } from "@/types";
 import React, { useEffect, useState } from "react";
 import NutritionalChart from "../nutritionalChart/nutritionalChart";
 import { fetchDayNutritionalHistory, fetchNutritionalGoals } from "@/lib/data";
-import { flattenNutritionFacts } from "@/lib/functions";
+import { flattenNutritionFacts, sumDailyNutrition } from "@/lib/functions";
 
 function DailyMacroProgress() {
   const today = new Date().toISOString().split("T")[0];
@@ -14,8 +14,8 @@ function DailyMacroProgress() {
   useEffect(() => {
     const fetch = async () => {
       let fetchNutrition = await fetchDayNutritionalHistory(today);
+      fetchNutrition = sumDailyNutrition(fetchNutrition);
       fetchNutrition = flattenNutritionFacts(fetchNutrition);
-      console.log(fetchNutrition);
       setNutritionalData(fetchNutrition);
 
       const fetchNutritionalGoal = await fetchNutritionalGoals();

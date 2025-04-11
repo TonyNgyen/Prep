@@ -134,10 +134,80 @@ const extractNutritionFacts = (ingredient: Ingredient): NutritionFacts => {
   };
 };
 
+const sumDailyNutrition = (
+  dailyEntry: Record<string, NutritionFacts>
+): NutritionFacts => {
+  const NUTRITIONAL_KEYS = [
+    "calories",
+    "protein",
+    "totalFat",
+    "saturatedFat",
+    "polyunsaturatedFat",
+    "monounsaturatedFat",
+    "transFat",
+    "cholesterol",
+    "sodium",
+    "potassium",
+    "totalCarbohydrates",
+    "dietaryFiber",
+    "totalSugars",
+    "addedSugars",
+    "sugarAlcohols",
+    "vitaminA",
+    "vitaminC",
+    "vitaminD",
+    "calcium",
+    "iron",
+  ] as const;
+
+  type NumericNutritionKey = (typeof NUTRITIONAL_KEYS)[number];
+
+  const total: NutritionFacts = {
+    calories: 0,
+    protein: 0,
+    totalFat: 0,
+    saturatedFat: 0,
+    polyunsaturatedFat: 0,
+    monounsaturatedFat: 0,
+    transFat: 0,
+    cholesterol: 0,
+    sodium: 0,
+    potassium: 0,
+    totalCarbohydrates: 0,
+    dietaryFiber: 0,
+    totalSugars: 0,
+    addedSugars: 0,
+    sugarAlcohols: 0,
+    vitaminA: 0,
+    vitaminC: 0,
+    vitaminD: 0,
+    calcium: 0,
+    iron: 0,
+    extraNutrition: {},
+  };
+
+  for (const mealNutrition of Object.values(dailyEntry)) {
+    NUTRITIONAL_KEYS.forEach((key: NumericNutritionKey) => {
+      const value = mealNutrition[key] ?? 0;
+      total[key] += value;
+    });
+
+    Object.entries(mealNutrition.extraNutrition).forEach(([key, extra]) => {
+      if (!total.extraNutrition[key]) {
+        total.extraNutrition[key] = { ...extra, value: 0 };
+      }
+      total.extraNutrition[key].value += extra.value;
+    });
+  }
+
+  return total;
+};
+
 export {
   addNutrition,
   subtractNutrition,
   flattenNutritionFacts,
   multiplyNutrition,
   extractNutritionFacts,
+  sumDailyNutrition,
 };

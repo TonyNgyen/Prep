@@ -234,7 +234,7 @@ function LogIngredientInfo({
         ((servingSize ?? 0) * (numberOfServings ?? 0)) / ingredient.servingSize;
     }
     const newNutrition = { ...nutrition };
-
+    console.log(ingredient);
     Object.keys(NUTRITIONAL_KEYS).map((nutritionalKey) => {
       const key = nutritionalKey as keyof NutritionFacts;
 
@@ -244,15 +244,18 @@ function LogIngredientInfo({
 
       newNutrition[key] += ingredientValue * multiplier;
     });
-    Object.keys(ingredient.extraNutrition).map((key) => {
-      const ingredientExtra = ingredient.extraNutrition[key];
+    if (ingredient.extraNutrition != null) {
+      Object.keys(ingredient.extraNutrition).map((key) => {
+        const ingredientExtra = ingredient.extraNutrition[key];
 
-      if (!newNutrition.extraNutrition[key]) {
-        newNutrition.extraNutrition[key] = { ...ingredientExtra, value: 0 };
-      }
-      newNutrition.extraNutrition[key].value +=
-        ingredientExtra.value * multiplier;
-    });
+        if (!newNutrition.extraNutrition[key]) {
+          newNutrition.extraNutrition[key] = { ...ingredientExtra, value: 0 };
+        }
+        newNutrition.extraNutrition[key].value +=
+          ingredientExtra.value * multiplier;
+      });
+    }
+    console.log(newNutrition);
     setNutrition(newNutrition);
   };
 

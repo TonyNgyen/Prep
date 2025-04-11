@@ -21,7 +21,6 @@ type DailyMealEntry = {
     [foodId: string]: InventoryIngredient | InventoryRecipe;
   };
   meal: string;
-  nutrition: NutritionFacts;
 };
 
 const getUserId = async () => {
@@ -413,7 +412,8 @@ const addToNutritionalHistory = async (
   }
 
   const nutritionalHistory = data?.nutritionalHistory || {};
-  const mealsForDay: Record<string, NutritionFacts> = nutritionalHistory[date] || {};
+  const mealsForDay: Record<string, NutritionFacts> =
+    nutritionalHistory[date] || {};
 
   let updatedMealNutrition: NutritionFacts;
 
@@ -504,7 +504,6 @@ const updateMealHistory = async (
 const addToMealHistory = async (
   meal: string,
   information: {
-    nutrition: NutritionFacts;
     food: ItemsToAdd;
   },
   date: string
@@ -557,11 +556,6 @@ const addToMealHistory = async (
         existingMealEntry.food[id] = foodItem;
       }
     });
-
-    existingMealEntry.nutrition = addNutrition(
-      existingMealEntry.nutrition,
-      information.nutrition
-    );
 
     updateMealHistory(date, meal, existingMealEntry);
     return;
@@ -808,6 +802,7 @@ const fetchDayNutritionalHistory = async (date: string) => {
       return {};
     }
     if (error) console.log(error);
+    console.log(data["nutritionalHistory"][date]);
     return data["nutritionalHistory"][date]
       ? data["nutritionalHistory"][date]
       : {
@@ -822,7 +817,8 @@ const fetchDayNutritionalHistory = async (date: string) => {
           sodium: 0,
           potassium: 0,
           totalCarbohydrates: 0,
-          sugars: 0,
+          dietaryFiber: 0,
+          totalSugars: 0,
           addedSugars: 0,
           sugarAlcohols: 0,
           vitaminA: 0,
@@ -889,8 +885,11 @@ const deleteMealFromNutritionalHistory = async (
     const userId = await getUserId();
     let foodInformation;
 
-    if (food.type == "ingredient") {
+    if (food.type === "ingredient") {
       foodInformation = await searchIngredientById(food.id);
+    } else if (food.type === "recipe") {
+      // Make sure to handle recipes too if needed
+      foodInformation = await searchRecipeById(food.id);
     }
 
     const foodNutrition = extractNutritionFacts(foodInformation);
@@ -908,25 +907,34 @@ const deleteMealFromNutritionalHistory = async (
 
     const nutritionalHistory = data?.nutritionalHistory || {};
     const dailyNutrition = nutritionalHistory[date];
-    console.log("daily", dailyNutrition);
-    console.log("food", foodNutrition);
+    const mealNutrition = dailyNutrition?.[meal];
 
-    if (!dailyNutrition) {
-      console.warn("Food entry not found for given date/meal/foodId.");
+    if (!dailyNutrition || !mealNutrition) {
+      console.warn("Nutrition entry not found for given date/meal.");
       return;
     }
 
-    const updatedNutrition = subtractNutrition(dailyNutrition, foodNutrition);
+    const updatedNutrition = subtractNutrition(mealNutrition, foodNutrition);
 
-    // const updatedFood = { ...dailyEntry.food };
-    // delete updatedFood[foodId];
+    // Update the correct meal on the correct date
+    const updatedNutritionalHistory = {
+      ...nutritionalHistory,
+      [date]: {
+        ...dailyNutrition,
+        [meal]: updatedNutrition,
+      },
+    };
 
-    // const updatedMealEntry: DailyMealEntry = {
-    //   ...dailyEntry,
-    //   food: updatedFood,
-    // };
+    const { error: updateError } = await supabase
+      .from("users")
+      .update({ nutritionalHistory: updatedNutritionalHistory })
+      .eq("uid", userId);
 
-    // await updateMealHistory(date, meal, updatedMealEntry);
+    if (updateError) {
+      console.error("Error updating nutritional history:", updateError);
+    } else {
+      console.log("Nutritional history updated successfully!");
+    }
   } catch (err) {
     console.error("Failed to remove food:", err);
   }

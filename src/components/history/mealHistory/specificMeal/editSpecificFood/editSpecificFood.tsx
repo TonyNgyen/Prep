@@ -105,6 +105,7 @@ function EditSpecificFood({ food, meal, date }: EditSpecificFoodProps) {
                 onClick={() => {
                   setDropdown(false);
                   deleteMealFromMealHistory(date, meal, food.id);
+                  deleteMealFromNutritionalHistory(date, meal, food);
                 }}
                 className="w-full px-4 py-2 hover:bg-gray-100 text-left text-red-500"
               >

@@ -205,7 +205,6 @@ function LogFoodForm({
               await addToMealHistory(
                 meal,
                 {
-                  nutrition: nutrition,
                   food: logFood,
                 },
                 date
