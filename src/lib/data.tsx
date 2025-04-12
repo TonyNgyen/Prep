@@ -802,6 +802,8 @@ const fetchDayNutritionalHistory = async (date: string) => {
       return {};
     }
     if (error) console.log(error);
+    console.log(data["nutritionalHistory"]);
+    console.log(date);
     console.log(data["nutritionalHistory"][date]);
     return data["nutritionalHistory"][date]
       ? data["nutritionalHistory"][date]

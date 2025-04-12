@@ -5,7 +5,7 @@ import { fetchDayNutritionalHistory, fetchNutritionalGoals } from "@/lib/data";
 import { flattenNutritionFacts, sumDailyNutrition } from "@/lib/functions";
 
 function DailyMacroProgress() {
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toLocaleDateString("en-CA");
   const [nutritionalData, setNutritionalData] = useState<NutritionFacts | null>(
     null
   );
@@ -14,13 +14,28 @@ function DailyMacroProgress() {
   useEffect(() => {
     const fetch = async () => {
       let fetchNutrition = await fetchDayNutritionalHistory(today);
-      fetchNutrition = sumDailyNutrition(fetchNutrition);
-      fetchNutrition = flattenNutritionFacts(fetchNutrition);
+
+      const isDailyMeals =
+        fetchNutrition &&
+        typeof fetchNutrition === "object" &&
+        !Array.isArray(fetchNutrition) &&
+        Object.values(fetchNutrition).every(
+          (val) => typeof val === "object" && val !== null && "calories" in val
+        );
+
+      if (isDailyMeals) {
+        fetchNutrition = sumDailyNutrition(
+          fetchNutrition as Record<string, NutritionFacts>
+        );
+        fetchNutrition = flattenNutritionFacts(fetchNutrition);
+      }
+
       setNutritionalData(fetchNutrition);
 
       const fetchNutritionalGoal = await fetchNutritionalGoals();
       setGoals(fetchNutritionalGoal);
     };
+
     fetch();
   }, []);
 

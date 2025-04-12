@@ -38,7 +38,7 @@ function SpecificMeal({ meal, mealInformation, date }: SpecificMealProps) {
         </div>
 
         <div className="bg-gray-300 bg-opacity-50 rounded-b-md">
-          {mealInformation && (
+          {mealInformation && Object.keys(mealInformation.food).length != 0 && (
             <div className="p-2 space-y-3">
               {!editing
                 ? Object.values(mealInformation.food).map((food) => (
