@@ -70,7 +70,7 @@ function InventoryRecipeInfo({
       {
         id: recipe.id,
         name: recipe.name,
-        servings: numberOfRecipes * recipe.numberOfServings,
+        numberOfServings: numberOfRecipes * recipe.numberOfServings,
         servingSize: recipe.servingSize,
         totalAmount:
           numberOfRecipes * recipe.numberOfServings * recipe.servingSize,
@@ -100,7 +100,7 @@ function InventoryRecipeInfo({
       {
         id: recipe.id,
         name: recipe.name,
-        servings: numberOfServings,
+        numberOfServings: numberOfServings,
         servingSize: recipe.servingSize,
         totalAmount: numberOfServings * recipe.servingSize,
         unit: recipe.servingUnit,

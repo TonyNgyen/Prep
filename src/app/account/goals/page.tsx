@@ -52,6 +52,8 @@ function GoalsPage() {
   });
 
   const today = format(new Date(), "yyyy-MM-dd");
+  const test = new Date().toISOString().split("T")[0];
+  console.log(today, test);
 
   useEffect(() => {
     const fetch = async () => {
@@ -164,9 +166,6 @@ function GoalsPage() {
             Edit
           </button>
         )}
-        {/* <button type="button" onClick={() => console.log(nutritionalGoals)}>
-          Test
-        </button> */}
       </div>
 
       <div className="flex flex-col gap-3 mt-4">

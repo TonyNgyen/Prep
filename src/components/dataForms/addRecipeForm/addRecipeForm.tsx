@@ -6,7 +6,6 @@ import { IoIosClose } from "react-icons/io";
 import Page3 from "./page3/page3";
 import Page2 from "./page2/page2";
 import Page1 from "./page1/page1";
-import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import { addRecipe } from "@/lib/data";
 
@@ -47,7 +46,8 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
     sodium: 0,
     potassium: 0,
     totalCarbohydrates: 0,
-    sugars: 0,
+    dietaryFiber: 0,
+    totalSugars: 0,
     addedSugars: 0,
     sugarAlcohols: 0,
     vitaminA: 0,
@@ -107,7 +107,8 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
           sodium: 0,
           potassium: 0,
           totalCarbohydrates: 0,
-          sugars: 0,
+          dietaryFiber: 0,
+          totalSugars: 0,
           addedSugars: 0,
           sugarAlcohols: 0,
           vitaminA: 0,

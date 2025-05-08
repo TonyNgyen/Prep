@@ -41,6 +41,7 @@ function Page3({
   numberOfServings,
 }: formProp) {
   const [displayTotal, setDisplayTotal] = useState<boolean>(true);
+
   return (
     <form className="space-y-3 flex-1">
       <div className="flex bg-mainGreen w-10/12 mx-auto h-12 rounded-md border-mainGreen border-[4px]">
@@ -70,18 +71,18 @@ function Page3({
               keyof typeof NUTRITIONAL_KEYS
             >
           ).map((key) => {
-            let value;
-            if (displayTotal) {
-              value = Number(recipeNutrition[key].toFixed(2));
-            } else {
-              value = Number(
-                (recipeNutrition[key] / numberOfServings).toFixed(2)
-              );
-            }
+            let value = recipeNutrition[key];
 
             if (value === null || value === undefined) return null;
 
+            if (displayTotal) {
+              value = Number(value.toFixed(2));
+            } else {
+              value = Number((value / numberOfServings).toFixed(2));
+            }
+
             const unit = NUTRITIONAL_UNITS[key];
+
             return (
               <div
                 key={key}
@@ -96,26 +97,21 @@ function Page3({
             );
           })}
           {Object.keys(recipeNutrition.extraNutrition).map((key) => {
-            let value;
-            if (displayTotal) {
-              value = Number(
-                recipeNutrition.extraNutrition[key].value.toFixed(2)
-              );
-            } else {
-              value = Number(
-                (
-                  recipeNutrition.extraNutrition[key].value / numberOfServings
-                ).toFixed(2)
-              );
-            }
+            let value = recipeNutrition.extraNutrition[key]?.value;
 
             if (value === null || value === undefined) return null;
 
+            if (displayTotal) {
+              value = Number(value.toFixed(2));
+            } else {
+              value = Number((value / numberOfServings).toFixed(2));
+            }
+
             let unit;
-            if (recipeNutrition.extraNutrition[key].unit == "percent") {
+            if (recipeNutrition.extraNutrition[key]?.unit === "percent") {
               unit = "%";
             } else {
-              unit = recipeNutrition.extraNutrition[key].unit;
+              unit = recipeNutrition.extraNutrition[key]?.unit;
             }
 
             return (
@@ -123,7 +119,7 @@ function Page3({
                 key={key}
                 className="flex items-center justify-between text-lg"
               >
-                <span>{recipeNutrition.extraNutrition[key].label}</span>
+                <span>{recipeNutrition.extraNutrition[key]?.label}</span>
                 <span>
                   {value}
                   {unit}

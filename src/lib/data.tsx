@@ -549,7 +549,7 @@ const addToMealHistory = async (
           isInventoryRecipe(existingItem) &&
           isInventoryRecipe(foodItem)
         ) {
-          existingItem.servings += foodItem.servings;
+          existingItem.numberOfServings += foodItem.numberOfServings;
           existingItem.totalAmount += foodItem.totalAmount;
         }
       } else {
