@@ -12,7 +12,7 @@ function Hero() {
       </h2>
       <Link
         href="/signup"
-        className="bg-white text-mainGreen font-bold text-xl w-full py-2 rounded-md tracking-wider text-center"
+        className="bg-white text-mainGreen font-bold text-xl w-full py-2 rounded-md tracking-wider text-center md:w-52"
       >
         Get Started
       </Link>

@@ -10,7 +10,7 @@ function DailyMacroProgress() {
     null
   );
   const [goals, setGoals] = useState<Record<string, number>>({});
-
+  
   useEffect(() => {
     const fetch = async () => {
       let fetchNutrition = await fetchDayNutritionalHistory(today);

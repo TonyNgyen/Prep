@@ -1,4 +1,3 @@
-import AddWeightForm from "@/components/dataForms/addWeightForm/addWeightForm";
 import UnderConstruction from "@/components/underConstruction/underConstruction";
 import React from "react";
 

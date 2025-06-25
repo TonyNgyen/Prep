@@ -15,8 +15,7 @@ function Reasons() {
     },
     {
       title: "Smart Ingredient Management",
-      description:
-        "Manage your ingredients to ensure nothing goes to waste",
+      description: "Manage your ingredients to ensure nothing goes to waste",
     },
   ];
 
@@ -25,7 +24,7 @@ function Reasons() {
       <h1 className="text-center text-3xl font-bold tracking-wide mb-8">
         Why Choose <span className="text-mainGreen">Prep?</span>
       </h1>
-      <div className="flex flex-col gap-5 px-5">
+      <div className="flex flex-col gap-5 px-5 md:flex-row md:items-center md:justify-center">
         {reasons.map((reason) => (
           <ReasonCard
             key={reason.title}

@@ -2,14 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import MealHistory from "../mealHistory/mealHistory";
-import NutritionalHistory from "../nutritionalHistory/nutritionalHistory";
 import { fetchNutritionalGoals, fetchAllNutritionalHistory } from "@/lib/data";
 import DatePicker from "@/components/datePicker/datePicker";
 import Dropdown from "@/components/dropdown/dropdown";
 import GoalDisplay from "@/components/goalDisplay/goalDisplay";
-import { IoTodayOutline } from "react-icons/io5";
 import { sumDailyNutrition } from "@/lib/functions";
-import { NutritionFacts } from "@/types"; // Assuming you have this
+import { NutritionFacts } from "@/types";
 
 function LogContainer() {
   const [nutritionalHistory, setNutritionalHistory] = useState<
