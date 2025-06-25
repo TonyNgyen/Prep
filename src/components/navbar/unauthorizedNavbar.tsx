@@ -23,6 +23,18 @@ function UnauthorizedNavbar() {
           ☰
         </button>
       </div>
+      <div className="flex gap-4">
+        <Link href="/login">
+          <button className="bg-mainGreen text-white py-2 rounded-full w-24 hidden lg:block">
+            Login
+          </button>
+        </Link>
+        <Link href="/signup">
+          <button className="border-mainGreen border-[3px] text-mainGreen py-2 rounded-full w-24 hidden lg:block">
+            Sign Up
+          </button>
+        </Link>
+      </div>
 
       <div
         className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg transform transition-all duration-300 ease-in-out ${
