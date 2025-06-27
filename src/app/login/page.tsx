@@ -4,7 +4,7 @@ import { login, signup } from "./actions";
 export default function LoginPage() {
   return (
     <div className="flex items-center justify-center px-4">
-      <form className="bg-white p-8 rounded-lg shadow-lg w-full">
+      <form className="bg-white p-8 rounded-lg shadow-lg w-full lg:w-1/4">
         <div className="text-center mb-6">
           <h2 className="text-2xl font-semibold text-mainGreen">
             Welcome Back
