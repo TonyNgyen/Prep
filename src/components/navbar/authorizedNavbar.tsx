@@ -13,64 +13,80 @@ import { usePathname } from "next/navigation";
 function AuthorizedNavbar() {
   const [addPopup, setAddPopup] = useState(false);
   const pathname = usePathname();
-  return (
-    <div className="w-full py-5 lg:px-20 px-2 flex justify-between items-center fixed bottom-0 left-0 bg-white h-20 z-50">
-      <Link
-        href="/"
-        className={`w-[55px] h-[55px] flex flex-col items-center justify-center gap-1 rounded-lg transition-colors ${
-          pathname === "/" ? "text-black" : "text-gray-400"
-        }`}
-      >
-        <IoHome className="w-full h-full" />
-        <p className="font-semibold text-sm">Home</p>
-      </Link>
-      <Link href="/log">
-        <button
-          className={`w-[55px] h-[55px] flex flex-col items-center justify-center gap-1 rounded-lg transition-colors ${
-            pathname === "/log" ? "text-black" : "text-gray-400"
-          }`}
-          onClick={() => setAddPopup(false)}
-        >
-          <IoMdBookmarks className="w-full h-full" />
-          <p className="font-semibold text-sm">Log</p>
-        </button>
-      </Link>
-      <div className="relative">
-        <div className={`absolute left-1/2 -translate-x-1/2 -top-[8rem]`}>
-          {addPopup && <AddPopup setAddPopup={setAddPopup} />}
-        </div>
 
-        <button
-          className="w-[60px] h-[60px] flex flex-col items-center justify-center text-mainGreen rounded-full"
-          onClick={() => setAddPopup(!addPopup)}
-        >
-          <IoIosAddCircle className="w-full h-full" />
-        </button>
+  const navItems = [
+    { href: "/", label: "Home", icon: IoHome },
+    { href: "/log", label: "Log", icon: IoMdBookmarks },
+    { href: "/statistics", label: "Stats", icon: MdInsertChart },
+    { href: "/more", label: "More", icon: FiMoreHorizontal },
+  ];
+
+  return (
+    <>
+      {/* Mobile Navbar (bottom) */}
+      <div className="fixed bottom-0 left-0 w-full h-20 bg-white z-50 flex justify-between items-center px-2 lg:hidden">
+        {navItems.map(({ href, label, icon: Icon }) => (
+          <Link
+            key={href}
+            href={href}
+            className={`w-[55px] h-[55px] flex flex-col items-center justify-center gap-1 rounded-lg transition-colors ${
+              pathname === href ? "text-black" : "text-gray-400"
+            }`}
+            onClick={() => setAddPopup(false)}
+          >
+            <Icon className="w-full h-full" />
+            <p className="font-semibold text-sm">{label}</p>
+          </Link>
+        ))}
+
+        {/* Add Button */}
+        <div className="relative">
+          {addPopup && (
+            <div className="absolute left-1/2 -translate-x-1/2 -top-[8rem]">
+              <AddPopup setAddPopup={setAddPopup} />
+            </div>
+          )}
+          <button
+            className="w-[60px] h-[60px] flex flex-col items-center justify-center text-mainGreen rounded-full"
+            onClick={() => setAddPopup(!addPopup)}
+          >
+            <IoIosAddCircle className="w-full h-full" />
+          </button>
+        </div>
       </div>
 
-      <Link href="/statistics">
-        <button
-          className={`w-[55px] h-[55px] flex flex-col items-center justify-center gap-1 rounded-lg transition-colors ${
-            pathname === "/statistics" ? "text-black" : "text-gray-400"
-          }`}
-          onClick={() => setAddPopup(false)}
-        >
-          <MdInsertChart className="w-full h-full" />
-          <p className="font-semibold text-sm">Stats</p>
-        </button>
-      </Link>
-      <Link href="/more">
-        <button
-          className={`w-[55px] h-[55px] flex flex-col items-center justify-center gap-1 rounded-lg transition-colors ${
-            pathname === "/more" ? "text-black" : "text-gray-400"
-          }`}
-          onClick={() => setAddPopup(false)}
-        >
-          <FiMoreHorizontal className="w-full h-full" />
-          <p className="font-semibold text-sm">More</p>
-        </button>
-      </Link>
-    </div>
+      {/* Desktop Sidebar (left) */}
+      <div className="hidden lg:flex lg:flex-col lg:items-center lg:py-10 lg:gap-6 fixed top-0 left-0 h-full w-24 bg-white z-50">
+        {navItems.map(({ href, label, icon: Icon }) => (
+          <Link
+            key={href}
+            href={href}
+            className={`w-[55px] h-[55px] flex flex-col items-center justify-center gap-1 rounded-lg transition-colors ${
+              pathname === href ? "text-black" : "text-gray-400"
+            }`}
+            onClick={() => setAddPopup(false)}
+          >
+            <Icon className="w-full h-full" />
+            <p className="font-semibold text-sm">{label}</p>
+          </Link>
+        ))}
+
+        {/* Add Button in sidebar */}
+        <div className="relative mt-6">
+          {addPopup && (
+            <div className="absolute left-full top-1/2 -translate-y-1/2 ml-4">
+              <AddPopup setAddPopup={setAddPopup} />
+            </div>
+          )}
+          <button
+            className="w-[60px] h-[60px] flex flex-col items-center justify-center text-mainGreen rounded-full"
+            onClick={() => setAddPopup(!addPopup)}
+          >
+            <IoIosAddCircle className="w-full h-full" />
+          </button>
+        </div>
+      </div>
+    </>
   );
 }
 
