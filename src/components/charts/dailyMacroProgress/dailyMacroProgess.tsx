@@ -4,13 +4,18 @@ import NutritionalChart from "../nutritionalChart/nutritionalChart";
 import { fetchDayNutritionalHistory, fetchNutritionalGoals } from "@/lib/data";
 import { flattenNutritionFacts, sumDailyNutrition } from "@/lib/functions";
 
+type Goal = {
+  goal: number;
+  color: string;
+};
+
 function DailyMacroProgress() {
   const today = new Date().toLocaleDateString("en-CA");
   const [nutritionalData, setNutritionalData] = useState<NutritionFacts | null>(
     null
   );
-  const [goals, setGoals] = useState<Record<string, number>>({});
-  
+  const [goals, setGoals] = useState<Record<string, Goal>>({});
+
   useEffect(() => {
     const fetch = async () => {
       let fetchNutrition = await fetchDayNutritionalHistory(today);
@@ -33,6 +38,7 @@ function DailyMacroProgress() {
       setNutritionalData(fetchNutrition);
 
       const fetchNutritionalGoal = await fetchNutritionalGoals();
+      console.log(fetchNutritionalGoal);
       setGoals(fetchNutritionalGoal);
     };
 
@@ -41,7 +47,7 @@ function DailyMacroProgress() {
 
   if (!nutritionalData) {
     return (
-      <div className="bg-white p-4 text-black rounded-lg shadow-md w-full">
+      <div className="bg-white p-4 text-black rounded-lg shadow-md lg:w-1/3">
         <h1 className="text-2xl font-bold">Daily Nutrition Log</h1>
         <h2>Loading...</h2>
       </div>
@@ -49,7 +55,7 @@ function DailyMacroProgress() {
   }
 
   return (
-    <div className="bg-white p-4 text-black rounded-lg shadow-md w-full">
+    <div className="bg-white p-4 text-black rounded-lg shadow-md lg:w-1/3">
       <h1 className="text-2xl font-bold mb-3">Daily Nutrition Log</h1>
       <div className="overflow-x-auto">
         <div className="flex gap-2 flex-nowrap">
@@ -65,7 +71,8 @@ function DailyMacroProgress() {
                 >
                   <NutritionalChart
                     current={(nutritionalData[nutrition] as number) ?? 0}
-                    goal={goals[nutrition] ?? 0}
+                    goal={goals[nutrition]?.goal ?? 0}
+                    color={goals[nutrition]?.color}
                   />
                   <h3 className="text-lg font-semibold">
                     {nutritionLabel.charAt(0).toUpperCase() +

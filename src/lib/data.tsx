@@ -624,7 +624,9 @@ const fetchWeightGoals = async () => {
   }
 };
 
-const updateNutritionalGoals = async (newGoal: Record<string, number>) => {
+const updateNutritionalGoals = async (
+  newGoal: Record<string, Record<string, number | string>>
+) => {
   const supabase = createClient();
   try {
     const userId = await getUserId();

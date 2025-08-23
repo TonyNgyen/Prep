@@ -19,6 +19,10 @@ export default async function Home() {
       </div>
     );
   } else {
-    return <Dashboard />;
+    return (
+      <div className="">
+        <Dashboard />
+      </div>
+    );
   }
 }

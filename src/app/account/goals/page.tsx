@@ -13,19 +13,27 @@ import { NutritionFacts } from "@/types";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 
+type Goal = {
+  goal: number;
+  color: string;
+};
+
 function GoalsPage() {
   const [nutritionalGoals, setNutritionalGoals] = useState<
-    Record<string, number>
+    Record<string, Goal>
   >({});
-  const [originalGoals, setOriginalGoals] = useState<Record<string, number>>(
-    {}
-  );
+  const [originalGoals, setOriginalGoals] = useState<Record<string, Goal>>({});
   const [editing, setEditing] = useState<boolean>(false);
   const [adding, setAdding] = useState<boolean>(false);
   const [update, setUpdate] = useState<boolean>(false);
-  const [newGoal, setNewGoal] = useState<{ nutrition: string; value: number }>({
+  const [newGoal, setNewGoal] = useState<{
+    nutrition: string;
+    value: number;
+    color: string;
+  }>({
     nutrition: "",
     value: 0,
+    color: "",
   });
   const [nutritionalHistory, setNutritionalHistory] = useState<NutritionFacts>({
     calories: 0,
@@ -53,7 +61,6 @@ function GoalsPage() {
 
   const today = format(new Date(), "yyyy-MM-dd");
   const test = new Date().toISOString().split("T")[0];
-  console.log(today, test);
 
   useEffect(() => {
     const fetch = async () => {
@@ -74,16 +81,16 @@ function GoalsPage() {
 
   const handleAddGoal = async () => {
     if (newGoal.nutrition.trim() && newGoal.value > 0) {
-      const updatedGoals = {
+      const updatedGoals: Record<string, Goal> = {
         ...nutritionalGoals,
-        [newGoal.nutrition]: newGoal.value,
+        [newGoal.nutrition]: { goal: newGoal.value, color: newGoal.color },
       };
       const success = await updateNutritionalGoals(updatedGoals);
       if (success) {
         setNutritionalGoals(updatedGoals);
         setOriginalGoals(updatedGoals);
         setAdding(false);
-        setNewGoal({ nutrition: "", value: 0 });
+        setNewGoal({ nutrition: "", value: 0, color: "" });
       }
     }
   };
@@ -171,8 +178,8 @@ function GoalsPage() {
       <div className="flex flex-col gap-3 mt-4">
         {adding && (
           <AddGoalBar
-            onGoalChange={(nutrition, value) =>
-              setNewGoal({ nutrition, value })
+            onGoalChange={(nutrition, value, color) =>
+              setNewGoal({ nutrition, value, color })
             }
           />
         )}
@@ -180,25 +187,24 @@ function GoalsPage() {
           ? Object.entries(nutritionalGoals).map(([key, value]) => (
               <GoalBar
                 nutrition={key}
-                goal={value}
-                key={key}
+                goal={value.goal}
                 current={
                   nutritionalHistory[key as keyof NutritionFacts] as number
                 }
+                color={value.color}
               />
             ))
           : Object.entries(nutritionalGoals).map(([key, value]) => (
               <EditGoalBar
                 nutrition={key}
-                goal={value}
-                key={key}
+                goal={value.goal}
                 current={
                   nutritionalHistory[key as keyof NutritionFacts] as number
                 }
                 onGoalChange={(newValue: number) => {
                   setNutritionalGoals((prev) => ({
                     ...prev,
-                    [key]: newValue,
+                    [key]: { ...prev[key], goal: newValue },
                   }));
                   setUpdate(true);
                 }}

@@ -75,38 +75,27 @@ function Dashboard() {
         >
           <h1 className="text-2xl font-bold">Log Food</h1>
         </Link>
-        <DailyMacroProgress />
-        <div className="bg-white p-4 text-black rounded-lg shadow-md flex flex-col">
-          <h1 className="text-2xl font-bold mb-4">Weight History</h1>
-          {/* <div
-            onClick={() => console.log(weightHistory)}
-            className="bg-red-200 p-4"
-          ></div> */}
-          {weightHistory && currentWeightGoal ? (
-            <>
-              <div className="flex gap-4 text-sm">
-                <h2>Current Weight: {currentWeight ?? "No data"}</h2>
-                <h2>Goal: {currentWeightGoal}</h2>
+        <div className="flex flex-col md:flex-row gap-4">
+          <DailyMacroProgress />
+          <div className="bg-white p-4 text-black rounded-lg shadow-md flex flex-col lg:w-1/3">
+            <h1 className="text-2xl font-bold mb-4">Weight History</h1>
+            {weightHistory && currentWeightGoal ? (
+              <div className="">
+                <div className="flex gap-4 text-sm">
+                  <h2>Current Weight: {currentWeight ?? "No data"}</h2>
+                  <h2>Goal: {currentWeightGoal}</h2>
+                </div>
+                <div className="h-[225px]">
+                  <WeightHistoryChart
+                    weightGoal={currentWeightGoal}
+                    weightHistory={weightHistory}
+                  />
+                </div>
               </div>
-              <div className="h-[225px]">
-                <WeightHistoryChart
-                  weightGoal={currentWeightGoal}
-                  weightHistory={weightHistory}
-                />
-              </div>
-            </>
-          ) : (
-            <div>No Data</div>
-          )}
-
-          {/* {weightHistory && currentWeightGoal && (
-            <div className="h-[225px]">
-              <WeightHistoryChart
-                weightGoal={currentWeightGoal}
-                weightHistory={weightHistory}
-              />
-            </div>
-          )} */}
+            ) : (
+              <div>No Data</div>
+            )}
+          </div>
         </div>
       </div>
     </div>
