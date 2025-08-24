@@ -42,7 +42,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   };
 
   const defaultClasses =
-    "bg-mainGreen w-full flex-1 p-2 flex flex-col text-white font-semibold";
+    "bg-gray-800 w-full flex-1 p-2 flex flex-col text-white font-semibold";
 
   const dropdownClasses = clsx(defaultClasses, className, {
     "rounded-b-none": isDropping,
@@ -62,7 +62,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       </button>
 
       {isDropping && (
-        <div className="absolute z-10 w-full bg-mainGreen text-white font-semibold rounded-b-md shadow-lg border-t-0">
+        <div className="absolute z-10 w-full bg-gray-800 text-white font-semibold rounded-b-md shadow-lg border-t-0">
           {options.map((option) => (
             <div
               key={option.value}

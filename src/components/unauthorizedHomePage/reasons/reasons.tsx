@@ -22,7 +22,7 @@ function Reasons() {
   return (
     <div>
       <h1 className="text-center text-3xl font-bold tracking-wide mb-8">
-        Why Choose <span className="text-mainGreen">Prep?</span>
+        Why Choose <span className="text-gray-800">Prep?</span>
       </h1>
       <div className="flex flex-col gap-5 px-5 md:flex-row md:items-center md:justify-center">
         {reasons.map((reason) => (

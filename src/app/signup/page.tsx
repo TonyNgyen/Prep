@@ -11,7 +11,7 @@ export default function SignupPage() {
     <div className="flex items-center justify-center px-4">
       <form className="bg-white p-8 rounded-lg shadow-lg w-full lg:w-1/4">
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-semibold text-mainGreen">
+          <h2 className="text-2xl font-semibold text-gray-800">
             Welcome to Prep
           </h2>
           <h3 className="text-gray-500">Create your account</h3>
@@ -30,7 +30,7 @@ export default function SignupPage() {
             type="email"
             required
             placeholder="Enter your email"
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-mainGreen focus:border-transparent"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
           />
         </div>
 
@@ -47,12 +47,12 @@ export default function SignupPage() {
             type={showPassword ? "text" : "password"}
             required
             placeholder="Enter your password"
-            className="mt-1 block w-full px-4 py-2 pr-12 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-mainGreen focus:border-transparent"
+            className="mt-1 block w-full px-4 py-2 pr-12 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
           />
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute right-3 top-9 text-sm text-mainGreen hover:underline focus:outline-none"
+            className="absolute right-3 top-9 text-sm text-gray-800 hover:underline focus:outline-none"
           >
             {showPassword ? "Hide" : "Show"}
           </button>
@@ -62,7 +62,7 @@ export default function SignupPage() {
           <button
             type="submit"
             formAction={signup}
-            className="w-full py-2 bg-mainGreen text-white rounded-md text-lg font-semibold transition-all hover:bg-mainGreen-dark focus:outline-none focus:ring-2 focus:ring-mainGreen"
+            className="w-full py-2 bg-gray-800 text-white rounded-md text-lg font-semibold transition-all hover:bg-gray-800-dark focus:outline-none focus:ring-2 focus:ring-gray-800"
           >
             Sign Up
           </button>
@@ -72,7 +72,7 @@ export default function SignupPage() {
           <span>Already have an account? </span>
           <Link
             href="/login"
-            className="text-mainGreen font-semibold hover:underline"
+            className="text-gray-800 font-semibold hover:underline"
           >
             Log in
           </Link>

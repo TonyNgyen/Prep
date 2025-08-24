@@ -118,7 +118,7 @@ function AddInventoryIngredientInfo({
   return (
     <div className="shadow-md">
       <div
-        className={`bg-mainGreen text-white p-3 rounded-md flex items-center justify-between ${
+        className={`bg-gray-800 text-white p-3 rounded-md flex items-center justify-between ${
           dropdown && "rounded-b-none"
         }`}
       >
@@ -126,7 +126,7 @@ function AddInventoryIngredientInfo({
           {!adding && (
             <button
               type="button"
-              className="bg-white text-mainGreen px-2 rounded-md text-lg font-semibold"
+              className="bg-white text-gray-800 px-2 rounded-md text-lg font-semibold"
               onClick={() => {
                 setAdding(true);
               }}
@@ -152,7 +152,7 @@ function AddInventoryIngredientInfo({
       </div>
       {!adding && dropdown && (
         <div className="bg-white rounded-b-md p-3">
-          <div className="border-b-8 border-b-mainGreen pb-2 mb-2">
+          <div className="border-b-8 border-b-gray-800 pb-2 mb-2">
             <div>
               <h1 className="text-lg">
                 {ingredient.servingsPerContainer} Servings Per Container
@@ -223,11 +223,11 @@ function AddInventoryIngredientInfo({
       )}
       {adding && (
         <div className="bg-white rounded-b-md p-3">
-          <div className="flex bg-mainGreen w-12/12 mx-auto h-10 rounded-md border-mainGreen border-[4px]">
+          <div className="flex bg-gray-800 w-12/12 mx-auto h-10 rounded-md border-gray-800 border-[4px]">
             <button
               className={`w-1/2 rounded-l-md font-bold tracking-wide ${
                 addType == "containers"
-                  ? "bg-white text-mainGreen"
+                  ? "bg-white text-gray-800"
                   : " text-white"
               }`}
               type="button"
@@ -238,7 +238,7 @@ function AddInventoryIngredientInfo({
             <button
               className={`w-1/2 rounded-r-md font-bold tracking-wide ${
                 addType == "servings"
-                  ? "bg-white text-mainGreen"
+                  ? "bg-white text-gray-800"
                   : " text-white"
               }`}
               type="button"
@@ -304,7 +304,7 @@ function AddInventoryIngredientInfo({
               Cancel
             </button>
             <button
-              className="w-1/2 bg-mainGreen p-1 text-lg font-bold text-white rounded-md"
+              className="w-1/2 bg-gray-800 p-1 text-lg font-bold text-white rounded-md"
               onClick={() => handleAdd()}
             >
               Confirm

@@ -47,7 +47,7 @@ function AuthorizedNavbar() {
             </div>
           )}
           <button
-            className="w-[60px] h-[60px] flex flex-col items-center justify-center text-mainGreen rounded-full"
+            className="w-[60px] h-[60px] flex flex-col items-center justify-center text-gray-800 rounded-full"
             onClick={() => setAddPopup(!addPopup)}
           >
             <IoIosAddCircle className="w-full h-full" />
@@ -79,7 +79,7 @@ function AuthorizedNavbar() {
             </div>
           )}
           <button
-            className="w-[60px] h-[60px] flex flex-col items-center justify-center text-mainGreen rounded-full"
+            className="w-[60px] h-[60px] flex flex-col items-center justify-center text-gray-800 rounded-full"
             onClick={() => setAddPopup(!addPopup)}
           >
             <IoIosAddCircle className="w-full h-full" />

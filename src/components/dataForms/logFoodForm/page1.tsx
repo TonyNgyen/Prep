@@ -166,7 +166,7 @@ function Page1({
           />
           <button
             type="button"
-            className="bg-mainGreen px-3 text-white font-semibold rounded-r-md"
+            className="bg-gray-800 px-3 text-white font-semibold rounded-r-md"
             onClick={searchItem}
           >
             Search

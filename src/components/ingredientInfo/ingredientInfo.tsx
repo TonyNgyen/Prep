@@ -16,7 +16,7 @@ function IngredientInfo({ ingredient }: IngredientInfoProps) {
   return (
     <div className="shadow-md">
       <div
-        className={`bg-mainGreen text-white p-3 rounded-md flex items-center justify-between ${
+        className={`bg-gray-800 text-white p-3 rounded-md flex items-center justify-between ${
           dropdown && "rounded-b-none"
         }`}
       >
@@ -36,7 +36,7 @@ function IngredientInfo({ ingredient }: IngredientInfoProps) {
       </div>
       {dropdown && (
         <div className="bg-white rounded-b-md p-3">
-          <div className="border-b-8 border-b-mainGreen pb-2 mb-2">
+          <div className="border-b-8 border-b-gray-800 pb-2 mb-2">
             <div>
               <h1 className="text-lg">
                 {ingredient.servingsPerContainer} Servings Per Container

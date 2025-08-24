@@ -42,7 +42,7 @@ const DropdownInverse: React.FC<DropdownProps> = ({
   };
 
   const defaultClasses =
-    "bg-white w-full flex-1 p-2 flex flex-col text-black font-semibold border border-mainGreen";
+    "bg-white w-full flex-1 p-2 flex flex-col text-black font-semibold border border-gray-800";
 
   const dropdownClasses = clsx(defaultClasses, className);
 
@@ -62,7 +62,7 @@ const DropdownInverse: React.FC<DropdownProps> = ({
       </button>
 
       {isDropping && (
-        <div className="absolute z-10 w-full bg-white text-black font-semibold rounded-b-md shadow-lg border-t-0 border border-mainGreen">
+        <div className="absolute z-10 w-full bg-white text-black font-semibold rounded-b-md shadow-lg border-t-0 border border-gray-800">
           {options.map((option) => (
             <div
               key={option.value}

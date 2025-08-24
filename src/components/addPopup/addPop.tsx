@@ -9,7 +9,7 @@ type AddPopupProps = {
 
 function AddPopup({ setAddPopup }: AddPopupProps) {
   return (
-    <div className="grid grid-rows-2 grid-cols-2 gap-4 bg-white w-80 h-32 p-2 border-4 border-mainGreen rounded-md">
+    <div className="grid grid-rows-2 grid-cols-2 gap-4 bg-white w-80 h-32 p-2 border-4 border-gray-800 rounded-md">
       <Link
         href="/log/add"
         className="flex items-center"

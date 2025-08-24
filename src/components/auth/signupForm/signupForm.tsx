@@ -59,13 +59,13 @@ function SignupForm() {
       </div>
       <button
         type="submit"
-        className="bg-mainGreen text-white rounded-lg py-3 font-bold text-xl"
+        className="bg-gray-800 text-white rounded-lg py-3 font-bold text-xl"
       >
         Sign Up
       </button>
       <h3 className="text-center text-lg font-medium">
         Have an Account?{" "}
-        <Link href="/login" className="text-mainGreen font-bold">
+        <Link href="/login" className="text-gray-800 font-bold">
           Log in!
         </Link>
       </h3>

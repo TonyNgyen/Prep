@@ -240,7 +240,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
             placeholder="Lettuce"
             value={formData.name}
             onChange={handleChange}
-            className="border rounded-md w-full p-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-mainGreen focus:border-transparent"
+            className="border rounded-md w-full p-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
             required
           />
         </div>
@@ -253,7 +253,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
               value={formData.servingSize || ""}
               onChange={handleChange}
               placeholder="50"
-              className="border border-r-0 rounded-l-md w-full p-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-mainGreen focus:border-transparent"
+              className="border border-r-0 rounded-l-md w-full p-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
               required
             />
           </div>
@@ -304,7 +304,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
                 value={formData[key as keyof FormDataType] || ""}
                 onChange={handleChange}
                 placeholder="Required"
-                className="border rounded-md w-1/3 p-2 border-mainGreen focus:outline-none focus:ring-2 focus:ring-mainGreen focus:border-transparent"
+                className="border rounded-md w-1/3 p-2 border-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                 required
               />
             ) : (
@@ -316,7 +316,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
                 value={formData[key as keyof FormDataType] ?? ""}
                 onChange={handleChange}
                 placeholder="Optional"
-                className="border rounded-md w-1/3 p-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-mainGreen focus:border-transparent"
+                className="border rounded-md w-1/3 p-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
               />
             )}
           </div>
@@ -332,7 +332,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
               value={allExtraNutrition[key].value || ""}
               onChange={handleChange}
               placeholder="Optional"
-              className="border rounded-md w-1/3 p-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-mainGreen focus:border-transparent"
+              className="border rounded-md w-1/3 p-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
             />
           </div>
         ))}
@@ -348,7 +348,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
                 value={extraNutritionValues["label"] || ""}
                 onChange={handleExtraNutrition}
                 placeholder="Nutritional Label"
-                className="border p-2 w-11/12 border-mainGreen border-r-0 rounded-l-md focus:outline-none focus:ring-2 focus:ring-mainGreen focus:border-transparent"
+                className="border p-2 w-11/12 border-gray-800 border-r-0 rounded-l-md focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                 required
               />
               <DropdownInverse
@@ -371,7 +371,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
               value={extraNutritionValues["value"] || ""}
               onChange={handleExtraNutrition}
               placeholder="Value"
-              className="border rounded-md w-1/3 p-2 border-mainGreen focus:outline-none focus:ring-2 focus:ring-mainGreen focus:border-transparent"
+              className="border rounded-md w-1/3 p-2 border-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
               required
             />
           </div>
@@ -382,7 +382,7 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
             <div className="flex gap-2 pt-12">
               <button
                 type="button"
-                className="bg-mainGreen text-white font-semibold rounded-md px-4 py-3 flex-1"
+                className="bg-gray-800 text-white font-semibold rounded-md px-4 py-3 flex-1"
                 onClick={() => addExtraNutrition()}
               >
                 Add Nutrition
@@ -398,14 +398,14 @@ function AddIngredientForm({ setShowAddForm, isForm }: formProp) {
             <div className="flex flex-col gap-2">
               <button
                 type="button"
-                className="bg-white text-mainGreen border-2 border-mainGreen font-semibold rounded-md px-4 py-3"
+                className="bg-white text-gray-800 border-2 border-gray-800 font-semibold rounded-md px-4 py-3"
                 onClick={() => setAddingExtraNutrition(true)}
               >
                 Add Nutritional Information
               </button>
               <button
                 type="submit"
-                className="bg-mainGreen text-white font-semibold rounded-md px-4 py-3"
+                className="bg-gray-800 text-white font-semibold rounded-md px-4 py-3"
               >
                 Add Ingredient
               </button>

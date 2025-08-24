@@ -52,13 +52,13 @@ function LoginForm() {
       </div>
       <button
         type="submit"
-        className="bg-mainGreen text-white rounded-lg py-3 font-bold text-xl"
+        className="bg-gray-800 text-white rounded-lg py-3 font-bold text-xl"
       >
         Log in
       </button>
       <h3 className="text-center text-lg font-medium">
         Don't have an account?{" "}
-        <Link href="/signup" className="text-mainGreen font-bold">
+        <Link href="/signup" className="text-gray-800 font-bold">
           Sign up!
         </Link>
       </h3>

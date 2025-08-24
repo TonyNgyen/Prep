@@ -197,7 +197,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
         {pageNumber != 1 ? (
           <button
             type="button"
-            className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
+            className="bg-gray-800 text-white font-semibold rounded-md px-4 py-2"
             onClick={() =>
               setPageNumber((prevPageNumber) => prevPageNumber - 1)
             }
@@ -210,7 +210,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
         {pageNumber != 3 ? (
           <button
             type="button"
-            className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
+            className="bg-gray-800 text-white font-semibold rounded-md px-4 py-2"
             onClick={() =>
               setPageNumber((prevPageNumber) => prevPageNumber + 1)
             }
@@ -220,7 +220,7 @@ function AddRecipeForm({ setShowAddForm, isForm }: formProp) {
         ) : (
           <button
             type="submit"
-            className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
+            className="bg-gray-800 text-white font-semibold rounded-md px-4 py-2"
             onClick={() => handleSubmit()}
           >
             Add Recipe

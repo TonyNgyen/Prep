@@ -96,7 +96,7 @@ function Page2({
         ) : (
           <button
             type="button"
-            className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2 w-[9.5rem]"
+            className="bg-gray-800 text-white font-semibold rounded-md px-4 py-2 w-[9.5rem]"
             onClick={() => setAddingIngredient(true)}
           >
             Add Ingredient
@@ -125,7 +125,7 @@ function Page2({
             />
             <button
               type="button"
-              className="bg-mainGreen px-3 text-white font-semibold rounded-r-md"
+              className="bg-gray-800 px-3 text-white font-semibold rounded-r-md"
               onClick={searchIngredientByName}
             >
               Search

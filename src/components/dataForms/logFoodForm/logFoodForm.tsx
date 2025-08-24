@@ -173,7 +173,7 @@ function LogFoodForm({
         {pageNumber != 1 ? (
           <button
             type="button"
-            className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
+            className="bg-gray-800 text-white font-semibold rounded-md px-4 py-2"
             onClick={() =>
               setPageNumber((prevPageNumber) => prevPageNumber - 1)
             }
@@ -186,7 +186,7 @@ function LogFoodForm({
         {pageNumber != 2 ? (
           <button
             type="button"
-            className={`bg-mainGreen text-white font-semibold rounded-md px-4 py-2 ${
+            className={`bg-gray-800 text-white font-semibold rounded-md px-4 py-2 ${
               (!meal || !Object.keys(logFood).length) && "opacity-50"
             }`}
             onClick={() =>
@@ -199,7 +199,7 @@ function LogFoodForm({
         ) : (
           <button
             type="button"
-            className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
+            className="bg-gray-800 text-white font-semibold rounded-md px-4 py-2"
             onClick={async () => {
               await addToNutritionalHistory(date, nutrition, meal);
               await addToMealHistory(

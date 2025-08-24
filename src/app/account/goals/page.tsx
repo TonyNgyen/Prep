@@ -116,7 +116,7 @@ function GoalsPage() {
               type="button"
               className={`p-2 px-4 rounded-md font-semibold text-lg ${
                 update
-                  ? "bg-mainGreen text-white"
+                  ? "bg-gray-800 text-white"
                   : "bg-gray-400 text-white cursor-not-allowed"
               }`}
               onClick={handleUpdateGoals}
@@ -138,7 +138,7 @@ function GoalsPage() {
               type="button"
               className={`p-2 px-4 rounded-md font-semibold text-lg ${
                 newGoal.nutrition.trim() && newGoal.value > 0
-                  ? "bg-mainGreen text-white"
+                  ? "bg-gray-800 text-white"
                   : "bg-gray-400 text-white cursor-not-allowed"
               }`}
               onClick={handleAddGoal}
@@ -157,7 +157,7 @@ function GoalsPage() {
         ) : (
           <button
             type="button"
-            className="bg-mainGreen text-white p-2 px-4 rounded-md font-semibold text-lg"
+            className="bg-gray-800 text-white p-2 px-4 rounded-md font-semibold text-lg"
             onClick={() => setAdding(true)}
           >
             Add
@@ -167,7 +167,7 @@ function GoalsPage() {
         {!editing && !adding && (
           <button
             type="button"
-            className="bg-mainGreen text-white p-2 px-4 rounded-md font-semibold text-lg"
+            className="bg-gray-800 text-white p-2 px-4 rounded-md font-semibold text-lg"
             onClick={() => setEditing(true)}
           >
             Edit

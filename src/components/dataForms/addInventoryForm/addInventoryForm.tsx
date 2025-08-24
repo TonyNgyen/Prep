@@ -111,7 +111,7 @@ function AddInventoryForm({ setShowAddForm, isForm }: formProp) {
         {pageNumber != 1 ? (
           <button
             type="button"
-            className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
+            className="bg-gray-800 text-white font-semibold rounded-md px-4 py-2"
             onClick={() =>
               setPageNumber((prevPageNumber) => prevPageNumber - 1)
             }
@@ -124,7 +124,7 @@ function AddInventoryForm({ setShowAddForm, isForm }: formProp) {
         {pageNumber !== 2 ? (
           <button
             type="button"
-            className="bg-mainGreen text-white font-semibold rounded-md px-4 py-2"
+            className="bg-gray-800 text-white font-semibold rounded-md px-4 py-2"
             onClick={() =>
               setPageNumber((prevPageNumber) => prevPageNumber + 1)
             }
@@ -134,7 +134,7 @@ function AddInventoryForm({ setShowAddForm, isForm }: formProp) {
         ) : (
           <button
             type="submit"
-            className={`bg-mainGreen text-white font-semibold rounded-md px-4 py-2 ${
+            className={`bg-gray-800 text-white font-semibold rounded-md px-4 py-2 ${
               Object.keys(itemsToAdd).length > 0 ? "" : "opacity-50"
             }`}
             onClick={() => updateInventory(inventory)}

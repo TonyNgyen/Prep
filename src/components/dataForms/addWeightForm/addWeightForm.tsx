@@ -170,7 +170,7 @@ function AddWeightForm() {
         value={formData.weight}
         onChange={handleChange}
         placeholder="Enter weight"
-        className="border rounded-md w-1/3 p-2 border-mainGreen"
+        className="border rounded-md w-1/3 p-2 border-gray-800"
         required
       />
       {errors.weight && <p className="text-red-500 text-sm">{errors.weight}</p>}
@@ -178,7 +178,7 @@ function AddWeightForm() {
       {/* Submit Button */}
       <button
         type="submit"
-        className="bg-mainGreen text-white font-semibold px-4 py-2 rounded-md shadow-md w-full"
+        className="bg-gray-800 text-white font-semibold px-4 py-2 rounded-md shadow-md w-full"
       >
         Submit
       </button>

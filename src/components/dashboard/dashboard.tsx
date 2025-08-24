@@ -71,7 +71,7 @@ function Dashboard() {
       <div className="flex flex-col gap-2">
         <Link
           href="/log/add"
-          className="bg-mainGreen p-4 text-white rounded-lg shadow-md flex items-center justify-between"
+          className="bg-gray-800 p-4 text-white rounded-lg shadow-md flex items-center justify-between"
         >
           <h1 className="text-2xl font-bold">Log Food</h1>
         </Link>

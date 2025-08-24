@@ -24,7 +24,7 @@ function Page2({ nutrition, logFood, inventory }: PageProps) {
                 return (
                   <div
                     key={food.id}
-                    className="bg-mainGreen p-3 rounded-md font-semibold text-lg text-white"
+                    className="bg-gray-800 p-3 rounded-md font-semibold text-lg text-white"
                   >
                     {food.name}
                   </div>
@@ -48,7 +48,7 @@ function Page2({ nutrition, logFood, inventory }: PageProps) {
 
       <div>
         <PageHeader>Nutrition For Food</PageHeader>
-        <div className="border-mainGreen border-[3px] p-3 rounded-md">
+        <div className="border-gray-800 border-[3px] p-3 rounded-md">
           <div className="space-y-2">
             {(
               Object.keys(NUTRITIONAL_KEYS) as Array<

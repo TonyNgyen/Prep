@@ -44,10 +44,10 @@ function Page3({
 
   return (
     <form className="space-y-3 flex-1">
-      <div className="flex bg-mainGreen w-10/12 mx-auto h-12 rounded-md border-mainGreen border-[4px]">
+      <div className="flex bg-gray-800 w-10/12 mx-auto h-12 rounded-md border-gray-800 border-[4px]">
         <button
           className={`h-full w-1/2 rounded-l-md font-bold tracking-wide ${
-            displayTotal ? "bg-white text-mainGreen" : " text-white"
+            displayTotal ? "bg-white text-gray-800" : " text-white"
           }`}
           type="button"
           onClick={() => setDisplayTotal(true)}
@@ -56,7 +56,7 @@ function Page3({
         </button>
         <button
           className={`h-full w-1/2 rounded-r-md font-bold tracking-wide ${
-            !displayTotal ? "bg-white text-mainGreen" : " text-white"
+            !displayTotal ? "bg-white text-gray-800" : " text-white"
           }`}
           type="button"
           onClick={() => setDisplayTotal(false)}
@@ -64,7 +64,7 @@ function Page3({
           Per Serving
         </button>
       </div>
-      <div className="border-mainGreen border-[3px] p-3 rounded-md">
+      <div className="border-gray-800 border-[3px] p-3 rounded-md">
         <div className="space-y-2">
           {(
             Object.keys(NUTRITIONAL_KEYS) as Array<

@@ -22,7 +22,7 @@ function EditIngredientInfo({
   return (
     <div className="">
       <div
-        className={`bg-mainGreen text-white p-3 rounded-md flex items-center justify-between ${
+        className={`bg-gray-800 text-white p-3 rounded-md flex items-center justify-between ${
           dropdown && "rounded-b-none"
         }`}
       >
@@ -47,8 +47,8 @@ function EditIngredientInfo({
         </div> */}
       </div>
       {dropdown && (
-        <div className="bg-white rounded-b-md p-3 max-h-96 overflow-y-auto border-mainGreen border-[3px] border-t-0">
-          <div className="border-b-8 border-b-mainGreen pb-2 mb-2">
+        <div className="bg-white rounded-b-md p-3 max-h-96 overflow-y-auto border-gray-800 border-[3px] border-t-0">
+          <div className="border-b-8 border-b-gray-800 pb-2 mb-2">
             <div>
               <h1 className="text-lg">{numberOfServings} Servings</h1>
             </div>

@@ -70,7 +70,7 @@ function IngredientsPage() {
         <PageHeader>Ingredients</PageHeader>
         <div className="flex gap-4  mb-4">
           <button
-            className="bg-mainGreen text-white p-2 px-4 rounded-md font-semibold text-lg"
+            className="bg-gray-800 text-white p-2 px-4 rounded-md font-semibold text-lg"
             onClick={() => setShowAddForm(true)}
           >
             Add Ingredient

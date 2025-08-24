@@ -34,7 +34,7 @@ function AddInventoryRecipeInfo({ recipe }: AddInventoryRecipeInfoProps) {
       </div>
       {dropdown && (
         <div className="bg-white rounded-b-md p-3">
-          {/* <div className="border-b-8 border-b-mainGreen pb-2 mb-2">
+          {/* <div className="border-b-8 border-b-gray-800 pb-2 mb-2">
             <div>
               <h1 className="text-lg">
                 {recipe.totalAmount} Total Servings

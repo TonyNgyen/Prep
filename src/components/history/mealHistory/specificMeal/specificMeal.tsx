@@ -67,7 +67,7 @@ function SpecificMeal({ meal, mealInformation, date }: SpecificMealProps) {
               >
                 Cancel
               </button>{" "}
-              <button className="bg-mainGreen flex-1 rounded-md py-[0.2rem] text-white font-semibold">
+              <button className="bg-gray-800 flex-1 rounded-md py-[0.2rem] text-white font-semibold">
                 Confirm
               </button>
             </div>
