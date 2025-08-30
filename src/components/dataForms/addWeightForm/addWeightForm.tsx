@@ -34,7 +34,7 @@ function AddWeightForm() {
           ? Math.min(
               Math.max(parseInt(value) || 1900, 1900),
               new Date().getFullYear()
-            ) // Enforce valid range
+            )
           : parseInt(value) || 0,
     }));
   };
@@ -45,28 +45,23 @@ function AddWeightForm() {
     const currentDate = new Date();
     const selectedDate = new Date(year, month - 1, day);
 
-    // Year validation
     if (year < 1900 || year > currentDate.getFullYear()) {
       newErrors.year = "Enter a valid year.";
     }
 
-    // Month validation
     if (month < 1 || month > 12) {
       newErrors.month = "Enter a valid month (1-12).";
     }
 
-    // Day validation based on month and leap years
     const daysInMonth = new Date(year, month, 0).getDate();
     if (day < 1 || day > daysInMonth) {
       newErrors.day = `Enter a valid day (1-${daysInMonth}).`;
     }
 
-    // Future date validation
     if (selectedDate > currentDate) {
       newErrors.day = "Date cannot be in the future.";
     }
 
-    // Weight validation
     if (weight <= 0) {
       newErrors.weight = "Weight must be greater than 0.";
     }

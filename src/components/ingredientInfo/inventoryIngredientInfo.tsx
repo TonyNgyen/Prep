@@ -34,20 +34,6 @@ function InventoryIngredientInfo({ ingredient }: InventoryIngredientInfoProps) {
       </div>
       {dropdown && (
         <div className="bg-white rounded-b-md p-3">
-          {/* <div className="border-b-8 border-b-gray-800 pb-2 mb-2">
-            <div>
-              <h1 className="text-lg">
-                {ingredient.totalAmount} Total Servings
-              </h1>
-            </div>
-            <div className="flex items-center justify-between text-2xl font-bold">
-              <h1>Serving Size</h1>
-              <p>
-                {ingredient.servingSize}
-                {ingredient.unit ? ingredient.unit : "g"}
-              </p>
-            </div>
-          </div> */}
 
           <div className="flex justify-between text-2xl font-bold">
             <h1>Total Amount:</h1>{" "}
@@ -56,60 +42,6 @@ function InventoryIngredientInfo({ ingredient }: InventoryIngredientInfoProps) {
               {ingredient.unit}
             </h1>
           </div>
-
-          {/* Display Nutritional Facts */}
-          {/* <div className="space-y-2">
-            {(
-              Object.keys(NUTRITIONAL_KEYS) as Array<
-                keyof typeof NUTRITIONAL_KEYS
-              >
-            ).map((key) => {
-              const value = ingredient[key];
-              if (value === null || value === undefined) return null; // Skip null/undefined values
-
-              const unit = NUTRITIONAL_UNITS[key]; // Get the unit for the current key
-              return (
-                <div
-                  key={key}
-                  className="flex items-center justify-between text-lg"
-                >
-                  <span>{NUTRITIONAL_KEYS[key]}</span>
-                  <span>
-                    {value}
-                    {unit}
-                  </span>
-                </div>
-              );
-            })}
-
-            {Object.keys(ingredient.extraNutrition ?? {}).map((key) => {
-              if (!ingredient.extraNutrition?.[key]) return null;
-
-              const value = ingredient.extraNutrition[key].value;
-
-              if (value === null || value === undefined) return null;
-
-              let unit;
-              if (ingredient.extraNutrition[key].unit == "percent") {
-                unit = "%";
-              } else {
-                unit = ingredient.extraNutrition[key].unit;
-              } // Get the unit for the current key
-
-              return (
-                <div
-                  key={key}
-                  className="flex items-center justify-between text-lg"
-                >
-                  <span>{ingredient.extraNutrition[key].label}</span>
-                  <span>
-                    {value}
-                    {unit}
-                  </span>
-                </div>
-              );
-            })}
-          </div> */}
         </div>
       )}
     </div>

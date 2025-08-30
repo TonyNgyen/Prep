@@ -4,7 +4,7 @@ type EditGoalBarProp = {
   nutrition: string;
   goal: number;
   current: number;
-  onGoalChange: (value: number) => void; // Function to update goals
+  onGoalChange: (value: number) => void;
 };
 
 function EditGoalBar({

@@ -1,4 +1,3 @@
-// app/layout.tsx
 import "./globals.css";
 import NavBar from "@/components/navbar/navbar";
 import { createClient } from "@/utils/supabase/server";

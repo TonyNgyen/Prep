@@ -5,13 +5,13 @@ import "react-circular-progressbar/dist/styles.css";
 interface NutritionalChartProps {
   current: number;
   goal: number;
-  color?: string; // make it optional, fallback to default
+  color?: string;
 }
 
 const NutritionalChart: React.FC<NutritionalChartProps> = ({
   current,
   goal,
-  color = "#0B6E4F", // default if none passed
+  color = "#0B6E4F"
 }) => {
   const percentage = goal > 0 ? Math.min((current / goal) * 100, 100) : 0;
 
@@ -20,9 +20,9 @@ const NutritionalChart: React.FC<NutritionalChartProps> = ({
       value={percentage}
       text={current.toString()}
       styles={buildStyles({
-        textColor: "#374151", // gray-700 for better readability
-        pathColor: color, // use the goal color
-        trailColor: "#E5E7EB", // light gray background
+        textColor: "#374151",
+        pathColor: color,
+        trailColor: "#E5E7EB",
       })}
     />
   );
