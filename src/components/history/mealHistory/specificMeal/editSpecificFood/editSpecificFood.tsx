@@ -46,15 +46,6 @@ function EditSpecificFood({ food, meal, date }: EditSpecificFoodProps) {
 
   return (
     <div className="flex justify-between items-center relative">
-      {/* <div className="bg-blue-300 p-4" onClick={() => console.log(food)}>
-        Print food
-      </div>
-      <div
-        className="bg-blue-300 p-4"
-        onClick={() => deleteMealFromNutritionalHistory(date, meal, food)}
-      >
-        Test
-      </div> */}
       <div className="flex flex-col">
         <h2 className="text-md font-medium">{food.name}</h2>
         {isEditing ? (

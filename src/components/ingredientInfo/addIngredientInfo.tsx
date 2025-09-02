@@ -50,12 +50,6 @@ function AddIngredientInfo({
           >
             Add
           </button>
-          {/* <div
-            className="bg-blue-200 p-2 text-black"
-            onClick={() => console.log(ingredient)}
-          >
-            Test
-          </div> */}
           <h1 className="text-2xl font-semibold">{ingredient.name}</h1>
         </div>
 
@@ -107,7 +101,6 @@ function AddIngredientInfo({
             </div>
           </div>
 
-          {/* Display Nutritional Facts */}
           <div className="space-y-2">
             {(
               Object.keys(NUTRITIONAL_KEYS) as Array<

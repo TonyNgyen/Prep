@@ -102,12 +102,6 @@ function AddInventoryForm({ setShowAddForm, isForm }: formProp) {
       </div>
 
       <div className="w-full flex justify-between absolute bottom-0 left-0 px-6 py-3 h-16">
-        {/* <button type="button" onClick={() => console.log(inventory)} className="bg-pink-300">
-          Inventory
-        </button>
-        <button type="button" onClick={() => updateInventory(inventory)} className="bg-orange-300">
-          Update Inventory
-        </button> */}
         {pageNumber != 1 ? (
           <button
             type="button"
